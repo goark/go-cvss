@@ -1,0 +1,3 @@
+[[constraint]]
+  name = "golang.org/x/text"
+  version = "v0.3.*"
