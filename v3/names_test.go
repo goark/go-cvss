@@ -1,22 +1,26 @@
-package base
+package v3
 
-import "golang.org/x/text/language"
+import (
+	"testing"
 
-//Severity is severity for Base Metrics
-type Severity int
-
-//Constant of severity
-const (
-	SeverityUnknown Severity = iota
-	SeverityNone
-	SeverityLow
-	SeverityMedium
-	SeverityHigh
-	SeverityCritical
+	"golang.org/x/text/language"
 )
 
-func (sv Severity) String() string {
-	return sv.NameOfValue(language.English)
+func TestName(t *testing.T) {
+	testCases := []struct {
+		lang language.Tag
+		s    string
+	}{
+		{lang: language.Und, s: "Common Vulnerability Scoring System (CVSS) v3.0"},
+		{lang: language.English, s: "Common Vulnerability Scoring System (CVSS) v3.0"},
+		{lang: language.Japanese, s: "共通脆弱性評価システム (CVSS) v3.0"},
+	}
+	for _, tc := range testCases {
+		s := New().Name(tc.lang)
+		if s != tc.s {
+			t.Errorf("CVSS.Name(%v) = \"%v\", want \"%v\".", tc.lang, s, tc.s)
+		}
+	}
 }
 
 /* Copyright 2018 Spiegel

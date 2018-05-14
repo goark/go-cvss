@@ -2,21 +2,17 @@ package base
 
 import "golang.org/x/text/language"
 
-//Severity is severity for Base Metrics
-type Severity int
+var baseNameMap = map[language.Tag]string{
+	language.English:  "Base Metrics",
+	language.Japanese: "基本評価基準",
+}
 
-//Constant of severity
-const (
-	SeverityUnknown Severity = iota
-	SeverityNone
-	SeverityLow
-	SeverityMedium
-	SeverityHigh
-	SeverityCritical
-)
-
-func (sv Severity) String() string {
-	return sv.NameOfValue(language.English)
+//Name returns string instance name for display
+func (m *Metrics) Name(lang language.Tag) string {
+	if s, ok := baseNameMap[lang]; ok {
+		return s
+	}
+	return baseNameMap[language.English]
 }
 
 /* Copyright 2018 Spiegel

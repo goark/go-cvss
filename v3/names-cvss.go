@@ -1,22 +1,18 @@
-package base
+package v3
 
 import "golang.org/x/text/language"
 
-//Severity is severity for Base Metrics
-type Severity int
+var cvssNameMap = map[language.Tag]string{
+	language.English:  "Common Vulnerability Scoring System (CVSS) v3.0",
+	language.Japanese: "共通脆弱性評価システム (CVSS) v3.0",
+}
 
-//Constant of severity
-const (
-	SeverityUnknown Severity = iota
-	SeverityNone
-	SeverityLow
-	SeverityMedium
-	SeverityHigh
-	SeverityCritical
-)
-
-func (sv Severity) String() string {
-	return sv.NameOfValue(language.English)
+//Name returns string instance name for display
+func (c *CVSS) Name(lang language.Tag) string {
+	if s, ok := cvssNameMap[lang]; ok {
+		return s
+	}
+	return cvssNameMap[language.English]
 }
 
 /* Copyright 2018 Spiegel

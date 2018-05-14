@@ -6,8 +6,18 @@ type CVSS struct {
 	Base *base.Metrics
 }
 
+//New returns CVSS instance
 func New() *CVSS {
 	return &CVSS{Base: base.NewMetrics()}
+}
+
+func (c *CVSS) ImportBaseVector(v string) error {
+	if m, err := base.Decode(v); err != nil {
+		return err
+	} else {
+		c.Base = m
+	}
+	return nil
 }
 
 /* Copyright 2018 Spiegel
