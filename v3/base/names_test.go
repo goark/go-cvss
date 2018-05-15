@@ -10,15 +10,20 @@ func TestBaseName(t *testing.T) {
 	testCases := []struct {
 		lang language.Tag
 		n    string
+		nv   string
 	}{
-		{lang: language.Und, n: "Base Metrics"},
-		{lang: language.English, n: "Base Metrics"},
-		{lang: language.Japanese, n: "基本評価基準"},
+		{lang: language.Und, n: "Base Metrics", nv: "Metric Value"},
+		{lang: language.English, n: "Base Metrics", nv: "Metric Value"},
+		{lang: language.Japanese, n: "基本評価基準", nv: "評価値"},
 	}
 	for _, tc := range testCases {
 		n := (&Metrics{}).Name(tc.lang)
 		if n != tc.n {
 			t.Errorf("Metrics.Name(%v) = \"%v\", want \"%v\".", tc.lang, n, tc.n)
+		}
+		nv := (&Metrics{}).NameOfvalue(tc.lang)
+		if nv != tc.nv {
+			t.Errorf("Metrics.NameOfvalue(%v) = \"%v\", want \"%v\".", tc.lang, nv, tc.nv)
 		}
 	}
 }

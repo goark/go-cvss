@@ -9,7 +9,8 @@ import (
 	"golang.org/x/text/language"
 )
 
-const tempCsv = `{{ .AVName }},{{ .AVValue }}
+const tempCsv = `{{ .BaseMetrics }},{{ .MetricValue }}
+{{ .AVName }},{{ .AVValue }}
 {{ .ACName }},{{ .ACValue }}
 {{ .PRName }},{{ .PRValue }}
 {{ .UIName }},{{ .UIValue }}
@@ -20,14 +21,15 @@ const tempCsv = `{{ .AVName }},{{ .AVValue }}
 `
 
 type CVSSReport struct {
-	AVName, AVValue string //AttackVector
-	ACName, ACValue string //AttackComplexity
-	PRName, PRValue string //PrivilegesRequired
-	UIName, UIValue string //UserInteraction
-	SName, SValue   string //Scope
-	CName, CValue   string //ConfidentialityImpact
-	IName, IValue   string //IntegrityImpact
-	AName, AValue   string //AvailabilityImpact
+	BaseMetrics, MetricValue string //titles
+	AVName, AVValue          string //AttackVector
+	ACName, ACValue          string //AttackComplexity
+	PRName, PRValue          string //PrivilegesRequired
+	UIName, UIValue          string //UserInteraction
+	SName, SValue            string //Scope
+	CName, CValue            string //ConfidentialityImpact
+	IName, IValue            string //IntegrityImpact
+	AName, AValue            string //AvailabilityImpact
 }
 
 func (m *Metrics) Report(r io.Reader, lang language.Tag) (io.Reader, error) {
@@ -51,22 +53,24 @@ func getTemplate(r io.Reader) string {
 
 func (m *Metrics) getReport(lang language.Tag) *CVSSReport {
 	return &CVSSReport{
-		AVName:  m.AV.Name(lang),
-		AVValue: m.AV.NameOfValue(lang),
-		ACName:  m.AC.Name(lang),
-		ACValue: m.AC.NameOfValue(lang),
-		PRName:  m.PR.Name(lang),
-		PRValue: m.PR.NameOfValue(lang),
-		UIName:  m.UI.Name(lang),
-		UIValue: m.UI.NameOfValue(lang),
-		SName:   m.S.Name(lang),
-		SValue:  m.S.NameOfValue(lang),
-		CName:   m.C.Name(lang),
-		CValue:  m.C.NameOfValue(lang),
-		IName:   m.I.Name(lang),
-		IValue:  m.I.NameOfValue(lang),
-		AName:   m.A.Name(lang),
-		AValue:  m.A.NameOfValue(lang),
+		BaseMetrics: m.Name(lang),
+		MetricValue: m.NameOfvalue(lang),
+		AVName:      m.AV.Name(lang),
+		AVValue:     m.AV.NameOfValue(lang),
+		ACName:      m.AC.Name(lang),
+		ACValue:     m.AC.NameOfValue(lang),
+		PRName:      m.PR.Name(lang),
+		PRValue:     m.PR.NameOfValue(lang),
+		UIName:      m.UI.Name(lang),
+		UIValue:     m.UI.NameOfValue(lang),
+		SName:       m.S.Name(lang),
+		SValue:      m.S.NameOfValue(lang),
+		CName:       m.C.Name(lang),
+		CValue:      m.C.NameOfValue(lang),
+		IName:       m.I.Name(lang),
+		IValue:      m.I.NameOfValue(lang),
+		AName:       m.A.Name(lang),
+		AValue:      m.A.NameOfValue(lang),
 	}
 }
 

@@ -6,6 +6,10 @@ var baseNameMap = map[language.Tag]string{
 	language.English:  "Base Metrics",
 	language.Japanese: "基本評価基準",
 }
+var baseVakueMap = map[language.Tag]string{
+	language.English:  "Metric Value",
+	language.Japanese: "評価値",
+}
 
 //Name returns string instance name for display
 func (m *Metrics) Name(lang language.Tag) string {
@@ -13,6 +17,14 @@ func (m *Metrics) Name(lang language.Tag) string {
 		return s
 	}
 	return baseNameMap[language.English]
+}
+
+//NameOfvalue returns string instance name for display
+func (m *Metrics) NameOfvalue(lang language.Tag) string {
+	if s, ok := baseVakueMap[lang]; ok {
+		return s
+	}
+	return baseVakueMap[language.English]
 }
 
 /* Copyright 2018 Spiegel

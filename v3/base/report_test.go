@@ -10,7 +10,7 @@ import (
 
 const (
 	tstMd = `
-| Metric | Value |
+| {{ .BaseMetrics }} | {{ .MetricValue }} |
 |--------|-------|
 | {{ .AVName }} | {{ .AVValue }} |
 | {{ .ACName }} | {{ .ACValue }} |
@@ -21,7 +21,8 @@ const (
 | {{ .IName }} | {{ .IValue }} |
 | {{ .AName }} | {{ .AValue }} |
 `
-	tstResCsv = `Attack Vector,Network
+	tstResCsv = `Base Metrics,Metric Value
+Attack Vector,Network
 Attack Complexity,Low
 Privileges Required,None
 User Interaction,None
@@ -31,7 +32,7 @@ Integrity Impact,High
 Availability Impact,High
 `
 	tstResMd = `
-| Metric | Value |
+| Base Metrics | Metric Value |
 |--------|-------|
 | Attack Vector | Network |
 | Attack Complexity | Low |
