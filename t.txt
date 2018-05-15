@@ -1,0 +1,78 @@
+?   	github.com/spiegel-im-spiegel/go-cvss	[no test files]
+=== RUN   TestImportBaseVector
+--- PASS: TestImportBaseVector (0.00s)
+=== RUN   TestName
+--- PASS: TestName (0.00s)
+PASS
+ok  	github.com/spiegel-im-spiegel/go-cvss/v3	1.677s
+=== RUN   TestDecodeError
+--- PASS: TestDecodeError (0.00s)
+=== RUN   TestDecodeEncode
+--- PASS: TestDecodeEncode (0.00s)
+=== RUN   TestScore
+--- PASS: TestScore (0.00s)
+=== RUN   TestAvailabilityImpact
+--- PASS: TestAvailabilityImpact (0.00s)
+=== RUN   TestAttackComplexity
+--- PASS: TestAttackComplexity (0.00s)
+=== RUN   TestAttackVector
+--- PASS: TestAttackVector (0.00s)
+=== RUN   TestConfidentialityImpact
+--- PASS: TestConfidentialityImpact (0.00s)
+=== RUN   TestIntegrityImpact
+--- PASS: TestIntegrityImpact (0.00s)
+=== RUN   TestPrivilegesRequired
+--- PASS: TestPrivilegesRequired (0.00s)
+=== RUN   TestScope
+--- PASS: TestScope (0.00s)
+=== RUN   TestUserInteraction
+--- PASS: TestUserInteraction (0.00s)
+=== RUN   TestBaseName
+--- PASS: TestBaseName (0.00s)
+=== RUN   TestAttackVectorName
+--- PASS: TestAttackVectorName (0.00s)
+=== RUN   TestAttackComplexityName
+--- PASS: TestAttackComplexityName (0.00s)
+=== RUN   TestPrivilegesRequiredName
+--- PASS: TestPrivilegesRequiredName (0.00s)
+=== RUN   TestUserInteractionName
+--- PASS: TestUserInteractionName (0.00s)
+=== RUN   TestScopeName
+--- PASS: TestScopeName (0.00s)
+=== RUN   TestConfidentialityImpactName
+--- PASS: TestConfidentialityImpactName (0.00s)
+=== RUN   TestIntegrityImpactName
+--- PASS: TestIntegrityImpactName (0.00s)
+=== RUN   TestAvailabilityImpactName
+--- PASS: TestAvailabilityImpactName (0.00s)
+=== RUN   TestSeverityName
+--- PASS: TestSeverityName (0.00s)
+=== RUN   TestReport
+--- FAIL: TestReport (0.00s)
+	report_test.go:52: Metrics.Report(nil, en) = "Attack Vector,Network
+		Attack Complexity,Low
+		Privileges Required,None
+		User Interaction,None
+		Scope,Unchanged
+		Confidentiality Impact,High
+		Integrity Impact,High
+		Availability Impact,High
+		", want "".
+	report_test.go:52: Metrics.Report(nil, en) = "
+		| Metric | Value |
+		|--------|-------|
+		| Attack Vector | Network |
+		| Attack Complexity | Low |
+		| Privileges Required | None |
+		| User Interaction | None |
+		| Scope | Unchanged |
+		| Confidentiality Impact | High |
+		| Integrity Impact | High |
+		| Availability Impact | High |
+		", want "".
+FAIL
+FAIL	github.com/spiegel-im-spiegel/go-cvss/v3/base	1.166s
+=== RUN   TestVersion
+--- PASS: TestVersion (0.00s)
+PASS
+ok  	github.com/spiegel-im-spiegel/go-cvss/v3/version	(cached)
