@@ -3,6 +3,8 @@ package base
 import (
 	"fmt"
 	"testing"
+
+	cvss "github.com/spiegel-im-spiegel/go-cvss"
 )
 
 func TestDecodeError(t *testing.T) {
@@ -11,20 +13,20 @@ func TestDecodeError(t *testing.T) {
 		err    error
 	}{
 		{vector: "CVSS:3.0/AV:P/AC:H/PR:H/UI:R/S:U/C:N/I:N/A:N", err: nil},
-		{vector: "XXX:3.0/AV:P/AC:H/PR:H/UI:R/S:U/C:N/I:N/A:N", err: ErrInvalidVector},
-		{vector: "CVSS:2.0/AV:P/AC:H/PR:H/UI:R/S:U/C:N/I:N/A:N", err: ErrNotSupportVer},
-		{vector: "CVSS:3.0", err: ErrInvalidVector},
-		{vector: "CVSS3.0/AV:X/AC:H/PR:H/UI:R/S:U/C:N/I:N/A:N", err: ErrInvalidVector},
-		{vector: "CVSS:3.0/AV:P/AC:H/PR:H/UI:R/S:U/C:N/I:N/A-N", err: ErrInvalidVector},
-		{vector: "CVSS:3.0/AV:P/AC:H/PR:H/UI:R/S:U/C:N/I:N/X:N", err: ErrInvalidVector},
-		{vector: "CVSS:3.0/AV:P/AC:H/PR:H/UI:R/S:U/C:N/I:N/A:X", err: ErrUndefinedMetric},
-		{vector: "CVSS:3.0/AV:P/AC:H/PR:H/UI:R/S:U/C:N/I:X/A:N", err: ErrUndefinedMetric},
-		{vector: "CVSS:3.0/AV:P/AC:H/PR:H/UI:R/S:U/C:X/I:N/A:N", err: ErrUndefinedMetric},
-		{vector: "CVSS:3.0/AV:P/AC:H/PR:H/UI:R/S:X/C:N/I:N/A:N", err: ErrUndefinedMetric},
-		{vector: "CVSS:3.0/AV:P/AC:H/PR:H/UI:X/S:U/C:N/I:N/A:N", err: ErrUndefinedMetric},
-		{vector: "CVSS:3.0/AV:P/AC:H/PR:X/UI:R/S:U/C:N/I:N/A:N", err: ErrUndefinedMetric},
-		{vector: "CVSS:3.0/AV:P/AC:X/PR:H/UI:R/S:U/C:N/I:N/A:N", err: ErrUndefinedMetric},
-		{vector: "CVSS:3.0/AV:X/AC:H/PR:H/UI:R/S:U/C:N/I:N/A:N", err: ErrUndefinedMetric},
+		{vector: "XXX:3.0/AV:P/AC:H/PR:H/UI:R/S:U/C:N/I:N/A:N", err: cvss.ErrInvalidVector},
+		{vector: "CVSS:2.0/AV:P/AC:H/PR:H/UI:R/S:U/C:N/I:N/A:N", err: cvss.ErrNotSupportVer},
+		{vector: "CVSS:3.0", err: cvss.ErrInvalidVector},
+		{vector: "CVSS3.0/AV:X/AC:H/PR:H/UI:R/S:U/C:N/I:N/A:N", err: cvss.ErrInvalidVector},
+		{vector: "CVSS:3.0/AV:P/AC:H/PR:H/UI:R/S:U/C:N/I:N/A-N", err: cvss.ErrInvalidVector},
+		{vector: "CVSS:3.0/AV:P/AC:H/PR:H/UI:R/S:U/C:N/I:N/X:N", err: cvss.ErrInvalidVector},
+		{vector: "CVSS:3.0/AV:P/AC:H/PR:H/UI:R/S:U/C:N/I:N/A:X", err: cvss.ErrUndefinedMetric},
+		{vector: "CVSS:3.0/AV:P/AC:H/PR:H/UI:R/S:U/C:N/I:X/A:N", err: cvss.ErrUndefinedMetric},
+		{vector: "CVSS:3.0/AV:P/AC:H/PR:H/UI:R/S:U/C:X/I:N/A:N", err: cvss.ErrUndefinedMetric},
+		{vector: "CVSS:3.0/AV:P/AC:H/PR:H/UI:R/S:X/C:N/I:N/A:N", err: cvss.ErrUndefinedMetric},
+		{vector: "CVSS:3.0/AV:P/AC:H/PR:H/UI:X/S:U/C:N/I:N/A:N", err: cvss.ErrUndefinedMetric},
+		{vector: "CVSS:3.0/AV:P/AC:H/PR:X/UI:R/S:U/C:N/I:N/A:N", err: cvss.ErrUndefinedMetric},
+		{vector: "CVSS:3.0/AV:P/AC:X/PR:H/UI:R/S:U/C:N/I:N/A:N", err: cvss.ErrUndefinedMetric},
+		{vector: "CVSS:3.0/AV:X/AC:H/PR:H/UI:R/S:U/C:N/I:N/A:N", err: cvss.ErrUndefinedMetric},
 	}
 
 	for _, tc := range testCases {
@@ -40,7 +42,7 @@ func TestDecodeEncode(t *testing.T) {
 		vector string
 		err    error
 	}{
-		{vector: "CVSS:3.0/AV:X/AC:X/PR:X/UI:X/S:X/C:X/I:X/A:X", err: ErrUndefinedMetric},
+		{vector: "CVSS:3.0/AV:X/AC:X/PR:X/UI:X/S:X/C:X/I:X/A:X", err: cvss.ErrUndefinedMetric},
 		{vector: "CVSS:3.0/AV:P/AC:H/PR:H/UI:R/S:U/C:N/I:N/A:N", err: nil},
 		{vector: "CVSS:3.0/AV:L/AC:L/PR:L/UI:N/S:C/C:L/I:L/A:L", err: nil},
 		{vector: "CVSS:3.0/AV:A/AC:L/PR:N/UI:N/S:C/C:H/I:H/A:H", err: nil},

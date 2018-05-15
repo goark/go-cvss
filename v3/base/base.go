@@ -2,19 +2,21 @@ package base
 
 import (
 	"bytes"
-	"errors"
 	"fmt"
 	"math"
 	"strings"
+
+	cvss "github.com/spiegel-im-spiegel/go-cvss"
+	"github.com/spiegel-im-spiegel/go-cvss/v3/version"
 )
 
 //Error instances
-var (
-	ErrNilData         = errors.New("nil data")
-	ErrUndefinedMetric = errors.New("undefined metric")
-	ErrInvalidVector   = errors.New("invalid vector")
-	ErrNotSupportVer   = errors.New("not support version")
-)
+// var (
+// 	ErrNilData         = errors.New("nil data")
+// 	ErrUndefinedMetric = errors.New("undefined metric")
+// 	ErrInvalidVector   = errors.New("invalid vector")
+// 	ErrNotSupportVer   = errors.New("not support version")
+// )
 
 //Metrics is Base Metrics for CVSSv3
 type Metrics struct {
@@ -46,7 +48,7 @@ func NewMetrics() *Metrics {
 func Decode(vector string) (*Metrics, error) {
 	values := strings.Split(vector, "/")
 	if len(values) < 9 {
-		return nil, ErrInvalidVector
+		return nil, cvss.ErrInvalidVector
 	}
 	//CVSS version (CVSS 3.0 only)
 	if _, err := checkVersion(values[0]); err != nil {
@@ -57,7 +59,7 @@ func Decode(vector string) (*Metrics, error) {
 	for _, value := range values[1:] {
 		metric := strings.Split(value, ":")
 		if len(metric) != 2 {
-			return nil, ErrInvalidVector
+			return nil, cvss.ErrInvalidVector
 		}
 		switch strings.ToUpper(metric[0]) {
 		case "AV": //Attack Vector
@@ -77,7 +79,7 @@ func Decode(vector string) (*Metrics, error) {
 		case "A": //Availability Impact
 			metrics.A = GetAvailabilityImpact(metric[1])
 		default:
-			return nil, ErrInvalidVector
+			return nil, cvss.ErrInvalidVector
 		}
 	}
 	return metrics, metrics.GetError()
@@ -85,13 +87,13 @@ func Decode(vector string) (*Metrics, error) {
 func checkVersion(ver string) (string, error) {
 	v := strings.Split(ver, ":")
 	if len(v) != 2 {
-		return "", ErrInvalidVector
+		return "", cvss.ErrInvalidVector
 	}
 	if strings.ToUpper(v[0]) != "CVSS" {
-		return "", ErrInvalidVector
+		return "", cvss.ErrInvalidVector
 	}
-	if v[1] != "3.0" {
-		return "", ErrNotSupportVer
+	if v[1] != version.Version {
+		return "", cvss.ErrNotSupportVer
 	}
 	return v[1], nil
 }
@@ -117,11 +119,11 @@ func (m *Metrics) Encode() (string, error) {
 //GetError returns error instance if undefined metric
 func (m *Metrics) GetError() error {
 	if m == nil {
-		return ErrNilData
+		return cvss.ErrUndefinedMetric
 	}
 	switch true {
 	case !m.AV.IsDefined(), !m.AC.IsDefined(), !m.PR.IsDefined(), !m.UI.IsDefined(), !m.S.IsDefined(), !m.C.IsDefined(), !m.I.IsDefined(), !m.A.IsDefined():
-		return ErrUndefinedMetric
+		return cvss.ErrUndefinedMetric
 	default:
 		return nil
 	}

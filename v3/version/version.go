@@ -1,22 +1,6 @@
-package v3
+package version
 
-import (
-	"github.com/spiegel-im-spiegel/go-cvss/v3/version"
-	"golang.org/x/text/language"
-)
-
-var cvssNameMap = map[language.Tag]string{
-	language.English:  "Common Vulnerability Scoring System (CVSS) v" + version.Version,
-	language.Japanese: "共通脆弱性評価システム (CVSS) v" + version.Version,
-}
-
-//Name returns string instance name for display
-func (c *CVSS) Name(lang language.Tag) string {
-	if s, ok := cvssNameMap[lang]; ok {
-		return s
-	}
-	return cvssNameMap[language.English]
-}
+const Version = "3.0"
 
 /* Copyright 2018 Spiegel
  *

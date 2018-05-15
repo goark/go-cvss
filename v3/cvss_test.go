@@ -3,7 +3,7 @@ package v3
 import (
 	"testing"
 
-	"github.com/spiegel-im-spiegel/go-cvss/v3/base"
+	cvss "github.com/spiegel-im-spiegel/go-cvss"
 )
 
 func TestImportBaseVector(t *testing.T) {
@@ -12,9 +12,9 @@ func TestImportBaseVector(t *testing.T) {
 		err    error
 	}{
 		{vector: "CVSS:3.0/AV:P/AC:H/PR:H/UI:R/S:U/C:N/I:N/A:N", err: nil},
-		{vector: "XXX:3.0/AV:P/AC:H/PR:H/UI:R/S:U/C:N/I:N/A:N", err: base.ErrInvalidVector},
-		{vector: "CVSS:2.0/AV:P/AC:H/PR:H/UI:R/S:U/C:N/I:N/A:N", err: base.ErrNotSupportVer},
-		{vector: "CVSS:3.0/AV:X/AC:H/PR:H/UI:R/S:U/C:N/I:N/A:N", err: base.ErrUndefinedMetric},
+		{vector: "XXX:3.0/AV:P/AC:H/PR:H/UI:R/S:U/C:N/I:N/A:N", err: cvss.ErrInvalidVector},
+		{vector: "CVSS:2.0/AV:P/AC:H/PR:H/UI:R/S:U/C:N/I:N/A:N", err: cvss.ErrNotSupportVer},
+		{vector: "CVSS:3.0/AV:X/AC:H/PR:H/UI:R/S:U/C:N/I:N/A:N", err: cvss.ErrUndefinedMetric},
 	}
 	for _, tc := range testCases {
 		err := New().ImportBaseVector(tc.vector)
