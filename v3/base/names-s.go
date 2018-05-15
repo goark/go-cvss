@@ -21,15 +21,15 @@ var (
 	}
 )
 
-//Name returns string instance name for display
-func (s Scope) Name(lang language.Tag) string {
+//Title returns string instance name for display
+func (s Scope) Title(lang language.Tag) string {
 	if str, ok := sNameMap[lang]; ok {
 		return str
 	}
 	return sNameMap[language.English]
 }
 
-//Name returns string name of value for display
+//NameOfValue returns string name of value for display
 func (s Scope) NameOfValue(lang language.Tag) string {
 	var mp map[language.Tag]string
 	switch s {

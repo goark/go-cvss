@@ -20,6 +20,7 @@ const tempCsv = `{{ .BaseMetrics }},{{ .MetricValue }}
 {{ .AName }},{{ .AValue }}
 `
 
+//CVSSReport is dataset for CVSS report
 type CVSSReport struct {
 	BaseMetrics, MetricValue string //titles
 	AVName, AVValue          string //AttackVector
@@ -32,6 +33,7 @@ type CVSSReport struct {
 	AName, AValue            string //AvailabilityImpact
 }
 
+//Report returns string of CVSS report
 func (m *Metrics) Report(r io.Reader, lang language.Tag) (io.Reader, error) {
 	buf := &bytes.Buffer{}
 	if t, err := template.New("Repost").Parse(getTemplate(r)); err != nil {
@@ -53,23 +55,23 @@ func getTemplate(r io.Reader) string {
 
 func (m *Metrics) getReport(lang language.Tag) *CVSSReport {
 	return &CVSSReport{
-		BaseMetrics: m.Name(lang),
+		BaseMetrics: m.Title(lang),
 		MetricValue: m.NameOfvalue(lang),
-		AVName:      m.AV.Name(lang),
+		AVName:      m.AV.Title(lang),
 		AVValue:     m.AV.NameOfValue(lang),
-		ACName:      m.AC.Name(lang),
+		ACName:      m.AC.Title(lang),
 		ACValue:     m.AC.NameOfValue(lang),
-		PRName:      m.PR.Name(lang),
+		PRName:      m.PR.Title(lang),
 		PRValue:     m.PR.NameOfValue(lang),
-		UIName:      m.UI.Name(lang),
+		UIName:      m.UI.Title(lang),
 		UIValue:     m.UI.NameOfValue(lang),
-		SName:       m.S.Name(lang),
+		SName:       m.S.Title(lang),
 		SValue:      m.S.NameOfValue(lang),
-		CName:       m.C.Name(lang),
+		CName:       m.C.Title(lang),
 		CValue:      m.C.NameOfValue(lang),
-		IName:       m.I.Name(lang),
+		IName:       m.I.Title(lang),
 		IValue:      m.I.NameOfValue(lang),
-		AName:       m.A.Name(lang),
+		AName:       m.A.Title(lang),
 		AValue:      m.A.NameOfValue(lang),
 	}
 }

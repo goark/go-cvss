@@ -61,7 +61,7 @@ func TestReport(t *testing.T) {
 		if err != nil {
 			t.Errorf("Metrics.Decode(%v) = \"%v\", want nil.", tc.vector, err)
 		}
-		var tr io.Reader = nil
+		var tr io.Reader
 		if len(tc.tmpdata) > 0 {
 			tr = strings.NewReader(tc.tmpdata)
 		}

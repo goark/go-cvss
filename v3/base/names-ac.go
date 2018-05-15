@@ -21,15 +21,15 @@ var (
 	}
 )
 
-//Name returns string instance name for display
-func (ac AttackComplexity) Name(lang language.Tag) string {
+//Title returns string instance name for display
+func (ac AttackComplexity) Title(lang language.Tag) string {
 	if s, ok := acNameMap[lang]; ok {
 		return s
 	}
 	return acNameMap[language.English]
 }
 
-//Name returns string name of value for display
+//NameOfValue returns string name of value for display
 func (ac AttackComplexity) NameOfValue(lang language.Tag) string {
 	var mp map[language.Tag]string
 	switch ac {

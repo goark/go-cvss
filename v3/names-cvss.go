@@ -10,8 +10,8 @@ var cvssNameMap = map[language.Tag]string{
 	language.Japanese: "共通脆弱性評価システム (CVSS) v" + version.Version,
 }
 
-//Name returns string instance name for display
-func (c *CVSS) Name(lang language.Tag) string {
+//Title returns string instance name for display
+func (c *CVSS) Title(lang language.Tag) string {
 	if s, ok := cvssNameMap[lang]; ok {
 		return s
 	}

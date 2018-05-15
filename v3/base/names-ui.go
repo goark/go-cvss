@@ -21,15 +21,15 @@ var (
 	}
 )
 
-//Name returns string instance name for display
-func (ui UserInteraction) Name(lang language.Tag) string {
+//Title returns string instance name for display
+func (ui UserInteraction) Title(lang language.Tag) string {
 	if s, ok := uiNameMap[lang]; ok {
 		return s
 	}
 	return uiNameMap[language.English]
 }
 
-//Name returns string name of value for display
+//NameOfValue returns string name of value for display
 func (ui UserInteraction) NameOfValue(lang language.Tag) string {
 	var mp map[language.Tag]string
 	switch ui {

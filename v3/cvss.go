@@ -2,6 +2,7 @@ package v3
 
 import "github.com/spiegel-im-spiegel/go-cvss/v3/base"
 
+//CVSS is type of CVSS
 type CVSS struct {
 	Base *base.Metrics
 }
@@ -11,12 +12,13 @@ func New() *CVSS {
 	return &CVSS{Base: base.NewMetrics()}
 }
 
+//ImportBaseVector imports CVSSv3.0 base metrics vector
 func (c *CVSS) ImportBaseVector(v string) error {
-	if m, err := base.Decode(v); err != nil {
+	m, err := base.Decode(v)
+	if err != nil {
 		return err
-	} else {
-		c.Base = m
 	}
+	c.Base = m
 	return nil
 }
 

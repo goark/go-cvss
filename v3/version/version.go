@@ -1,5 +1,6 @@
 package version
 
+//Version is version number of CVSS
 const Version = "3.0"
 
 /* Copyright 2018 Spiegel

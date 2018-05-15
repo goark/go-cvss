@@ -18,7 +18,7 @@ func main() {
 		return
 	}
 	vector := flag.Arg(0)
-	var tr io.Reader = nil
+	var tr io.Reader
 	if len(*tf) > 0 {
 		file, err := os.Open(*tf)
 		if err != nil {
@@ -35,9 +35,9 @@ func main() {
 		return
 	}
 	severity := m.Base.GetSeverity()
-	fmt.Printf("%s: %v (%.1f)\n\n", severity.Name(language.Japanese), severity.NameOfValue(language.Japanese), m.Base.Score())
+	fmt.Printf("%s: %v (%.1f)\n\n", severity.Title(language.English), severity, m.Base.Score())
 
-	if r, err := m.Base.Report(tr, language.Japanese); err != nil {
+	if r, err := m.Base.Report(tr, language.English); err != nil {
 		fmt.Fprintln(os.Stderr, err)
 	} else {
 		io.Copy(os.Stdout, r)

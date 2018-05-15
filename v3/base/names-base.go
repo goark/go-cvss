@@ -11,8 +11,8 @@ var baseVakueMap = map[language.Tag]string{
 	language.Japanese: "評価値",
 }
 
-//Name returns string instance name for display
-func (m *Metrics) Name(lang language.Tag) string {
+//Title returns string instance name for display
+func (m *Metrics) Title(lang language.Tag) string {
 	if s, ok := baseNameMap[lang]; ok {
 		return s
 	}

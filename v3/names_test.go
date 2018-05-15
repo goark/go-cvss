@@ -6,7 +6,7 @@ import (
 	"golang.org/x/text/language"
 )
 
-func TestName(t *testing.T) {
+func TestTitle(t *testing.T) {
 	testCases := []struct {
 		lang language.Tag
 		s    string
@@ -16,9 +16,9 @@ func TestName(t *testing.T) {
 		{lang: language.Japanese, s: "共通脆弱性評価システム (CVSS) v3.0"},
 	}
 	for _, tc := range testCases {
-		s := New().Name(tc.lang)
+		s := New().Title(tc.lang)
 		if s != tc.s {
-			t.Errorf("CVSS.Name(%v) = \"%v\", want \"%v\".", tc.lang, s, tc.s)
+			t.Errorf("CVSS.Title(%v) = \"%v\", want \"%v\".", tc.lang, s, tc.s)
 		}
 	}
 }

@@ -25,15 +25,15 @@ var (
 	}
 )
 
-//Name returns string instance name for display
-func (c ConfidentialityImpact) Name(lang language.Tag) string {
+//Title returns string instance name for display
+func (c ConfidentialityImpact) Title(lang language.Tag) string {
 	if s, ok := cNameMap[lang]; ok {
 		return s
 	}
 	return cNameMap[language.English]
 }
 
-//Name returns string name of value for display
+//NameOfValue returns string name of value for display
 func (c ConfidentialityImpact) NameOfValue(lang language.Tag) string {
 	var mp map[language.Tag]string
 	switch c {

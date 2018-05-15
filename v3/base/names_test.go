@@ -6,7 +6,7 @@ import (
 	"golang.org/x/text/language"
 )
 
-func TestBaseName(t *testing.T) {
+func TestBaseTitle(t *testing.T) {
 	testCases := []struct {
 		lang language.Tag
 		n    string
@@ -17,9 +17,9 @@ func TestBaseName(t *testing.T) {
 		{lang: language.Japanese, n: "基本評価基準", nv: "評価値"},
 	}
 	for _, tc := range testCases {
-		n := (&Metrics{}).Name(tc.lang)
+		n := (&Metrics{}).Title(tc.lang)
 		if n != tc.n {
-			t.Errorf("Metrics.Name(%v) = \"%v\", want \"%v\".", tc.lang, n, tc.n)
+			t.Errorf("Metrics.Title(%v) = \"%v\", want \"%v\".", tc.lang, n, tc.n)
 		}
 		nv := (&Metrics{}).NameOfvalue(tc.lang)
 		if nv != tc.nv {
@@ -28,7 +28,7 @@ func TestBaseName(t *testing.T) {
 	}
 }
 
-func TestAttackVectorName(t *testing.T) {
+func TestAttackVectorTitle(t *testing.T) {
 	testCases := []struct {
 		lang language.Tag
 		av   AttackVector
@@ -56,9 +56,9 @@ func TestAttackVectorName(t *testing.T) {
 		{lang: language.Japanese, av: AttackVectorNetwork, n: "攻撃元区分", nv: "ネットワーク"},
 	}
 	for _, tc := range testCases {
-		n := tc.av.Name(tc.lang)
+		n := tc.av.Title(tc.lang)
 		if n != tc.n {
-			t.Errorf("AttackVector.Name(%v) = \"%v\", want \"%v\".", tc.lang, n, tc.n)
+			t.Errorf("AttackVector.Title(%v) = \"%v\", want \"%v\".", tc.lang, n, tc.n)
 		}
 		nv := tc.av.NameOfValue(tc.lang)
 		if nv != tc.nv {
@@ -67,7 +67,7 @@ func TestAttackVectorName(t *testing.T) {
 	}
 }
 
-func TestAttackComplexityName(t *testing.T) {
+func TestAttackComplexityTitle(t *testing.T) {
 	testCases := []struct {
 		lang language.Tag
 		ac   AttackComplexity
@@ -87,9 +87,9 @@ func TestAttackComplexityName(t *testing.T) {
 		{lang: language.Japanese, ac: AttackComplexityLow, n: "攻撃条件の複雑さ", nv: "低"},
 	}
 	for _, tc := range testCases {
-		n := tc.ac.Name(tc.lang)
+		n := tc.ac.Title(tc.lang)
 		if n != tc.n {
-			t.Errorf("AttackComplexity.Name(%v) = \"%v\", want \"%v\".", tc.lang, n, tc.n)
+			t.Errorf("AttackComplexity.Title(%v) = \"%v\", want \"%v\".", tc.lang, n, tc.n)
 		}
 		nv := tc.ac.NameOfValue(tc.lang)
 		if nv != tc.nv {
@@ -98,7 +98,7 @@ func TestAttackComplexityName(t *testing.T) {
 	}
 }
 
-func TestPrivilegesRequiredName(t *testing.T) {
+func TestPrivilegesRequiredTitle(t *testing.T) {
 	testCases := []struct {
 		lang language.Tag
 		pr   PrivilegesRequired
@@ -122,9 +122,9 @@ func TestPrivilegesRequiredName(t *testing.T) {
 		{lang: language.Japanese, pr: PrivilegesRequiredNone, n: "必要な特権レベル", nv: "不要"},
 	}
 	for _, tc := range testCases {
-		n := tc.pr.Name(tc.lang)
+		n := tc.pr.Title(tc.lang)
 		if n != tc.n {
-			t.Errorf("PrivilegesRequired.Name(%v) = \"%v\", want \"%v\".", tc.lang, n, tc.n)
+			t.Errorf("PrivilegesRequired.Title(%v) = \"%v\", want \"%v\".", tc.lang, n, tc.n)
 		}
 		nv := tc.pr.NameOfValue(tc.lang)
 		if nv != tc.nv {
@@ -133,7 +133,7 @@ func TestPrivilegesRequiredName(t *testing.T) {
 	}
 }
 
-func TestUserInteractionName(t *testing.T) {
+func TestUserInteractionTitle(t *testing.T) {
 	testCases := []struct {
 		lang language.Tag
 		ui   UserInteraction
@@ -153,9 +153,9 @@ func TestUserInteractionName(t *testing.T) {
 		{lang: language.Japanese, ui: UserInteractionNone, n: "ユーザ関与レベル", nv: "不要"},
 	}
 	for _, tc := range testCases {
-		n := tc.ui.Name(tc.lang)
+		n := tc.ui.Title(tc.lang)
 		if n != tc.n {
-			t.Errorf("UserInteraction.Name(%v) = \"%v\", want \"%v\".", tc.lang, n, tc.n)
+			t.Errorf("UserInteraction.Title(%v) = \"%v\", want \"%v\".", tc.lang, n, tc.n)
 		}
 		nv := tc.ui.NameOfValue(tc.lang)
 		if nv != tc.nv {
@@ -164,7 +164,7 @@ func TestUserInteractionName(t *testing.T) {
 	}
 }
 
-func TestScopeName(t *testing.T) {
+func TestScopeTitle(t *testing.T) {
 	testCases := []struct {
 		lang language.Tag
 		s    Scope
@@ -184,9 +184,9 @@ func TestScopeName(t *testing.T) {
 		{lang: language.Japanese, s: ScopeChanged, n: "スコープ", nv: "変更あり"},
 	}
 	for _, tc := range testCases {
-		n := tc.s.Name(tc.lang)
+		n := tc.s.Title(tc.lang)
 		if n != tc.n {
-			t.Errorf("UserInteraction.Name(%v) = \"%v\", want \"%v\".", tc.lang, n, tc.n)
+			t.Errorf("UserInteraction.Title(%v) = \"%v\", want \"%v\".", tc.lang, n, tc.n)
 		}
 		nv := tc.s.NameOfValue(tc.lang)
 		if nv != tc.nv {
@@ -195,7 +195,7 @@ func TestScopeName(t *testing.T) {
 	}
 }
 
-func TestConfidentialityImpactName(t *testing.T) {
+func TestConfidentialityImpactTitle(t *testing.T) {
 	testCases := []struct {
 		lang language.Tag
 		c    ConfidentialityImpact
@@ -219,9 +219,9 @@ func TestConfidentialityImpactName(t *testing.T) {
 		{lang: language.Japanese, c: ConfidentialityImpactHigh, n: "機密性への影響", nv: "高"},
 	}
 	for _, tc := range testCases {
-		n := tc.c.Name(tc.lang)
+		n := tc.c.Title(tc.lang)
 		if n != tc.n {
-			t.Errorf("ConfidentialityImpact.Name(%v) = \"%v\", want \"%v\".", tc.lang, n, tc.n)
+			t.Errorf("ConfidentialityImpact.Title(%v) = \"%v\", want \"%v\".", tc.lang, n, tc.n)
 		}
 		nv := tc.c.NameOfValue(tc.lang)
 		if nv != tc.nv {
@@ -230,7 +230,7 @@ func TestConfidentialityImpactName(t *testing.T) {
 	}
 }
 
-func TestIntegrityImpactName(t *testing.T) {
+func TestIntegrityImpactTitle(t *testing.T) {
 	testCases := []struct {
 		lang language.Tag
 		i    IntegrityImpact
@@ -254,9 +254,9 @@ func TestIntegrityImpactName(t *testing.T) {
 		{lang: language.Japanese, i: IntegrityImpactHigh, n: "完全性への影響", nv: "高"},
 	}
 	for _, tc := range testCases {
-		n := tc.i.Name(tc.lang)
+		n := tc.i.Title(tc.lang)
 		if n != tc.n {
-			t.Errorf("IntegrityImpact.Name(%v) = \"%v\", want \"%v\".", tc.lang, n, tc.n)
+			t.Errorf("IntegrityImpact.Title(%v) = \"%v\", want \"%v\".", tc.lang, n, tc.n)
 		}
 		nv := tc.i.NameOfValue(tc.lang)
 		if nv != tc.nv {
@@ -265,7 +265,7 @@ func TestIntegrityImpactName(t *testing.T) {
 	}
 }
 
-func TestAvailabilityImpactName(t *testing.T) {
+func TestAvailabilityImpactTitle(t *testing.T) {
 	testCases := []struct {
 		lang language.Tag
 		a    AvailabilityImpact
@@ -289,9 +289,9 @@ func TestAvailabilityImpactName(t *testing.T) {
 		{lang: language.Japanese, a: AvailabilityImpactHigh, n: "可用性への影響", nv: "高"},
 	}
 	for _, tc := range testCases {
-		n := tc.a.Name(tc.lang)
+		n := tc.a.Title(tc.lang)
 		if n != tc.n {
-			t.Errorf("AvailabilityImpact.Name(%v) = \"%v\", want \"%v\".", tc.lang, n, tc.n)
+			t.Errorf("AvailabilityImpact.Title(%v) = \"%v\", want \"%v\".", tc.lang, n, tc.n)
 		}
 		nv := tc.a.NameOfValue(tc.lang)
 		if nv != tc.nv {
@@ -300,7 +300,7 @@ func TestAvailabilityImpactName(t *testing.T) {
 	}
 }
 
-func TestSeverityName(t *testing.T) {
+func TestSeverityTitle(t *testing.T) {
 	testCases := []struct {
 		lang language.Tag
 		sv   Severity
@@ -332,9 +332,9 @@ func TestSeverityName(t *testing.T) {
 		{lang: language.Japanese, sv: SeverityCritical, n: "深刻度", nv: "緊急"},
 	}
 	for _, tc := range testCases {
-		n := tc.sv.Name(tc.lang)
+		n := tc.sv.Title(tc.lang)
 		if n != tc.n {
-			t.Errorf("Severity.Name(%v) = \"%v\", want \"%v\".", tc.lang, n, tc.n)
+			t.Errorf("Severity.Title(%v) = \"%v\", want \"%v\".", tc.lang, n, tc.n)
 		}
 		nv := tc.sv.NameOfValue(tc.lang)
 		if nv != tc.nv {

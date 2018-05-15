@@ -25,15 +25,15 @@ var (
 	}
 )
 
-//Name returns string instance name for display
-func (pr PrivilegesRequired) Name(lang language.Tag) string {
+//Title returns string instance name for display
+func (pr PrivilegesRequired) Title(lang language.Tag) string {
 	if s, ok := prNameMap[lang]; ok {
 		return s
 	}
 	return prNameMap[language.English]
 }
 
-//Name returns string name of value for display
+//NameOfValue returns string name of value for display
 func (pr PrivilegesRequired) NameOfValue(lang language.Tag) string {
 	var mp map[language.Tag]string
 	switch pr {
