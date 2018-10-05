@@ -35,9 +35,11 @@ func main() {
 		return
 	}
 	severity := m.Base.GetSeverity()
-	fmt.Printf("%s: %v (%.1f)\n\n", severity.Title(language.English), severity, m.Base.Score())
+	//lang := language.English
+	lang := language.Japanese
+	fmt.Printf("%s: %v (%.1f)\n\n", severity.Title(lang), severity.NameOfValue(lang), m.Base.Score())
 
-	if r, err := m.Base.Report(tr, language.English); err != nil {
+	if r, err := m.Base.Report(tr, lang); err != nil {
 		fmt.Fprintln(os.Stderr, err)
 	} else {
 		io.Copy(os.Stdout, r)
