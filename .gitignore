@@ -13,5 +13,6 @@
 # Output of the go coverage tool, specifically when used with LiteIDE
 *.out
 
-# Other folders
+# Other files and folders
+go.sum
 vendor/
