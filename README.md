@@ -4,12 +4,6 @@
 [![GitHub license](https://img.shields.io/badge/license-Apache%202-blue.svg)](https://raw.githubusercontent.com/spiegel-im-spiegel/go-cvss/master/LICENSE)
 [![GitHub release](http://img.shields.io/github/release/spiegel-im-spiegel/go-cvss.svg)](https://github.com/spiegel-im-spiegel/go-cvss/releases/latest)
 
-## Install
-
-```
-$ go get -u github.com/spiegel-im-spiegel/gpgpdump
-```
-
 ### Usage
 
 ```go
