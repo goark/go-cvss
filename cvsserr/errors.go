@@ -28,6 +28,18 @@ func (n Num) Error() string {
 	return fmt.Sprintf("unknown error (%d)", int(n))
 }
 
+func (n Num) Is(target error) bool {
+	var t1 *wrapError
+	if errors.As(target, &t1) {
+		return n == t1.Num
+	}
+	var t2 Num
+	if errors.As(target, &t2) {
+		return n == t2
+	}
+	return false
+}
+
 type wrapError struct {
 	Num
 	frame errors.Frame
@@ -48,9 +60,6 @@ func (we *wrapError) FormatError(p errors.Printer) error {
 }
 
 func (we *wrapError) Is(target error) bool {
-	if we == nil || target == nil {
-		return we == target
-	}
 	var t1 *wrapError
 	if errors.As(target, &t1) {
 		return we.Num == t1.Num

@@ -4,33 +4,56 @@
 [![GitHub license](https://img.shields.io/badge/license-Apache%202-blue.svg)](https://raw.githubusercontent.com/spiegel-im-spiegel/go-cvss/master/LICENSE)
 [![GitHub release](http://img.shields.io/github/release/spiegel-im-spiegel/go-cvss.svg)](https://github.com/spiegel-im-spiegel/go-cvss/releases/latest)
 
-### Usage
+### Sample Code
 
 ```go
-m := cvssv3.New()
-if err := m.ImportBaseVector("CVSS:3.0/AV:N/AC:L/PR:L/UI:N/S:C/C:H/I:H/A:H"); err != nil {
-    fmt.Fprintln(os.Stderr, err)
-    return
+package main
+
+import (
+	"flag"
+	"fmt"
+	"io"
+	"os"
+
+	cvssv3 "github.com/spiegel-im-spiegel/go-cvss/v3"
+	"golang.org/x/text/language"
+)
+
+func main() {
+	tf := flag.String("t", "", "template file")
+	flag.Parse()
+	if flag.NArg() != 1 {
+		fmt.Fprintln(os.Stderr, os.ErrInvalid)
+		return
+	}
+	vector := flag.Arg(0)
+	var tr io.Reader
+	if len(*tf) > 0 {
+		file, err := os.Open(*tf)
+		if err != nil {
+			fmt.Fprintln(os.Stderr, err)
+			return
+		}
+		defer file.Close()
+		tr = file
+	}
+
+	m := cvssv3.New()
+	if err := m.ImportBaseVector(vector); err != nil {
+		fmt.Fprintln(os.Stderr, err)
+		return
+	}
+	severity := m.Base.GetSeverity()
+	//lang := language.English
+	lang := language.Japanese
+	fmt.Printf("%s: %v (%.1f)\n\n", severity.Title(lang), severity.NameOfValue(lang), m.Base.Score())
+
+	if r, err := m.Base.Report(tr, lang); err != nil {
+		fmt.Fprintln(os.Stderr, err)
+	} else {
+		io.Copy(os.Stdout, r)
+	}
 }
-severity := m.Base.GetSeverity()
-fmt.Printf("%s: %v (%.1f)\n\n", severity.Title(language.English), severity, m.Base.Score())
-if r, err := m.Base.Report(nil, language.English); err != nil { //output with CSV format
-    fmt.Fprintln(os.Stderr, err)
-} else {
-    io.Copy(os.Stdout, r)
-}
-// Output:
-//Severity: Critical (9.9)
-//
-//Base Metrics,Metric Value
-//Attack Vector,Network
-//Attack Complexity,Low
-//Privileges Required,Low
-//User Interaction,None
-//Scope,Changed
-//Confidentiality Impact,High
-//Integrity Impact,High
-//Availability Impact,High
 ```
 
 ref: [sample.go](https://github.com/spiegel-im-spiegel/go-cvss/blob/master/sample/sample.go)

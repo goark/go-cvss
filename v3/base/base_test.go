@@ -4,7 +4,8 @@ import (
 	"fmt"
 	"testing"
 
-	cvss "github.com/spiegel-im-spiegel/go-cvss"
+	"github.com/spiegel-im-spiegel/go-cvss/cvsserr"
+	"golang.org/x/xerrors"
 )
 
 func TestDecodeError(t *testing.T) {
@@ -13,25 +14,25 @@ func TestDecodeError(t *testing.T) {
 		err    error
 	}{
 		{vector: "CVSS:3.0/AV:P/AC:H/PR:H/UI:R/S:U/C:N/I:N/A:N", err: nil},
-		{vector: "XXX:3.0/AV:P/AC:H/PR:H/UI:R/S:U/C:N/I:N/A:N", err: cvss.ErrInvalidVector},
-		{vector: "CVSS:2.0/AV:P/AC:H/PR:H/UI:R/S:U/C:N/I:N/A:N", err: cvss.ErrNotSupportVer},
-		{vector: "CVSS:3.0", err: cvss.ErrInvalidVector},
-		{vector: "CVSS3.0/AV:X/AC:H/PR:H/UI:R/S:U/C:N/I:N/A:N", err: cvss.ErrInvalidVector},
-		{vector: "CVSS:3.0/AV:P/AC:H/PR:H/UI:R/S:U/C:N/I:N/A-N", err: cvss.ErrInvalidVector},
-		{vector: "CVSS:3.0/AV:P/AC:H/PR:H/UI:R/S:U/C:N/I:N/X:N", err: cvss.ErrInvalidVector},
-		{vector: "CVSS:3.0/AV:P/AC:H/PR:H/UI:R/S:U/C:N/I:N/A:X", err: cvss.ErrUndefinedMetric},
-		{vector: "CVSS:3.0/AV:P/AC:H/PR:H/UI:R/S:U/C:N/I:X/A:N", err: cvss.ErrUndefinedMetric},
-		{vector: "CVSS:3.0/AV:P/AC:H/PR:H/UI:R/S:U/C:X/I:N/A:N", err: cvss.ErrUndefinedMetric},
-		{vector: "CVSS:3.0/AV:P/AC:H/PR:H/UI:R/S:X/C:N/I:N/A:N", err: cvss.ErrUndefinedMetric},
-		{vector: "CVSS:3.0/AV:P/AC:H/PR:H/UI:X/S:U/C:N/I:N/A:N", err: cvss.ErrUndefinedMetric},
-		{vector: "CVSS:3.0/AV:P/AC:H/PR:X/UI:R/S:U/C:N/I:N/A:N", err: cvss.ErrUndefinedMetric},
-		{vector: "CVSS:3.0/AV:P/AC:X/PR:H/UI:R/S:U/C:N/I:N/A:N", err: cvss.ErrUndefinedMetric},
-		{vector: "CVSS:3.0/AV:X/AC:H/PR:H/UI:R/S:U/C:N/I:N/A:N", err: cvss.ErrUndefinedMetric},
+		{vector: "XXX:3.0/AV:P/AC:H/PR:H/UI:R/S:U/C:N/I:N/A:N", err: cvsserr.ErrInvalidVector},
+		{vector: "CVSS:2.0/AV:P/AC:H/PR:H/UI:R/S:U/C:N/I:N/A:N", err: cvsserr.ErrNotSupportVer},
+		{vector: "CVSS:3.0", err: cvsserr.ErrInvalidVector},
+		{vector: "CVSS3.0/AV:X/AC:H/PR:H/UI:R/S:U/C:N/I:N/A:N", err: cvsserr.ErrInvalidVector},
+		{vector: "CVSS:3.0/AV:P/AC:H/PR:H/UI:R/S:U/C:N/I:N/A-N", err: cvsserr.ErrInvalidVector},
+		{vector: "CVSS:3.0/AV:P/AC:H/PR:H/UI:R/S:U/C:N/I:N/X:N", err: cvsserr.ErrInvalidVector},
+		{vector: "CVSS:3.0/AV:P/AC:H/PR:H/UI:R/S:U/C:N/I:N/A:X", err: cvsserr.ErrUndefinedMetric},
+		{vector: "CVSS:3.0/AV:P/AC:H/PR:H/UI:R/S:U/C:N/I:X/A:N", err: cvsserr.ErrUndefinedMetric},
+		{vector: "CVSS:3.0/AV:P/AC:H/PR:H/UI:R/S:U/C:X/I:N/A:N", err: cvsserr.ErrUndefinedMetric},
+		{vector: "CVSS:3.0/AV:P/AC:H/PR:H/UI:R/S:X/C:N/I:N/A:N", err: cvsserr.ErrUndefinedMetric},
+		{vector: "CVSS:3.0/AV:P/AC:H/PR:H/UI:X/S:U/C:N/I:N/A:N", err: cvsserr.ErrUndefinedMetric},
+		{vector: "CVSS:3.0/AV:P/AC:H/PR:X/UI:R/S:U/C:N/I:N/A:N", err: cvsserr.ErrUndefinedMetric},
+		{vector: "CVSS:3.0/AV:P/AC:X/PR:H/UI:R/S:U/C:N/I:N/A:N", err: cvsserr.ErrUndefinedMetric},
+		{vector: "CVSS:3.0/AV:X/AC:H/PR:H/UI:R/S:U/C:N/I:N/A:N", err: cvsserr.ErrUndefinedMetric},
 	}
 
 	for _, tc := range testCases {
 		_, err := Decode(tc.vector)
-		if err != tc.err {
+		if !xerrors.Is(err, tc.err) {
 			t.Errorf("NewMetrics(%s) = \"%v\", want \"%v\".", tc.vector, err, tc.err)
 		}
 	}
@@ -42,7 +43,7 @@ func TestDecodeEncode(t *testing.T) {
 		vector string
 		err    error
 	}{
-		{vector: "CVSS:3.0/AV:X/AC:X/PR:X/UI:X/S:X/C:X/I:X/A:X", err: cvss.ErrUndefinedMetric},
+		{vector: "CVSS:3.0/AV:X/AC:X/PR:X/UI:X/S:X/C:X/I:X/A:X", err: cvsserr.ErrUndefinedMetric},
 		{vector: "CVSS:3.0/AV:P/AC:H/PR:H/UI:R/S:U/C:N/I:N/A:N", err: nil},
 		{vector: "CVSS:3.0/AV:L/AC:L/PR:L/UI:N/S:C/C:L/I:L/A:L", err: nil},
 		{vector: "CVSS:3.0/AV:A/AC:L/PR:N/UI:N/S:C/C:H/I:H/A:H", err: nil},
@@ -51,11 +52,11 @@ func TestDecodeEncode(t *testing.T) {
 
 	for _, tc := range testCases {
 		m, err := Decode(tc.vector)
-		if err != tc.err {
+		if !xerrors.Is(err, tc.err) {
 			t.Errorf("Decode(%s) = \"%v\", want \"%v\".", tc.vector, err, tc.err)
 		}
 		v, err := m.Encode()
-		if err != tc.err {
+		if !xerrors.Is(err, tc.err) {
 			t.Errorf("Encode() = \"%v\", want \"%v\".", err, tc.err)
 		}
 		if err == nil {
@@ -121,7 +122,7 @@ func ExampleMetrics() {
 	//Severity = High
 }
 
-/* Copyright 2018 Spiegel
+/* Copyright 2018,2019 Spiegel
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
