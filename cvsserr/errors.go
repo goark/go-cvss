@@ -29,13 +29,13 @@ func (n Num) Error() string {
 }
 
 func (n Num) Is(target error) bool {
-	var t1 *wrapError
+	var t1 Num
 	if errors.As(target, &t1) {
-		return n == t1.Num
+		return n == t1
 	}
-	var t2 Num
+	var t2 *wrapError
 	if errors.As(target, &t2) {
-		return n == t2
+		return n == t2.Num
 	}
 	return false
 }
@@ -60,13 +60,13 @@ func (we *wrapError) FormatError(p errors.Printer) error {
 }
 
 func (we *wrapError) Is(target error) bool {
-	var t1 *wrapError
+	var t1 Num
 	if errors.As(target, &t1) {
-		return we.Num == t1.Num
+		return we.Num == t1
 	}
-	var t2 Num
+	var t2 *wrapError
 	if errors.As(target, &t2) {
-		return we.Num == t2
+		return we.Num == t2.Num
 	}
 	return false
 }
