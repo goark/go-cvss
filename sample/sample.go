@@ -42,11 +42,13 @@ func main() {
 	if r, err := m.Base.Report(tr, lang); err != nil {
 		fmt.Fprintln(os.Stderr, err)
 	} else {
-		io.Copy(os.Stdout, r)
+		if _, err := io.Copy(os.Stdout, r); err != nil {
+			fmt.Fprintln(os.Stderr, err)
+		}
 	}
 }
 
-/* Copyright 2018 Spiegel
+/* Copyright 2018-2020 Spiegel
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.

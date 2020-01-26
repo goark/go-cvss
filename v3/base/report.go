@@ -47,7 +47,9 @@ func (m *Metrics) Report(r io.Reader, lang language.Tag) (io.Reader, error) {
 func getTemplate(r io.Reader) string {
 	if r != nil {
 		tmpdata := &strings.Builder{}
-		io.Copy(tmpdata, r)
+		if _, err := io.Copy(tmpdata, r); err != nil {
+			return ""
+		}
 		return tmpdata.String()
 	}
 	return tempCsv
@@ -76,7 +78,7 @@ func (m *Metrics) getReport(lang language.Tag) *CVSSReport {
 	}
 }
 
-/* Copyright 2018 Spiegel
+/* Copyright 2018-2020 Spiegel
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.

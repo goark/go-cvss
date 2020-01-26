@@ -70,7 +70,9 @@ func TestReport(t *testing.T) {
 		if err != nil {
 			t.Errorf("Metrics.Report(nil, %v) = \"%v\", want nil.", tc.lang, err)
 		}
-		io.Copy(bldr, r)
+		if _, err := io.Copy(bldr, r); err != nil {
+			t.Errorf("Metrics.Report(nil, %v) = \"%v\", want nil.", tc.lang, err)
+		}
 		rep := bldr.String()
 		if rep != tc.rep {
 			t.Errorf("Metrics.Report(nil, %v) = \"%v\", want \"%v\".", tc.lang, rep, tc.rep)
@@ -79,7 +81,7 @@ func TestReport(t *testing.T) {
 	}
 }
 
-/* Copyright 2018 Spiegel
+/* Copyright 2018-2020 Spiegel
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
