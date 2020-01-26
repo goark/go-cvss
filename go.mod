@@ -1,6 +1,8 @@
 module github.com/spiegel-im-spiegel/go-cvss
 
+go 1.13
+
 require (
-	golang.org/x/text v0.3.0
-	golang.org/x/xerrors v0.0.0-20190212162355-a5947ffaace3
+	github.com/spiegel-im-spiegel/errs v0.3.3
+	golang.org/x/text v0.3.2
 )

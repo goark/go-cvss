@@ -1,10 +1,6 @@
 package cvsserr
 
-import (
-	"fmt"
-
-	errors "golang.org/x/xerrors"
-)
+import "fmt"
 
 //Num is error number for CVSS
 type Num int
@@ -28,50 +24,7 @@ func (n Num) Error() string {
 	return fmt.Sprintf("unknown error (%d)", int(n))
 }
 
-func (n Num) Is(target error) bool {
-	var t1 Num
-	if errors.As(target, &t1) {
-		return n == t1
-	}
-	var t2 *wrapError
-	if errors.As(target, &t2) {
-		return n == t2.Num
-	}
-	return false
-}
-
-type wrapError struct {
-	Num
-	frame errors.Frame
-}
-
-func New(n Num) error {
-	return &wrapError{Num: n, frame: errors.Caller(1)}
-}
-
-func (we *wrapError) Format(s fmt.State, v rune) {
-	errors.FormatError(we, s, v)
-}
-
-func (we *wrapError) FormatError(p errors.Printer) error {
-	p.Print(we.Error())
-	we.frame.Format(p)
-	return nil
-}
-
-func (we *wrapError) Is(target error) bool {
-	var t1 Num
-	if errors.As(target, &t1) {
-		return we.Num == t1
-	}
-	var t2 *wrapError
-	if errors.As(target, &t2) {
-		return we.Num == t2.Num
-	}
-	return false
-}
-
-/* Copyright 2018,2019 Spiegel
+/* Copyright 2018-2020 Spiegel
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.

@@ -11,9 +11,9 @@ func TestTitle(t *testing.T) {
 		lang language.Tag
 		s    string
 	}{
-		{lang: language.Und, s: "Common Vulnerability Scoring System (CVSS) v3.0"},
-		{lang: language.English, s: "Common Vulnerability Scoring System (CVSS) v3.0"},
-		{lang: language.Japanese, s: "共通脆弱性評価システム (CVSS) v3.0"},
+		{lang: language.Und, s: "Common Vulnerability Scoring System (CVSS) v3.1"},
+		{lang: language.English, s: "Common Vulnerability Scoring System (CVSS) v3.1"},
+		{lang: language.Japanese, s: "共通脆弱性評価システム (CVSS) v3.1"},
 	}
 	for _, tc := range testCases {
 		s := New().Title(tc.lang)
@@ -23,7 +23,7 @@ func TestTitle(t *testing.T) {
 	}
 }
 
-/* Copyright 2018 Spiegel
+/* Copyright 2018-2020 Spiegel
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.

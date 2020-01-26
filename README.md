@@ -2,7 +2,7 @@
 
 [![Build Status](https://travis-ci.org/spiegel-im-spiegel/go-cvss.svg?branch=master)](https://travis-ci.org/spiegel-im-spiegel/go-cvss)
 [![GitHub license](https://img.shields.io/badge/license-Apache%202-blue.svg)](https://raw.githubusercontent.com/spiegel-im-spiegel/go-cvss/master/LICENSE)
-[![GitHub release](http://img.shields.io/github/release/spiegel-im-spiegel/go-cvss.svg)](https://github.com/spiegel-im-spiegel/go-cvss/releases/latest)
+[![GitHub release](https://img.shields.io/github/release/spiegel-im-spiegel/go-cvss.svg)](https://github.com/spiegel-im-spiegel/go-cvss/releases/latest)
 
 ### Sample Code
 
@@ -60,7 +60,8 @@ ref: [sample.go](https://github.com/spiegel-im-spiegel/go-cvss/blob/master/sampl
 
 ## Bookmark
 
-- [CVSS v3.0 Specification Document](https://www.first.org/cvss/specification-document)
+- [CVSS v3.0 Specification Document](https://www.first.org/cvss/v3.0/specification-document)
+- [CVSS v3.1 Specification Document](https://www.first.org/cvss/v3.1/specification-document)
 - [JVN が CVSSv3 による脆弱性評価を開始 — しっぽのさきっちょ | text.Baldanders.info](http://text.baldanders.info/remark/2015/cvss-v3-metrics-in-jvn/)
 
 [go-cvss]: https://github.com/spiegel-im-spiegel/cvss3

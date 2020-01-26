@@ -2,10 +2,7 @@ package cvsserr
 
 import (
 	"fmt"
-	"os"
 	"testing"
-
-	"golang.org/x/xerrors"
 )
 
 func TestNumError(t *testing.T) {
@@ -28,79 +25,7 @@ func TestNumError(t *testing.T) {
 	}
 }
 
-func TestWrapError(t *testing.T) {
-	testCases := []struct {
-		err error
-		str string
-	}{
-		{err: New(ErrUndefinedMetric), str: "undefined metric"},
-		{err: New(ErrInvalidVector), str: "invalid vector"},
-		{err: New(ErrNotSupportVer), str: "not support version"},
-		{err: New(Num(4)), str: "unknown error (4)"},
-	}
-
-	for _, tc := range testCases {
-		errStr := tc.err.Error()
-		if errStr != tc.str {
-			t.Errorf("\"%v\" != \"%v\"", errStr, tc.str)
-		}
-		fmt.Printf("Info(TestWrapError): %+v\n", tc.err)
-	}
-}
-
-func TestErrorEquality(t *testing.T) {
-	testCases := []struct {
-		err1 error
-		err2 error
-		res  bool
-	}{
-		{err1: New(ErrUndefinedMetric), err2: ErrUndefinedMetric, res: true},
-		{err1: New(ErrInvalidVector), err2: ErrInvalidVector, res: true},
-		{err1: New(ErrNotSupportVer), err2: ErrNotSupportVer, res: true},
-		{err1: New(ErrUndefinedMetric), err2: New(ErrUndefinedMetric), res: true},
-		{err1: New(ErrInvalidVector), err2: New(ErrInvalidVector), res: true},
-		{err1: New(ErrNotSupportVer), err2: New(ErrNotSupportVer), res: true},
-		{err1: New(ErrUndefinedMetric), err2: nil, res: false},
-		{err1: New(ErrInvalidVector), err2: nil, res: false},
-		{err1: New(ErrNotSupportVer), err2: nil, res: false},
-		{err1: New(ErrUndefinedMetric), err2: Num(4), res: false},
-		{err1: New(ErrInvalidVector), err2: Num(4), res: false},
-		{err1: New(ErrNotSupportVer), err2: Num(4), res: false},
-		{err1: New(ErrUndefinedMetric), err2: New(Num(4)), res: false},
-		{err1: New(ErrInvalidVector), err2: New(Num(4)), res: false},
-		{err1: New(ErrNotSupportVer), err2: New(Num(4)), res: false},
-		{err1: New(ErrUndefinedMetric), err2: os.ErrInvalid, res: false},
-		{err1: New(ErrInvalidVector), err2: os.ErrInvalid, res: false},
-		{err1: New(ErrNotSupportVer), err2: os.ErrInvalid, res: false},
-		{err1: ErrUndefinedMetric, err2: New(ErrUndefinedMetric), res: true},
-		{err1: ErrInvalidVector, err2: New(ErrInvalidVector), res: true},
-		{err1: ErrNotSupportVer, err2: New(ErrNotSupportVer), res: true},
-		{err1: ErrUndefinedMetric, err2: ErrUndefinedMetric, res: true},
-		{err1: ErrInvalidVector, err2: ErrInvalidVector, res: true},
-		{err1: ErrNotSupportVer, err2: ErrNotSupportVer, res: true},
-		{err1: ErrUndefinedMetric, err2: nil, res: false},
-		{err1: ErrInvalidVector, err2: nil, res: false},
-		{err1: ErrNotSupportVer, err2: nil, res: false},
-		{err1: ErrUndefinedMetric, err2: Num(4), res: false},
-		{err1: ErrInvalidVector, err2: Num(4), res: false},
-		{err1: ErrNotSupportVer, err2: Num(4), res: false},
-		{err1: ErrUndefinedMetric, err2: New(Num(4)), res: false},
-		{err1: ErrInvalidVector, err2: New(Num(4)), res: false},
-		{err1: ErrNotSupportVer, err2: New(Num(4)), res: false},
-		{err1: ErrUndefinedMetric, err2: os.ErrInvalid, res: false},
-		{err1: ErrInvalidVector, err2: os.ErrInvalid, res: false},
-		{err1: ErrNotSupportVer, err2: os.ErrInvalid, res: false},
-	}
-
-	for _, tc := range testCases {
-		res := xerrors.Is(tc.err1, tc.err2)
-		if res != tc.res {
-			t.Errorf("\"%v\" == \"%v\" ? %v, want %v", tc.err1, tc.err2, res, tc.res)
-		}
-	}
-}
-
-/* Copyright 2019 Spiegel
+/* Copyright 2019,2020 Spiegel
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.

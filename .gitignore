@@ -14,5 +14,4 @@
 *.out
 
 # Other files and folders
-go.sum
 vendor/

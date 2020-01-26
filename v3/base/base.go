@@ -1,38 +1,40 @@
 package base
 
 import (
-	"bytes"
 	"fmt"
 	"math"
 	"strings"
 
+	"github.com/spiegel-im-spiegel/errs"
 	"github.com/spiegel-im-spiegel/go-cvss/cvsserr"
 	"github.com/spiegel-im-spiegel/go-cvss/v3/version"
 )
 
 //Metrics is Base Metrics for CVSSv3
 type Metrics struct {
-	AV AttackVector
-	AC AttackComplexity
-	PR PrivilegesRequired
-	UI UserInteraction
-	S  Scope
-	C  ConfidentialityImpact
-	I  IntegrityImpact
-	A  AvailabilityImpact
+	Ver version.Num
+	AV  AttackVector
+	AC  AttackComplexity
+	PR  PrivilegesRequired
+	UI  UserInteraction
+	S   Scope
+	C   ConfidentialityImpact
+	I   IntegrityImpact
+	A   AvailabilityImpact
 }
 
 //NewMetrics returns Metrics instance
 func NewMetrics() *Metrics {
 	return &Metrics{
-		AV: AttackVectorUnknown,
-		AC: AttackComplexityUnknown,
-		PR: PrivilegesRequiredUnknown,
-		UI: UserInteractionUnknown,
-		S:  ScopeUnknown,
-		C:  ConfidentialityImpactUnknown,
-		I:  IntegrityImpactUnknown,
-		A:  AvailabilityImpactUnknown,
+		Ver: version.Unknown,
+		AV:  AttackVectorUnknown,
+		AC:  AttackComplexityUnknown,
+		PR:  PrivilegesRequiredUnknown,
+		UI:  UserInteractionUnknown,
+		S:   ScopeUnknown,
+		C:   ConfidentialityImpactUnknown,
+		I:   IntegrityImpactUnknown,
+		A:   AvailabilityImpactUnknown,
 	}
 }
 
@@ -40,18 +42,23 @@ func NewMetrics() *Metrics {
 func Decode(vector string) (*Metrics, error) {
 	values := strings.Split(vector, "/")
 	if len(values) < 9 {
-		return nil, cvsserr.New(cvsserr.ErrInvalidVector)
+		return nil, errs.Wrap(cvsserr.ErrInvalidVector, "", errs.WithContext("vector", vector))
 	}
-	//CVSS version (CVSS 3.0 only)
-	if _, err := checkVersion(values[0]); err != nil {
-		return nil, err
+	//CVSS version
+	num, err := checkVersion(values[0])
+	if err != nil {
+		return nil, errs.Wrap(err, "", errs.WithContext("vector", vector))
+	}
+	if num == version.Unknown {
+		return nil, errs.Wrap(cvsserr.ErrNotSupportVer, "", errs.WithContext("vector", vector))
 	}
 	//metrics
 	metrics := NewMetrics()
+	metrics.Ver = num
 	for _, value := range values[1:] {
 		metric := strings.Split(value, ":")
 		if len(metric) != 2 {
-			return nil, cvsserr.New(cvsserr.ErrInvalidVector)
+			return nil, errs.Wrap(cvsserr.ErrInvalidVector, "", errs.WithContext("vector", vector))
 		}
 		switch strings.ToUpper(metric[0]) {
 		case "AV": //Attack Vector
@@ -71,23 +78,20 @@ func Decode(vector string) (*Metrics, error) {
 		case "A": //Availability Impact
 			metrics.A = GetAvailabilityImpact(metric[1])
 		default:
-			return nil, cvsserr.New(cvsserr.ErrInvalidVector)
+			return nil, errs.Wrap(cvsserr.ErrInvalidVector, "", errs.WithContext("vector", value))
 		}
 	}
 	return metrics, metrics.GetError()
 }
-func checkVersion(ver string) (string, error) {
+func checkVersion(ver string) (version.Num, error) {
 	v := strings.Split(ver, ":")
 	if len(v) != 2 {
-		return "", cvsserr.New(cvsserr.ErrInvalidVector)
+		return version.Unknown, errs.Wrap(cvsserr.ErrInvalidVector, "", errs.WithContext("vector", ver))
 	}
 	if strings.ToUpper(v[0]) != "CVSS" {
-		return "", cvsserr.New(cvsserr.ErrInvalidVector)
+		return version.Unknown, errs.Wrap(cvsserr.ErrInvalidVector, "", errs.WithContext("vector", ver))
 	}
-	if v[1] != version.Version {
-		return "", cvsserr.New(cvsserr.ErrNotSupportVer)
-	}
-	return v[1], nil
+	return version.Get(v[1]), nil
 }
 
 //Encode returns CVSSv3 vector string
@@ -95,8 +99,8 @@ func (m *Metrics) Encode() (string, error) {
 	if err := m.GetError(); err != nil {
 		return "", err
 	}
-	r := &bytes.Buffer{}
-	r.WriteString("CVSS:3.0")                  //CVSS Version
+	r := &strings.Builder{}
+	r.WriteString("CVSS:" + m.Ver.String())    //CVSS Version
 	r.WriteString(fmt.Sprintf("/AV:%v", m.AV)) //Attack Vector
 	r.WriteString(fmt.Sprintf("/AC:%v", m.AC)) //Attack Complexity
 	r.WriteString(fmt.Sprintf("/PR:%v", m.PR)) //Privileges Required
@@ -111,11 +115,11 @@ func (m *Metrics) Encode() (string, error) {
 //GetError returns error instance if undefined metric
 func (m *Metrics) GetError() error {
 	if m == nil {
-		return cvsserr.New(cvsserr.ErrUndefinedMetric)
+		return errs.Wrap(cvsserr.ErrUndefinedMetric, "")
 	}
 	switch true {
 	case !m.AV.IsDefined(), !m.AC.IsDefined(), !m.PR.IsDefined(), !m.UI.IsDefined(), !m.S.IsDefined(), !m.C.IsDefined(), !m.I.IsDefined(), !m.A.IsDefined():
-		return cvsserr.New(cvsserr.ErrUndefinedMetric)
+		return errs.Wrap(cvsserr.ErrUndefinedMetric, "")
 	default:
 		return nil
 	}
@@ -167,7 +171,7 @@ func (m *Metrics) GetSeverity() Severity {
 	}
 }
 
-/* Copyright 2018,2019 Spiegel
+/* Copyright 2018-2020 Spiegel
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.

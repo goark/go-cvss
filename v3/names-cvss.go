@@ -6,8 +6,8 @@ import (
 )
 
 var cvssNameMap = map[language.Tag]string{
-	language.English:  "Common Vulnerability Scoring System (CVSS) v" + version.Version,
-	language.Japanese: "共通脆弱性評価システム (CVSS) v" + version.Version,
+	language.English:  "Common Vulnerability Scoring System (CVSS) v" + version.V3_1.String(),
+	language.Japanese: "共通脆弱性評価システム (CVSS) v" + version.V3_1.String(),
 }
 
 //Title returns string instance name for display
@@ -18,7 +18,7 @@ func (c *CVSS) Title(lang language.Tag) string {
 	return cvssNameMap[language.English]
 }
 
-/* Copyright 2018 Spiegel
+/* Copyright 2018-2020 Spiegel
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.

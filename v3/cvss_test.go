@@ -1,6 +1,7 @@
 package v3
 
 import (
+	"errors"
 	"fmt"
 	"io"
 	"os"
@@ -8,7 +9,6 @@ import (
 
 	"github.com/spiegel-im-spiegel/go-cvss/cvsserr"
 	"golang.org/x/text/language"
-	"golang.org/x/xerrors"
 )
 
 func TestImportBaseVector(t *testing.T) {
@@ -17,13 +17,14 @@ func TestImportBaseVector(t *testing.T) {
 		err    error
 	}{
 		{vector: "CVSS:3.0/AV:P/AC:H/PR:H/UI:R/S:U/C:N/I:N/A:N", err: nil},
+		{vector: "CVSS:3.1/AV:P/AC:H/PR:H/UI:R/S:U/C:N/I:N/A:N", err: nil},
 		{vector: "XXX:3.0/AV:P/AC:H/PR:H/UI:R/S:U/C:N/I:N/A:N", err: cvsserr.ErrInvalidVector},
 		{vector: "CVSS:2.0/AV:P/AC:H/PR:H/UI:R/S:U/C:N/I:N/A:N", err: cvsserr.ErrNotSupportVer},
-		{vector: "CVSS:3.0/AV:X/AC:H/PR:H/UI:R/S:U/C:N/I:N/A:N", err: cvsserr.ErrUndefinedMetric},
+		{vector: "CVSS:3.1/AV:X/AC:H/PR:H/UI:R/S:U/C:N/I:N/A:N", err: cvsserr.ErrUndefinedMetric},
 	}
 	for _, tc := range testCases {
 		err := New().ImportBaseVector(tc.vector)
-		if !xerrors.Is(err, tc.err) {
+		if !errors.Is(err, tc.err) {
 			t.Errorf("CVSS.ImportBaseVector(%s) = \"%v\", want \"%v\".", tc.vector, err, tc.err)
 		}
 	}
@@ -40,7 +41,7 @@ func ExampleCVSS() {
 	if r, err := m.Base.Report(nil, language.English); err != nil { //output with CSV format
 		fmt.Fprintln(os.Stderr, err)
 	} else {
-		io.Copy(os.Stdout, r)
+		_, _ = io.Copy(os.Stdout, r)
 	}
 	// Output:
 	//Severity: Critical (9.9)
@@ -56,7 +57,7 @@ func ExampleCVSS() {
 	//Availability Impact,High
 }
 
-/* Copyright 2018,2019 Spiegel
+/* Copyright 2018-2020 Spiegel
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
