@@ -30,7 +30,7 @@ func main() {
 		tr = file
 	}
 
-	m, err := cvss.ImportV3Base(vector)
+	m, err := cvss.ImportBase(vector)
 	if err != nil {
 		fmt.Fprintln(os.Stderr, err)
 		return

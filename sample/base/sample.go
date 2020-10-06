@@ -1,20 +1,24 @@
-package cvss
+package main
 
 import (
-	"github.com/spiegel-im-spiegel/go-cvss/v3/metric"
+	"fmt"
+	"os"
+
+	cvss "github.com/spiegel-im-spiegel/go-cvss"
 )
 
-//ImportBase creates new metric.Base instance from CVSSv3 vector string.
-func ImportBase(vector string) (*metric.Base, error) {
-	return metric.NewBase().Decode(vector)
+func main() {
+	m, err := cvss.ImportBase("CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:C/C:H/I:H/A:H") //CVE-2020-1472: ZeroLogon
+	if err != nil {
+		fmt.Fprintln(os.Stderr, err)
+		return
+	}
+	fmt.Printf("Severity: %v (%v)\n", m.Severity(), m.Score())
+	// Output:
+	// Severity: Critical (10)
 }
 
-//ImportTemporal creates new metric.Temporal instance from CVSSv3 vector string.
-func ImportTemporal(vector string) (*metric.Temporal, error) {
-	return metric.NewTemporal().Decode(vector)
-}
-
-/* Copyright 2020 Spiegel
+/* Copyright 2018-2020 Spiegel
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.

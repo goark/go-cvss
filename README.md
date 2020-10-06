@@ -5,59 +5,59 @@
 [![GitHub license](https://img.shields.io/badge/license-Apache%202-blue.svg)](https://raw.githubusercontent.com/spiegel-im-spiegel/go-cvss/master/LICENSE)
 [![GitHub release](https://img.shields.io/github/release/spiegel-im-spiegel/go-cvss.svg)](https://github.com/spiegel-im-spiegel/go-cvss/releases/latest)
 
-### Sample Code
+## Sample Code
+
+ref: [sample.go](https://github.com/spiegel-im-spiegel/go-cvss/blob/master/sample/sample.go)
+
+### Base Metrics
 
 ```go
 package main
 
 import (
-	"flag"
-	"fmt"
-	"io"
-	"os"
+    "fmt"
+    "os"
 
-	cvssv3 "github.com/spiegel-im-spiegel/go-cvss/v3"
-	"golang.org/x/text/language"
+    cvss "github.com/spiegel-im-spiegel/go-cvss"
 )
 
 func main() {
-	tf := flag.String("t", "", "template file")
-	flag.Parse()
-	if flag.NArg() != 1 {
-		fmt.Fprintln(os.Stderr, os.ErrInvalid)
-		return
-	}
-	vector := flag.Arg(0)
-	var tr io.Reader
-	if len(*tf) > 0 {
-		file, err := os.Open(*tf)
-		if err != nil {
-			fmt.Fprintln(os.Stderr, err)
-			return
-		}
-		defer file.Close()
-		tr = file
-	}
-
-	m := cvssv3.New()
-	if err := m.ImportBaseVector(vector); err != nil {
-		fmt.Fprintln(os.Stderr, err)
-		return
-	}
-	severity := m.Base.GetSeverity()
-	//lang := language.English
-	lang := language.Japanese
-	fmt.Printf("%s: %v (%.1f)\n\n", severity.Title(lang), severity.NameOfValue(lang), m.Base.Score())
-
-	if r, err := m.Base.Report(tr, lang); err != nil {
-		fmt.Fprintln(os.Stderr, err)
-	} else {
-		io.Copy(os.Stdout, r)
-	}
+    bm, err := cvss.ImportV3Base("CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:C/C:H/I:H/A:H") //CVE-2020-1472: ZeroLogon
+    if err != nil {
+        fmt.Fprintln(os.Stderr, err)
+        return
+    }
+    fmt.Printf("Severity: %v (%v)\n", bm.Severity(), bm.Score())
+    // Output:
+    // Severity: Critical (10)
 }
 ```
 
-ref: [sample.go](https://github.com/spiegel-im-spiegel/go-cvss/blob/master/sample/sample.go)
+### Temporal Metrics
+
+```go
+package main
+
+import (
+    "fmt"
+    "os"
+
+    cvss "github.com/spiegel-im-spiegel/go-cvss"
+)
+
+func main() {
+    tm, err := cvss.ImportV3Temporal("CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:C/C:H/I:H/A:H/E:F/RL:W/RC:R") //CVE-2020-1472: ZeroLogon
+    if err != nil {
+        fmt.Fprintln(os.Stderr, err)
+        return
+    }
+    fmt.Printf("Base Severity: %v (%v)\n", tm.BaseMetrics().Severity(), tm.BaseMetrics().Score())
+    fmt.Printf("Temporal Severity: %v (%v)\n", tm.Severity(), tm.Score())
+    // Output:
+    // Base Severity: Critical (10)
+    // Temporal Severity: Critical (9.1)
+}
+```
 
 ## Bookmark
 
