@@ -1,6 +1,7 @@
 # [go-cvss] - Common Vulnerability Scoring System (CVSS) Version 3
 
-[![Build Status](https://travis-ci.org/spiegel-im-spiegel/go-cvss.svg?branch=master)](https://travis-ci.org/spiegel-im-spiegel/go-cvss)
+[![check vulns](https://github.com/spiegel-im-spiegel/go-cvss/workflows/vulns/badge.svg)](https://github.com/spiegel-im-spiegel/go-cvss/actions)
+[![lint status](https://github.com/spiegel-im-spiegel/go-cvss/workflows/lint/badge.svg)](https://github.com/spiegel-im-spiegel/go-cvss/actions)
 [![GitHub license](https://img.shields.io/badge/license-Apache%202-blue.svg)](https://raw.githubusercontent.com/spiegel-im-spiegel/go-cvss/master/LICENSE)
 [![GitHub release](https://img.shields.io/github/release/spiegel-im-spiegel/go-cvss.svg)](https://github.com/spiegel-im-spiegel/go-cvss/releases/latest)
 

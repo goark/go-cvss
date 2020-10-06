@@ -1,7 +1,5 @@
 package version
 
-import "fmt"
-
 //Num is error number for CVSS
 type Num int
 
@@ -21,7 +19,7 @@ func (n Num) String() string {
 	if s, ok := verStrings[n]; ok {
 		return s
 	}
-	return fmt.Sprintf("unknown")
+	return "unknown"
 }
 
 //Get returns Version number from string

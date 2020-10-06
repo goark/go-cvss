@@ -48,15 +48,15 @@ func NewMetrics() *Metrics {
 func Decode(vector string) (*Metrics, error) {
 	values := strings.Split(vector, "/")
 	if len(values) < 9 {
-		return nil, errs.Wrap(cvsserr.ErrInvalidVector, "", errs.WithContext("vector", vector))
+		return nil, errs.Wrap(cvsserr.ErrInvalidVector, errs.WithContext("vector", vector))
 	}
 	//CVSS version
 	num, err := checkVersion(values[0])
 	if err != nil {
-		return nil, errs.Wrap(err, "", errs.WithContext("vector", vector))
+		return nil, errs.Wrap(err, errs.WithContext("vector", vector))
 	}
 	if num == version.Unknown {
-		return nil, errs.Wrap(cvsserr.ErrNotSupportVer, "", errs.WithContext("vector", vector))
+		return nil, errs.Wrap(cvsserr.ErrNotSupportVer, errs.WithContext("vector", vector))
 	}
 	//metrics
 	metrics := NewMetrics()
@@ -64,7 +64,7 @@ func Decode(vector string) (*Metrics, error) {
 	for _, value := range values[1:] {
 		metric := strings.Split(value, ":")
 		if len(metric) != 2 {
-			return nil, errs.Wrap(cvsserr.ErrInvalidVector, "", errs.WithContext("vector", vector))
+			return nil, errs.Wrap(cvsserr.ErrInvalidVector, errs.WithContext("vector", vector))
 		}
 		switch strings.ToUpper(metric[0]) {
 		case "AV": //Attack Vector
@@ -90,7 +90,7 @@ func Decode(vector string) (*Metrics, error) {
 		case "RC": //RemediationLevel
 			metrics.RC = GetReportConfidence(metric[1])
 		default:
-			return nil, errs.Wrap(cvsserr.ErrInvalidVector, "", errs.WithContext("vector", value))
+			return nil, errs.Wrap(cvsserr.ErrInvalidVector, errs.WithContext("vector", value))
 		}
 	}
 	return metrics, metrics.GetError()
@@ -98,10 +98,10 @@ func Decode(vector string) (*Metrics, error) {
 func checkVersion(ver string) (version.Num, error) {
 	v := strings.Split(ver, ":")
 	if len(v) != 2 {
-		return version.Unknown, errs.Wrap(cvsserr.ErrInvalidVector, "", errs.WithContext("vector", ver))
+		return version.Unknown, errs.Wrap(cvsserr.ErrInvalidVector, errs.WithContext("vector", ver))
 	}
 	if strings.ToUpper(v[0]) != "CVSS" {
-		return version.Unknown, errs.Wrap(cvsserr.ErrInvalidVector, "", errs.WithContext("vector", ver))
+		return version.Unknown, errs.Wrap(cvsserr.ErrInvalidVector, errs.WithContext("vector", ver))
 	}
 	return version.Get(v[1]), nil
 }
@@ -140,11 +140,11 @@ func (m *Metrics) Encode() (string, error) {
 //GetError returns error instance if undefined metric
 func (m *Metrics) GetError() error {
 	if m == nil {
-		return errs.Wrap(cvsserr.ErrUndefinedMetric, "")
+		return errs.Wrap(cvsserr.ErrUndefinedMetric)
 	}
 	switch true {
 	case !m.AV.IsDefined(), !m.AC.IsDefined(), !m.PR.IsDefined(), !m.UI.IsDefined(), !m.S.IsDefined(), !m.C.IsDefined(), !m.I.IsDefined(), !m.A.IsDefined():
-		return errs.Wrap(cvsserr.ErrUndefinedMetric, "")
+		return errs.Wrap(cvsserr.ErrUndefinedMetric)
 	default:
 		return nil
 	}
