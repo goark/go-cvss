@@ -1,6 +1,10 @@
 package v3
 
-import "github.com/spiegel-im-spiegel/go-cvss/v3/base"
+import (
+	"github.com/spiegel-im-spiegel/go-cvss/v3/base"
+	"github.com/spiegel-im-spiegel/go-cvss/v3/version"
+	"golang.org/x/text/language"
+)
 
 //CVSS is type of CVSS
 type CVSS struct {
@@ -20,6 +24,19 @@ func (c *CVSS) ImportBaseVector(v string) error {
 	}
 	c.Base = m
 	return nil
+}
+
+var cvssNameMap = map[language.Tag]string{
+	language.English:  "Common Vulnerability Scoring System (CVSS) v" + version.V3_1.String(),
+	language.Japanese: "共通脆弱性評価システム (CVSS) v" + version.V3_1.String(),
+}
+
+//Title returns string instance name for display
+func (c *CVSS) Title(lang language.Tag) string {
+	if s, ok := cvssNameMap[lang]; ok {
+		return s
+	}
+	return cvssNameMap[language.English]
 }
 
 /* Copyright 2018 Spiegel

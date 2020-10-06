@@ -1,32 +1,20 @@
-package cvsserr
+package names
 
-import "fmt"
+import "golang.org/x/text/language"
 
-//Num is error number for CVSS
-type Num int
+type langNameMap map[language.Tag]string
 
-const (
-	ErrUndefinedMetric Num = iota + 1
-	ErrInvalidVector
-	ErrNotSupportVer
-	ErrNotSupportMetric
-)
-
-var errMessage = map[Num]string{
-	ErrUndefinedMetric:  "undefined metric",
-	ErrInvalidVector:    "invalid vector",
-	ErrNotSupportVer:    "not support version",
-	ErrNotSupportMetric: "not support metric",
-}
-
-func (n Num) Error() string {
-	if s, ok := errMessage[n]; ok {
+func (ln langNameMap) getNameInLang(lang language.Tag) string {
+	if s, ok := ln[lang]; ok {
 		return s
 	}
-	return fmt.Sprintf("unknown error (%d)", int(n))
+	if s, ok := ln[language.English]; ok {
+		return s
+	}
+	return ""
 }
 
-/* Copyright 2018-2020 Spiegel
+/* Copyright 2020 Spiegel
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.

@@ -1,6 +1,8 @@
-package base
+package metric
 
-import "strings"
+import (
+	"strings"
+)
 
 //ReportConfidence is metric type for Temporal Metrics
 type ReportConfidence int
@@ -13,14 +15,14 @@ const (
 	ReportConfidenceConfirmed
 )
 
-var ReportConfidenceMap = map[ReportConfidence]string{
+var reportConfidenceMap = map[ReportConfidence]string{
 	ReportConfidenceNotDefined: "X",
 	ReportConfidenceUnknown:    "U",
 	ReportConfidenceReasonable: "R",
 	ReportConfidenceConfirmed:  "C",
 }
 
-var ReportConfidenceValueMap = map[ReportConfidence]float64{
+var reportConfidenceValueMap = map[ReportConfidence]float64{
 	ReportConfidenceNotDefined: 1,
 	ReportConfidenceUnknown:    0.92,
 	ReportConfidenceReasonable: 0.96,
@@ -30,7 +32,7 @@ var ReportConfidenceValueMap = map[ReportConfidence]float64{
 //GetReportConfidence returns result of ReportConfidence metric
 func GetReportConfidence(s string) ReportConfidence {
 	s = strings.ToUpper(s)
-	for k, v := range ReportConfidenceMap {
+	for k, v := range reportConfidenceMap {
 		if s == v {
 			return k
 		}
@@ -38,24 +40,26 @@ func GetReportConfidence(s string) ReportConfidence {
 	return ReportConfidenceNotDefined
 }
 
-func (ai ReportConfidence) String() string {
-	if s, ok := ReportConfidenceMap[ai]; ok {
+func (rc ReportConfidence) String() string {
+	if s, ok := reportConfidenceMap[rc]; ok {
 		return s
 	}
 	return ""
 }
 
 //Value returns value of ReportConfidence metric
-func (ai ReportConfidence) Value() float64 {
-	if v, ok := ReportConfidenceValueMap[ai]; ok {
+func (rc ReportConfidence) Value() float64 {
+	if v, ok := reportConfidenceValueMap[rc]; ok {
 		return v
 	}
 	return 1
 }
 
 //IsDefined returns false if undefined result value of metric
-func (ai ReportConfidence) IsDefined() bool {
-	return ai != ReportConfidenceNotDefined
+func (rc ReportConfidence) IsDefined() bool {
+	_, ok := reportConfidenceValueMap[rc]
+	return ok
 }
 
 /* Copyright by Florent Viel, 2020 */
+/* Contributed by Spiegel, 2020 */

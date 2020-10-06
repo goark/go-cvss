@@ -1,5 +1,8 @@
-| {{ .BaseMetrics }} | {{ .MetricValue }} |
-|--------|-------|
+- CVSS Version {{ .Version }}
+- {{ .SeverityName }}: {{ .SeverityValue }} ({{ .BaseScore }})
+
+| {{ .BaseMetrics }} | {{ .BaseMetricValue }} |
+| --- | --- |
 | {{ .AVName }} | {{ .AVValue }} |
 | {{ .ACName }} | {{ .ACValue }} |
 | {{ .PRName }} | {{ .PRValue }} |

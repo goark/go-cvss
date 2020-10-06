@@ -1,4 +1,4 @@
-package base
+package metric
 
 import (
 	"errors"
@@ -19,7 +19,7 @@ func TestDecodeError(t *testing.T) {
 		{vector: "CVSS:3.1", err: cvsserr.ErrInvalidVector},
 		{vector: "CVSS3.1/AV:X/AC:H/PR:H/UI:R/S:U/C:N/I:N/A:N", err: cvsserr.ErrInvalidVector},
 		{vector: "CVSS:3.1/AV:P/AC:H/PR:H/UI:R/S:U/C:N/I:N/A-N", err: cvsserr.ErrInvalidVector},
-		{vector: "CVSS:3.1/AV:P/AC:H/PR:H/UI:R/S:U/C:N/I:N/X:N", err: cvsserr.ErrInvalidVector},
+		{vector: "CVSS:3.1/AV:P/AC:H/PR:H/UI:R/S:U/C:N/I:N/X:N", err: cvsserr.ErrNotSupportMetric},
 		{vector: "CVSS:3.1/AV:P/AC:H/PR:H/UI:R/S:U/C:N/I:N/A:X", err: cvsserr.ErrUndefinedMetric},
 		{vector: "CVSS:3.1/AV:P/AC:H/PR:H/UI:R/S:U/C:N/I:X/A:N", err: cvsserr.ErrUndefinedMetric},
 		{vector: "CVSS:3.1/AV:P/AC:H/PR:H/UI:R/S:U/C:X/I:N/A:N", err: cvsserr.ErrUndefinedMetric},
@@ -31,7 +31,7 @@ func TestDecodeError(t *testing.T) {
 	}
 
 	for _, tc := range testCases {
-		if _, err := Decode(tc.vector); !errors.Is(err, tc.err) {
+		if _, err := (*Base)(nil).Decode(tc.vector); !errors.Is(err, tc.err) {
 			t.Errorf("Decode(%s) = \"%+v\", want \"%v\".", tc.vector, err, tc.err)
 		}
 	}
@@ -50,7 +50,7 @@ func TestDecodeEncode(t *testing.T) {
 	}
 
 	for _, tc := range testCases {
-		m, err := Decode(tc.vector)
+		m, err := NewBase().Decode(tc.vector)
 		if !errors.Is(err, tc.err) {
 			t.Errorf("Decode(%s) = \"%+v\", want \"%v\".", tc.vector, err, tc.err)
 		}
@@ -120,32 +120,14 @@ func TestScore(t *testing.T) {
 	}
 
 	for _, tc := range testCases {
-		m, _ := Decode(tc.vector)
+		m, _ := NewBase().Decode(tc.vector)
 		score := m.Score()
 		if score != tc.score {
 			t.Errorf("Score(%s) = %v, want %v.", tc.vector, score, tc.score)
 		}
-		severity := m.GetSeverity()
+		severity := m.Severity()
 		if severity.String() != tc.severity.String() {
 			t.Errorf("Score(%s) = %v, want %v.", tc.vector, severity, tc.severity)
-		}
-	}
-}
-
-func TestTemporalScore(t *testing.T) {
-	testCases := []struct {
-		vector string
-		score  float64
-	}{
-		{vector: "CVSS:3.1/S:U/AV:N/AC:L/PR:H/UI:N/C:L/I:L/A:N/E:F/RL:X", score: 3.7},
-		{vector: "CVSS:3.0/AV:P/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:N/E:F/RL:W/RC:R", score: 5.6},
-	}
-
-	for _, tc := range testCases {
-		m, _ := Decode(tc.vector)
-		score := m.TemporalScore()
-		if score != tc.score {
-			t.Errorf("Score(%s) = %v, want %v.", tc.vector, score, tc.score)
 		}
 	}
 }

@@ -13,7 +13,8 @@ func TestNumError(t *testing.T) {
 		{err: ErrUndefinedMetric, str: "undefined metric"},
 		{err: ErrInvalidVector, str: "invalid vector"},
 		{err: ErrNotSupportVer, str: "not support version"},
-		{err: Num(4), str: "unknown error (4)"},
+		{err: ErrNotSupportMetric, str: "not support metric"},
+		{err: Num(5), str: "unknown error (5)"},
 	}
 
 	for _, tc := range testCases {

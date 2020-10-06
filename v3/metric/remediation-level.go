@@ -1,4 +1,4 @@
-package base
+package metric
 
 import "strings"
 
@@ -14,7 +14,7 @@ const (
 	RemediationLevelUnavailable
 )
 
-var RemediationLevelMap = map[RemediationLevel]string{
+var remediationLevelMap = map[RemediationLevel]string{
 	RemediationLevelNotDefined:   "X",
 	RemediationLevelOfficialFix:  "O",
 	RemediationLevelTemporaryFix: "T",
@@ -22,7 +22,7 @@ var RemediationLevelMap = map[RemediationLevel]string{
 	RemediationLevelUnavailable:  "U",
 }
 
-var RemediationLevelValueMap = map[RemediationLevel]float64{
+var remediationLevelValueMap = map[RemediationLevel]float64{
 	RemediationLevelNotDefined:   1,
 	RemediationLevelOfficialFix:  0.95,
 	RemediationLevelTemporaryFix: 0.96,
@@ -33,7 +33,7 @@ var RemediationLevelValueMap = map[RemediationLevel]float64{
 //GetRemediationLevel returns result of RemediationLevel metric
 func GetRemediationLevel(s string) RemediationLevel {
 	s = strings.ToUpper(s)
-	for k, v := range RemediationLevelMap {
+	for k, v := range remediationLevelMap {
 		if s == v {
 			return k
 		}
@@ -41,24 +41,26 @@ func GetRemediationLevel(s string) RemediationLevel {
 	return RemediationLevelNotDefined
 }
 
-func (ai RemediationLevel) String() string {
-	if s, ok := RemediationLevelMap[ai]; ok {
+func (rl RemediationLevel) String() string {
+	if s, ok := remediationLevelMap[rl]; ok {
 		return s
 	}
 	return ""
 }
 
 //Value returns value of RemediationLevel metric
-func (ai RemediationLevel) Value() float64 {
-	if v, ok := RemediationLevelValueMap[ai]; ok {
+func (rl RemediationLevel) Value() float64 {
+	if v, ok := remediationLevelValueMap[rl]; ok {
 		return v
 	}
 	return 1
 }
 
 //IsDefined returns false if undefined result value of metric
-func (ai RemediationLevel) IsDefined() bool {
-	return ai != RemediationLevelNotDefined
+func (rl RemediationLevel) IsDefined() bool {
+	_, ok := remediationLevelValueMap[rl]
+	return ok
 }
 
 /* Copyright by Florent Viel, 2020 */
+/* Contributed by Spiegel, 2020 */

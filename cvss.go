@@ -1,15 +1,20 @@
 package cvss
 
-import "testing"
+import (
+	"github.com/spiegel-im-spiegel/go-cvss/v3/metric"
+)
 
-func TestVersion(t *testing.T) {
-	v := "v3.1"
-	if LatestVersion != v {
-		t.Errorf("Version = %v, want %v.", LatestVersion, v)
-	}
+//ImportV3BaseVector creates new metric.Base instance from CVSSv3 vector string.
+func ImportV3Base(vector string) (*metric.Base, error) {
+	return metric.NewBase().Decode(vector)
 }
 
-/* Copyright 2018-2020 Spiegel
+//ImportV3TemporalVector creates new metric.Temporal instance from CVSSv3 vector string.
+func ImportV3Temporal(vector string) (*metric.Temporal, error) {
+	return metric.NewTemporal().Decode(vector)
+}
+
+/* Copyright 2020 Spiegel
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.

@@ -6,7 +6,8 @@ import (
 	"io"
 	"os"
 
-	cvssv3 "github.com/spiegel-im-spiegel/go-cvss/v3"
+	cvss "github.com/spiegel-im-spiegel/go-cvss"
+	"github.com/spiegel-im-spiegel/go-cvss/v3/report"
 	"golang.org/x/text/language"
 )
 
@@ -29,22 +30,21 @@ func main() {
 		tr = file
 	}
 
-	m := cvssv3.New()
-	if err := m.ImportBaseVector(vector); err != nil {
+	m, err := cvss.ImportV3Base(vector)
+	if err != nil {
 		fmt.Fprintln(os.Stderr, err)
 		return
 	}
-	severity := m.Base.GetSeverity()
 	//lang := language.English
 	lang := language.Japanese
-	fmt.Printf("%s: %v (%.1f)\n\n", severity.Title(lang), severity.NameOfValue(lang), m.Base.Score())
 
-	if r, err := m.Base.Report(tr, lang); err != nil {
+	r, err := report.NewBase(m, lang).ExportWithTemplate(tr)
+	if err != nil {
 		fmt.Fprintln(os.Stderr, err)
-	} else {
-		if _, err := io.Copy(os.Stdout, r); err != nil {
-			fmt.Fprintln(os.Stderr, err)
-		}
+		return
+	}
+	if _, err := io.Copy(os.Stdout, r); err != nil {
+		fmt.Fprintln(os.Stderr, err)
 	}
 }
 

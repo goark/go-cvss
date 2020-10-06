@@ -1,24 +1,34 @@
-package v3
+package metric
 
-import (
-	"github.com/spiegel-im-spiegel/go-cvss/v3/version"
-	"golang.org/x/text/language"
+//Severity is severity for Base Metrics
+type Severity int
+
+//Constant of severity
+const (
+	SeverityUnknown Severity = iota
+	SeverityNone
+	SeverityLow
+	SeverityMedium
+	SeverityHigh
+	SeverityCritical
 )
 
-var cvssNameMap = map[language.Tag]string{
-	language.English:  "Common Vulnerability Scoring System (CVSS) v" + version.V3_1.String(),
-	language.Japanese: "共通脆弱性評価システム (CVSS) v" + version.V3_1.String(),
+var severityMap = map[Severity]string{
+	SeverityNone:     "None",
+	SeverityLow:      "Low",
+	SeverityMedium:   "Medium",
+	SeverityHigh:     "High",
+	SeverityCritical: "Critical",
 }
 
-//Title returns string instance name for display
-func (c *CVSS) Title(lang language.Tag) string {
-	if s, ok := cvssNameMap[lang]; ok {
+func (sv Severity) String() string {
+	if s, ok := severityMap[sv]; ok {
 		return s
 	}
-	return cvssNameMap[language.English]
+	return "Unknown"
 }
 
-/* Copyright 2018-2020 Spiegel
+/* Copyright 2018 Spiegel
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
