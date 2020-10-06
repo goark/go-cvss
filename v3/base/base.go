@@ -21,6 +21,9 @@ type Metrics struct {
 	C   ConfidentialityImpact
 	I   IntegrityImpact
 	A   AvailabilityImpact
+	E   Exploitability
+	RL  RemediationLevel
+	RC  ReportConfidence
 }
 
 //NewMetrics returns Metrics instance
@@ -35,6 +38,9 @@ func NewMetrics() *Metrics {
 		C:   ConfidentialityImpactUnknown,
 		I:   IntegrityImpactUnknown,
 		A:   AvailabilityImpactUnknown,
+		E:   ExploitabilityNotDefined,
+		RL:  RemediationLevelNotDefined,
+		RC:  ReportConfidenceNotDefined,
 	}
 }
 
@@ -77,6 +83,12 @@ func Decode(vector string) (*Metrics, error) {
 			metrics.I = GetIntegrityImpact(metric[1])
 		case "A": //Availability Impact
 			metrics.A = GetAvailabilityImpact(metric[1])
+		case "E": //Exploitability
+			metrics.E = GetExploitability(metric[1])
+		case "RL": //RemediationLevel
+			metrics.RL = GetRemediationLevel(metric[1])
+		case "RC": //RemediationLevel
+			metrics.RC = GetReportConfidence(metric[1])
 		default:
 			return nil, errs.Wrap(cvsserr.ErrInvalidVector, "", errs.WithContext("vector", value))
 		}
@@ -109,6 +121,19 @@ func (m *Metrics) Encode() (string, error) {
 	r.WriteString(fmt.Sprintf("/C:%v", m.C))   //Confidentiality Impact
 	r.WriteString(fmt.Sprintf("/I:%v", m.I))   //Integrity Impact
 	r.WriteString(fmt.Sprintf("/A:%v", m.A))   //Availability Impact
+
+	if m.E.IsDefined() {
+		r.WriteString(fmt.Sprintf("/E:%v", m.E)) //Exploitability
+	}
+
+	if m.RL.IsDefined() {
+		r.WriteString(fmt.Sprintf("/RL:%v", m.RL)) //Remediation Level
+	}
+
+	if m.RC.IsDefined() {
+		r.WriteString(fmt.Sprintf("/RC:%v", m.RC)) //Report Confidence
+	}
+
 	return r.String(), nil
 }
 
@@ -143,11 +168,9 @@ func (m *Metrics) Score() float64 {
 	if impact <= 0 {
 		score = 0.0
 	} else if m.S == ScopeUnchanged {
-		score = math.Min(impact+ease, 10.0)
-		score = math.Ceil(score*10.0) / 10.0
+		score = roundUp(math.Min(impact+ease, 10))
 	} else {
-		score = math.Min(1.08*(impact+ease), 10.0)
-		score = math.Ceil(score*10.0) / 10.0
+		score = roundUp(math.Min(1.08*(impact+ease), 10))
 	}
 	return score
 }
@@ -169,6 +192,20 @@ func (m *Metrics) GetSeverity() Severity {
 	default:
 		return SeverityUnknown
 	}
+}
+
+func (m *Metrics) TemporalScore() float64 {
+	return roundUp(m.Score() * m.E.Value() * m.RL.Value() * m.RC.Value())
+}
+
+func roundUp(input float64) float64 {
+	intInput := math.Round(input * 100000)
+
+	if int(intInput)%10000 == 0 {
+		return intInput / 100000
+	}
+
+	return (math.Floor(intInput/10000) + 1) / 10.0
 }
 
 /* Copyright 2018-2020 Spiegel
