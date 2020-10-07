@@ -1,68 +1,74 @@
-# [go-cvss] - Common Vulnerability Scoring System (CVSS) Version 3
+# [go-cvss] - Common Vulnerability Scoring System (CVSS)
 
 [![check vulns](https://github.com/spiegel-im-spiegel/go-cvss/workflows/vulns/badge.svg)](https://github.com/spiegel-im-spiegel/go-cvss/actions)
 [![lint status](https://github.com/spiegel-im-spiegel/go-cvss/workflows/lint/badge.svg)](https://github.com/spiegel-im-spiegel/go-cvss/actions)
 [![GitHub license](https://img.shields.io/badge/license-Apache%202-blue.svg)](https://raw.githubusercontent.com/spiegel-im-spiegel/go-cvss/master/LICENSE)
 [![GitHub release](https://img.shields.io/github/release/spiegel-im-spiegel/go-cvss.svg)](https://github.com/spiegel-im-spiegel/go-cvss/releases/latest)
 
-### Sample Code
+Importing CVSS vector and scoring.
+
+- Supoort CVSS version 3.0 and 3.1
+- Exporting CVSS information with template string
+
+## Sample Code
+
+### Base Metrics
 
 ```go
 package main
 
 import (
-	"flag"
-	"fmt"
-	"io"
-	"os"
+    "fmt"
+    "os"
 
-	cvssv3 "github.com/spiegel-im-spiegel/go-cvss/v3"
-	"golang.org/x/text/language"
+    "github.com/spiegel-im-spiegel/go-cvss/v3/metric"
 )
 
 func main() {
-	tf := flag.String("t", "", "template file")
-	flag.Parse()
-	if flag.NArg() != 1 {
-		fmt.Fprintln(os.Stderr, os.ErrInvalid)
-		return
-	}
-	vector := flag.Arg(0)
-	var tr io.Reader
-	if len(*tf) > 0 {
-		file, err := os.Open(*tf)
-		if err != nil {
-			fmt.Fprintln(os.Stderr, err)
-			return
-		}
-		defer file.Close()
-		tr = file
-	}
-
-	m := cvssv3.New()
-	if err := m.ImportBaseVector(vector); err != nil {
-		fmt.Fprintln(os.Stderr, err)
-		return
-	}
-	severity := m.Base.GetSeverity()
-	//lang := language.English
-	lang := language.Japanese
-	fmt.Printf("%s: %v (%.1f)\n\n", severity.Title(lang), severity.NameOfValue(lang), m.Base.Score())
-
-	if r, err := m.Base.Report(tr, lang); err != nil {
-		fmt.Fprintln(os.Stderr, err)
-	} else {
-		io.Copy(os.Stdout, r)
-	}
+    bm, err := metric.NewBase().Decode("CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:C/C:H/I:H/A:H") //CVE-2020-1472: ZeroLogon
+    if err != nil {
+        fmt.Fprintln(os.Stderr, err)
+        return
+    }
+    fmt.Printf("Severity: %v (%v)\n", bm.Severity(), bm.Score())
+    // Output:
+    // Severity: Critical (10)
 }
 ```
 
+### Temporal Metrics
+
+```go
+package main
+
+import (
+    "fmt"
+    "os"
+
+    "github.com/spiegel-im-spiegel/go-cvss/v3/metric"
+)
+
+func main() {
+    tm, err := metric.NewTemporal().Decode("CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:C/C:H/I:H/A:H/E:F/RL:W/RC:R") //CVE-2020-1472: ZeroLogon
+    if err != nil {
+        fmt.Fprintln(os.Stderr, err)
+        return
+    }
+    fmt.Printf("Base Severity: %v (%v)\n", tm.BaseMetrics().Severity(), tm.BaseMetrics().Score())
+    fmt.Printf("Temporal Severity: %v (%v)\n", tm.Severity(), tm.Score())
+    // Output:
+    // Base Severity: Critical (10)
+    // Temporal Severity: Critical (9.1)
+}
+```
+
+### Reporting with template
+
 ref: [sample.go](https://github.com/spiegel-im-spiegel/go-cvss/blob/master/sample/sample.go)
 
-## Bookmark
+## Reference
 
 - [CVSS v3.0 Specification Document](https://www.first.org/cvss/v3.0/specification-document)
 - [CVSS v3.1 Specification Document](https://www.first.org/cvss/v3.1/specification-document)
-- [JVN が CVSSv3 による脆弱性評価を開始 — しっぽのさきっちょ | text.Baldanders.info](http://text.baldanders.info/remark/2015/cvss-v3-metrics-in-jvn/)
 
-[go-cvss]: https://github.com/spiegel-im-spiegel/cvss3
+[go-cvss]: https://github.com/spiegel-im-spiegel/go-cvss

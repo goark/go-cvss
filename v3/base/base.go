@@ -208,6 +208,7 @@ func roundUp(input float64) float64 {
 	return (math.Floor(intInput/10000) + 1) / 10.0
 }
 
+/* Contributed by Florent Viel, 2020 */
 /* Copyright 2018-2020 Spiegel
  *
  * Licensed under the Apache License, Version 2.0 (the "License");

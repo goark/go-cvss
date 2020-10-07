@@ -10,10 +10,13 @@ func TestNumError(t *testing.T) {
 		err error
 		str string
 	}{
+		{err: ErrNullPointer, str: "Null reference instance"},
 		{err: ErrUndefinedMetric, str: "undefined metric"},
 		{err: ErrInvalidVector, str: "invalid vector"},
 		{err: ErrNotSupportVer, str: "not support version"},
-		{err: Num(4), str: "unknown error (4)"},
+		{err: ErrNotSupportMetric, str: "not support metric"},
+		{err: ErrInvalidTemplate, str: "invalid templete string"},
+		{err: Num(7), str: "unknown error (7)"},
 	}
 
 	for _, tc := range testCases {

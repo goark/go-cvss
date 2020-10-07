@@ -30,6 +30,23 @@ func TestImportBaseVector(t *testing.T) {
 	}
 }
 
+func TestTitle(t *testing.T) {
+	testCases := []struct {
+		lang language.Tag
+		s    string
+	}{
+		{lang: language.Und, s: "Common Vulnerability Scoring System (CVSS) v3.1"},
+		{lang: language.English, s: "Common Vulnerability Scoring System (CVSS) v3.1"},
+		{lang: language.Japanese, s: "共通脆弱性評価システム (CVSS) v3.1"},
+	}
+	for _, tc := range testCases {
+		s := New().Title(tc.lang)
+		if s != tc.s {
+			t.Errorf("CVSS.Title(%v) = \"%v\", want \"%v\".", tc.lang, s, tc.s)
+		}
+	}
+}
+
 func ExampleCVSS() {
 	m := New()
 	if err := m.ImportBaseVector("CVSS:3.0/AV:N/AC:L/PR:L/UI:N/S:C/C:H/I:H/A:H"); err != nil {

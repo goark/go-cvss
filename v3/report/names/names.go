@@ -1,15 +1,31 @@
-package cvss
+package names
 
-import "testing"
+import "golang.org/x/text/language"
 
-func TestVersion(t *testing.T) {
-	v := "v3.1"
-	if LatestVersion != v {
-		t.Errorf("Version = %v, want %v.", LatestVersion, v)
+var (
+	unknownValueNameMap = langNameMap{
+		language.English:  "Unknown",
+		language.Japanese: "未定義",
 	}
+	metricVakueMap = langNameMap{
+		language.English:  "Metric Value",
+		language.Japanese: "評価値",
+	}
+)
+
+type langNameMap map[language.Tag]string
+
+func (ln langNameMap) getNameInLang(lang language.Tag) string {
+	if s, ok := ln[lang]; ok {
+		return s
+	}
+	if s, ok := ln[language.English]; ok {
+		return s
+	}
+	return ""
 }
 
-/* Copyright 2018-2020 Spiegel
+/* Copyright 2020 Spiegel
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.

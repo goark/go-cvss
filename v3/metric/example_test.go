@@ -1,9 +1,24 @@
-package cvss
+package metric_test
 
-const (
-	LatestVersion = "v3.1"
+import (
+	"fmt"
+
+	"github.com/spiegel-im-spiegel/go-cvss/v3/metric"
 )
 
+func ExampleBase_Decode() {
+	m, err := metric.NewBase().Decode("CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:N/A:N") //CVE-2015-8252
+	if err != nil {
+		return
+	}
+	fmt.Println("Score =", m.Score())
+	fmt.Println("Severity =", m.Severity())
+	//Output
+	//Score = 7.5
+	//Severity = High
+}
+
+/* Contributed by Florent Viel, 2020 */
 /* Copyright 2018-2020 Spiegel
  *
  * Licensed under the Apache License, Version 2.0 (the "License");

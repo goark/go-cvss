@@ -1,26 +1,23 @@
-package v3
+package main
 
 import (
-	"testing"
+	"fmt"
+	"os"
 
-	"golang.org/x/text/language"
+	"github.com/spiegel-im-spiegel/go-cvss/v3/metric"
 )
 
-func TestTitle(t *testing.T) {
-	testCases := []struct {
-		lang language.Tag
-		s    string
-	}{
-		{lang: language.Und, s: "Common Vulnerability Scoring System (CVSS) v3.1"},
-		{lang: language.English, s: "Common Vulnerability Scoring System (CVSS) v3.1"},
-		{lang: language.Japanese, s: "共通脆弱性評価システム (CVSS) v3.1"},
+func main() {
+	tm, err := metric.NewTemporal().Decode("CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:C/C:H/I:H/A:H/E:F/RL:W/RC:R") //CVE-2020-1472: ZeroLogon
+	if err != nil {
+		fmt.Fprintln(os.Stderr, err)
+		return
 	}
-	for _, tc := range testCases {
-		s := New().Title(tc.lang)
-		if s != tc.s {
-			t.Errorf("CVSS.Title(%v) = \"%v\", want \"%v\".", tc.lang, s, tc.s)
-		}
-	}
+	fmt.Printf("Base Severity: %v (%v)\n", tm.BaseMetrics().Severity(), tm.BaseMetrics().Score())
+	fmt.Printf("Temporal Severity: %v (%v)\n", tm.Severity(), tm.Score())
+	// Output:
+	// Base Severity: Critical (10)
+	// Temporal Severity: Critical (9.1)
 }
 
 /* Copyright 2018-2020 Spiegel

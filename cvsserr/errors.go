@@ -6,15 +6,21 @@ import "fmt"
 type Num int
 
 const (
-	ErrUndefinedMetric Num = iota + 1
+	ErrNullPointer Num = iota + 1
+	ErrUndefinedMetric
 	ErrInvalidVector
 	ErrNotSupportVer
+	ErrNotSupportMetric
+	ErrInvalidTemplate
 )
 
 var errMessage = map[Num]string{
-	ErrUndefinedMetric: "undefined metric",
-	ErrInvalidVector:   "invalid vector",
-	ErrNotSupportVer:   "not support version",
+	ErrNullPointer:      "Null reference instance",
+	ErrUndefinedMetric:  "undefined metric",
+	ErrInvalidVector:    "invalid vector",
+	ErrNotSupportVer:    "not support version",
+	ErrNotSupportMetric: "not support metric",
+	ErrInvalidTemplate:  "invalid templete string",
 }
 
 func (n Num) Error() string {
