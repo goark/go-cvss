@@ -32,10 +32,6 @@ var (
 			language.Japanese: "緊急",
 		},
 	}
-	severityValueNameUnknownMap = langNameMap{
-		language.English:  "Unknown",
-		language.Japanese: "不明",
-	}
 )
 
 //Severity returns string of Severity
@@ -48,7 +44,7 @@ func SeverityValueOf(sv metric.Severity, lang language.Tag) string {
 	if m, ok := severityNamesMap[sv]; ok {
 		return m.getNameInLang(lang)
 	}
-	return severityValueNameUnknownMap.getNameInLang(lang)
+	return unknownValueNameMap.getNameInLang(lang)
 }
 
 /* Copyright 2018-2020 Spiegel

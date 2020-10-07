@@ -9,7 +9,8 @@ func TestScope(t *testing.T) {
 		res     string
 		defined bool
 	}{
-		{input: "X", result: ScopeUnknown, res: "", defined: false},
+		{input: "Z", result: ScopeUnknown, res: "", defined: false},
+		{input: "X", result: ScopeNotDefined, res: "X", defined: true},
 		{input: "U", result: ScopeUnchanged, res: "U", defined: true},
 		{input: "C", result: ScopeChanged, res: "C", defined: true},
 	}
@@ -23,7 +24,7 @@ func TestScope(t *testing.T) {
 		if str != tc.res {
 			t.Errorf("Scope.String(%v) = \"%v\", want \"%v\".", tc.input, str, tc.res)
 		}
-		if r.IsDefined() != tc.defined {
+		if r.IsUnknown() == tc.defined {
 			t.Errorf("Scope.IsDefined(%v) = %v, want %v.", tc.input, r.IsDefined(), tc.defined)
 		}
 	}

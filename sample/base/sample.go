@@ -4,16 +4,16 @@ import (
 	"fmt"
 	"os"
 
-	cvss "github.com/spiegel-im-spiegel/go-cvss"
+	"github.com/spiegel-im-spiegel/go-cvss/v3/metric"
 )
 
 func main() {
-	m, err := cvss.ImportBase("CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:C/C:H/I:H/A:H") //CVE-2020-1472: ZeroLogon
+	bm, err := metric.NewBase().Decode("CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:C/C:H/I:H/A:H") //CVE-2020-1472: ZeroLogon
 	if err != nil {
 		fmt.Fprintln(os.Stderr, err)
 		return
 	}
-	fmt.Printf("Severity: %v (%v)\n", m.Severity(), m.Score())
+	fmt.Printf("Severity: %v (%v)\n", bm.Severity(), bm.Score())
 	// Output:
 	// Severity: Critical (10)
 }

@@ -10,7 +10,8 @@ func TestConfidentialityImpact(t *testing.T) {
 		value   float64
 		defined bool
 	}{
-		{input: "X", result: ConfidentialityImpactUnknown, res: "", value: 0.0, defined: false},
+		{input: "Z", result: ConfidentialityImpactUnknown, res: "", value: 0.0, defined: false},
+		{input: "X", result: ConfidentialityImpactNotDefined, res: "X", value: 0.0, defined: true},
 		{input: "N", result: ConfidentialityImpactNone, res: "N", value: 0.0, defined: true},
 		{input: "L", result: ConfidentialityImpactLow, res: "L", value: 0.22, defined: true},
 		{input: "H", result: ConfidentialityImpactHigh, res: "H", value: 0.56, defined: true},
@@ -29,7 +30,7 @@ func TestConfidentialityImpact(t *testing.T) {
 		if v != tc.value {
 			t.Errorf("ConfidentialityImpact.Value(%v) = %v, want %v.", tc.input, v, tc.value)
 		}
-		if r.IsDefined() != tc.defined {
+		if r.IsUnknown() == tc.defined {
 			t.Errorf("ConfidentialityImpact.IsDefined(%v) = %v, want %v.", tc.input, r.IsDefined(), tc.defined)
 		}
 	}

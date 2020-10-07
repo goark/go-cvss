@@ -8,13 +8,15 @@ type Scope int
 //Constant of Scope result
 const (
 	ScopeUnknown Scope = iota
+	ScopeNotDefined
 	ScopeUnchanged
 	ScopeChanged
 )
 
 var scopeMap = map[Scope]string{
-	ScopeUnchanged: "U",
-	ScopeChanged:   "C",
+	ScopeNotDefined: "X",
+	ScopeUnchanged:  "U",
+	ScopeChanged:    "C",
 }
 
 //GetScope returns result of Scope metric
@@ -35,9 +37,14 @@ func (sc Scope) String() string {
 	return ""
 }
 
+//IsUnknown returns false if undefined result value of metric
+func (sc Scope) IsUnknown() bool {
+	return sc == ScopeUnknown
+}
+
 //IsDefined returns false if undefined result value of metric
 func (sc Scope) IsDefined() bool {
-	return sc != ScopeUnknown
+	return !sc.IsUnknown() && sc != ScopeNotDefined
 }
 
 /* Copyright 2018-2020 Spiegel

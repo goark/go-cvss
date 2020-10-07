@@ -11,6 +11,10 @@ var (
 		language.Japanese: "完全性への影響",
 	}
 	iNamesMap = map[metric.IntegrityImpact]langNameMap{
+		metric.IntegrityImpactNotDefined: langNameMap{
+			language.English:  "Not Defined",
+			language.Japanese: "未評価",
+		},
 		metric.IntegrityImpactNone: langNameMap{
 			language.English:  "None",
 			language.Japanese: "なし",
@@ -24,10 +28,6 @@ var (
 			language.Japanese: "高",
 		},
 	}
-	iValueNameUnknownMap = langNameMap{
-		language.English:  "Unknown",
-		language.Japanese: "不明",
-	}
 )
 
 //IntegrityImpact returns string instance name for display
@@ -40,7 +40,7 @@ func IValueOf(i metric.IntegrityImpact, lang language.Tag) string {
 	if m, ok := iNamesMap[i]; ok {
 		return m.getNameInLang(lang)
 	}
-	return iValueNameUnknownMap.getNameInLang(lang)
+	return unknownValueNameMap.getNameInLang(lang)
 }
 
 /* Copyright 2018-2020 Spiegel

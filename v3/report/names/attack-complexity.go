@@ -11,6 +11,10 @@ var (
 		language.Japanese: "攻撃条件の複雑さ",
 	}
 	acNamesMap = map[metric.AttackComplexity]langNameMap{
+		metric.AttackComplexityNotDefined: langNameMap{
+			language.English:  "Not Defined",
+			language.Japanese: "未評価",
+		},
 		metric.AttackComplexityHigh: langNameMap{
 			language.English:  "High",
 			language.Japanese: "高",
@@ -19,10 +23,6 @@ var (
 			language.English:  "Low",
 			language.Japanese: "低",
 		},
-	}
-	acValueNameUnknownMap = langNameMap{
-		language.English:  "Unknown",
-		language.Japanese: "不明",
 	}
 )
 
@@ -36,7 +36,7 @@ func ACValueOf(ac metric.AttackComplexity, lang language.Tag) string {
 	if m, ok := acNamesMap[ac]; ok {
 		return m.getNameInLang(lang)
 	}
-	return acValueNameUnknownMap.getNameInLang(lang)
+	return unknownValueNameMap.getNameInLang(lang)
 }
 
 /* Copyright 2018-2020 Spiegel

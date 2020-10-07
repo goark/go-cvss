@@ -8,21 +8,24 @@ type IntegrityImpact int
 //Constant of IntegrityImpact result
 const (
 	IntegrityImpactUnknown IntegrityImpact = iota
+	IntegrityImpactNotDefined
 	IntegrityImpactNone
 	IntegrityImpactLow
 	IntegrityImpactHigh
 )
 
 var integrityImpactMap = map[IntegrityImpact]string{
-	IntegrityImpactNone: "N",
-	IntegrityImpactLow:  "L",
-	IntegrityImpactHigh: "H",
+	IntegrityImpactNotDefined: "X",
+	IntegrityImpactNone:       "N",
+	IntegrityImpactLow:        "L",
+	IntegrityImpactHigh:       "H",
 }
 
 var integrityImpactValueMap = map[IntegrityImpact]float64{
-	IntegrityImpactNone: 0.00,
-	IntegrityImpactLow:  0.22,
-	IntegrityImpactHigh: 0.56,
+	IntegrityImpactNotDefined: 0.00,
+	IntegrityImpactNone:       0.00,
+	IntegrityImpactLow:        0.22,
+	IntegrityImpactHigh:       0.56,
 }
 
 //GetIntegrityImpact returns result of IntegrityImpact metric
@@ -51,9 +54,14 @@ func (ii IntegrityImpact) Value() float64 {
 	return 0.0
 }
 
+//IsUnKnown returns false if undefined result value of metric
+func (ii IntegrityImpact) IsUnKnown() bool {
+	return ii == IntegrityImpactUnknown
+}
+
 //IsDefined returns false if undefined result value of metric
 func (ii IntegrityImpact) IsDefined() bool {
-	return ii != IntegrityImpactUnknown
+	return !ii.IsUnKnown() && ii != IntegrityImpactNotDefined
 }
 
 /* Copyright 2018-2020 Spiegel

@@ -8,6 +8,7 @@ type AttackVector int
 //Constant of AttackVector result
 const (
 	AttackVectorUnknown AttackVector = iota
+	AttackVectorNotDefined
 	AttackVectorPhysical
 	AttackVectorLocal
 	AttackVectorAdjacent
@@ -15,17 +16,19 @@ const (
 )
 
 var attackVectorMap = map[AttackVector]string{
-	AttackVectorPhysical: "P",
-	AttackVectorLocal:    "L",
-	AttackVectorAdjacent: "A",
-	AttackVectorNetwork:  "N",
+	AttackVectorNotDefined: "X",
+	AttackVectorPhysical:   "P",
+	AttackVectorLocal:      "L",
+	AttackVectorAdjacent:   "A",
+	AttackVectorNetwork:    "N",
 }
 
 var attackVectorValueMap = map[AttackVector]float64{
-	AttackVectorPhysical: 0.20,
-	AttackVectorLocal:    0.55,
-	AttackVectorAdjacent: 0.62,
-	AttackVectorNetwork:  0.85,
+	AttackVectorNotDefined: 0,
+	AttackVectorPhysical:   0.20,
+	AttackVectorLocal:      0.55,
+	AttackVectorAdjacent:   0.62,
+	AttackVectorNetwork:    0.85,
 }
 
 //GetAttackVector returns result of AttackVector metric
@@ -54,9 +57,14 @@ func (av AttackVector) Value() float64 {
 	return 0.0
 }
 
+//IsUnknown returns false if unknouwn result value of metric
+func (av AttackVector) IsUnknown() bool {
+	return av == AttackVectorUnknown
+}
+
 //IsDefined returns false if undefined result value of metric
 func (av AttackVector) IsDefined() bool {
-	return av != AttackVectorUnknown
+	return !av.IsUnknown() && av != AttackVectorNotDefined
 }
 
 /* Copyright 2018-2020 Spiegel

@@ -8,21 +8,24 @@ type AvailabilityImpact int
 //Constant of AvailabilityImpact result
 const (
 	AvailabilityImpactUnknown AvailabilityImpact = iota
+	AvailabilityImpactNotDefined
 	AvailabilityImpactNone
 	AvailabilityImpactLow
 	AvailabilityImpactHigh
 )
 
 var availabilityImpactMap = map[AvailabilityImpact]string{
-	AvailabilityImpactNone: "N",
-	AvailabilityImpactLow:  "L",
-	AvailabilityImpactHigh: "H",
+	AvailabilityImpactNotDefined: "X",
+	AvailabilityImpactNone:       "N",
+	AvailabilityImpactLow:        "L",
+	AvailabilityImpactHigh:       "H",
 }
 
 var availabilityImpactValueMap = map[AvailabilityImpact]float64{
-	AvailabilityImpactNone: 0.00,
-	AvailabilityImpactLow:  0.22,
-	AvailabilityImpactHigh: 0.56,
+	AvailabilityImpactNotDefined: 0.00,
+	AvailabilityImpactNone:       0.00,
+	AvailabilityImpactLow:        0.22,
+	AvailabilityImpactHigh:       0.56,
 }
 
 //GetAvailabilityImpact returns result of AvailabilityImpact metric
@@ -51,9 +54,14 @@ func (ai AvailabilityImpact) Value() float64 {
 	return 0.0
 }
 
+//IsUnknown returns false if undefined result value of metric
+func (ai AvailabilityImpact) IsUnknown() bool {
+	return ai == AvailabilityImpactUnknown
+}
+
 //IsDefined returns false if undefined result value of metric
 func (ai AvailabilityImpact) IsDefined() bool {
-	return ai != AvailabilityImpactUnknown
+	return !ai.IsUnknown() && ai != AvailabilityImpactNotDefined
 }
 
 /* Copyright 2018-2020 Spiegel

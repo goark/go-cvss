@@ -11,6 +11,10 @@ var (
 		language.Japanese: "スコープ",
 	}
 	sNamesMap = map[metric.Scope]langNameMap{
+		metric.ScopeNotDefined: langNameMap{
+			language.English:  "Not Defined",
+			language.Japanese: "未評価",
+		},
 		metric.ScopeUnchanged: langNameMap{
 			language.English:  "Unchanged",
 			language.Japanese: "変更なし",
@@ -19,10 +23,6 @@ var (
 			language.English:  "Changed",
 			language.Japanese: "変更あり",
 		},
-	}
-	sValueNameUnknownMap = langNameMap{
-		language.English:  "Unknown",
-		language.Japanese: "不明",
 	}
 )
 
@@ -36,7 +36,7 @@ func SValueOf(s metric.Scope, lang language.Tag) string {
 	if m, ok := sNamesMap[s]; ok {
 		return m.getNameInLang(lang)
 	}
-	return sValueNameUnknownMap.getNameInLang(lang)
+	return unknownValueNameMap.getNameInLang(lang)
 }
 
 /* Copyright 2018-2020 Spiegel

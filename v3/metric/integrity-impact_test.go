@@ -10,7 +10,8 @@ func TestIntegrityImpact(t *testing.T) {
 		value   float64
 		defined bool
 	}{
-		{input: "X", result: IntegrityImpactUnknown, res: "", value: 0.0, defined: false},
+		{input: "Z", result: IntegrityImpactUnknown, res: "", value: 0.0, defined: false},
+		{input: "X", result: IntegrityImpactNotDefined, res: "X", value: 0.0, defined: true},
 		{input: "N", result: IntegrityImpactNone, res: "N", value: 0.0, defined: true},
 		{input: "L", result: IntegrityImpactLow, res: "L", value: 0.22, defined: true},
 		{input: "H", result: IntegrityImpactHigh, res: "H", value: 0.56, defined: true},
@@ -29,7 +30,7 @@ func TestIntegrityImpact(t *testing.T) {
 		if v != tc.value {
 			t.Errorf("IntegrityImpact.Value(%v) = %v, want %v.", tc.input, v, tc.value)
 		}
-		if r.IsDefined() != tc.defined {
+		if r.IsUnKnown() == tc.defined {
 			t.Errorf("IntegrityImpact.IsDefined(%v) = %v, want %v.", tc.input, r.IsDefined(), tc.defined)
 		}
 	}

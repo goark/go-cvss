@@ -8,18 +8,21 @@ type AttackComplexity int
 //Constant of AttackComplexity result
 const (
 	AttackComplexityUnknown AttackComplexity = iota
+	AttackComplexityNotDefined
 	AttackComplexityHigh
 	AttackComplexityLow
 )
 
 var attackComplexityMap = map[AttackComplexity]string{
-	AttackComplexityHigh: "H",
-	AttackComplexityLow:  "L",
+	AttackComplexityNotDefined: "X",
+	AttackComplexityHigh:       "H",
+	AttackComplexityLow:        "L",
 }
 
 var attackComplexityValueMap = map[AttackComplexity]float64{
-	AttackComplexityHigh: 0.44,
-	AttackComplexityLow:  0.77,
+	AttackComplexityNotDefined: 0,
+	AttackComplexityHigh:       0.44,
+	AttackComplexityLow:        0.77,
 }
 
 //GetAttackComplexity returns result of AttackComplexity metric
@@ -48,9 +51,14 @@ func (ac AttackComplexity) Value() float64 {
 	return 0.0
 }
 
+//IsUnknown returns false if unknown result value of metric
+func (ac AttackComplexity) IsUnknown() bool {
+	return ac == AttackComplexityUnknown
+}
+
 //IsDefined returns false if undefined result value of metric
 func (ac AttackComplexity) IsDefined() bool {
-	return ac != AttackComplexityUnknown
+	return !ac.IsUnknown() && ac != AttackComplexityNotDefined
 }
 
 /* Copyright 2018-2020 Spiegel

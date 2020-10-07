@@ -11,8 +11,10 @@ func TestPrivilegesRequired(t *testing.T) {
 		value   float64
 		defined bool
 	}{
-		{input: "X", result: PrivilegesRequiredUnknown, sc: ScopeUnchanged, res: "", value: 0.0, defined: false},
-		{input: "X", result: PrivilegesRequiredUnknown, sc: ScopeChanged, res: "", value: 0.0, defined: false},
+		{input: "Z", result: PrivilegesRequiredUnknown, sc: ScopeUnchanged, res: "", value: 0.0, defined: false},
+		{input: "Z", result: PrivilegesRequiredUnknown, sc: ScopeChanged, res: "", value: 0.0, defined: false},
+		{input: "X", result: PrivilegesRequiredNotDefined, sc: ScopeUnchanged, res: "X", value: 0.0, defined: true},
+		{input: "X", result: PrivilegesRequiredNotDefined, sc: ScopeChanged, res: "X", value: 0.0, defined: true},
 		{input: "H", result: PrivilegesRequiredHigh, sc: ScopeUnchanged, res: "H", value: 0.27, defined: true},
 		{input: "H", result: PrivilegesRequiredHigh, sc: ScopeChanged, res: "H", value: 0.50, defined: true},
 		{input: "L", result: PrivilegesRequiredLow, sc: ScopeUnchanged, res: "L", value: 0.62, defined: true},
@@ -34,7 +36,7 @@ func TestPrivilegesRequired(t *testing.T) {
 		if v != tc.value {
 			t.Errorf("PrivilegesRequired.Value(%v, %v) = %v, want %v.", tc.input, tc.sc, v, tc.value)
 		}
-		if r.IsDefined() != tc.defined {
+		if r.IsUnknown() == tc.defined {
 			t.Errorf("PrivilegesRequired.IsDefined(%v) = %v, want %v.", tc.input, r.IsDefined(), tc.defined)
 		}
 	}

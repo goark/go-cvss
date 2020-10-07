@@ -6,10 +6,6 @@ var baseTitleMap = langNameMap{
 	language.English:  "Base Metrics",
 	language.Japanese: "基本評価基準",
 }
-var baseVakueMap = langNameMap{
-	language.English:  "Metric Value",
-	language.Japanese: "評価値",
-}
 
 //BaseMetrics returns string instance name for display
 func BaseMetrics(lang language.Tag) string {
@@ -18,7 +14,7 @@ func BaseMetrics(lang language.Tag) string {
 
 //BaseMetricsValueOf returns string instance name for display
 func BaseMetricsValueOf(lang language.Tag) string {
-	return baseVakueMap.getNameInLang(lang)
+	return metricVakueMap.getNameInLang(lang)
 }
 
 /* Copyright 2018-2020 Spiegel

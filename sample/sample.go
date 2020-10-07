@@ -1,44 +1,52 @@
 package main
 
 import (
-	"flag"
 	"fmt"
 	"io"
 	"os"
+	"strings"
 
-	cvss "github.com/spiegel-im-spiegel/go-cvss"
+	"github.com/spiegel-im-spiegel/go-cvss/v3/metric"
 	"github.com/spiegel-im-spiegel/go-cvss/v3/report"
-	"golang.org/x/text/language"
 )
 
-func main() {
-	tf := flag.String("t", "", "template file")
-	flag.Parse()
-	if flag.NArg() != 1 {
-		fmt.Fprintln(os.Stderr, os.ErrInvalid)
-		return
-	}
-	vector := flag.Arg(0)
-	var tr io.Reader
-	if len(*tf) > 0 {
-		file, err := os.Open(*tf)
-		if err != nil {
-			fmt.Fprintln(os.Stderr, err)
-			return
-		}
-		defer file.Close()
-		tr = file
-	}
+var template = `- CVSS Version {{ .Version }}
+- Vector: {{ .Vector }}
 
-	m, err := cvss.ImportBase(vector)
+## Base Metrics
+
+- Base Score: {{ .BaseScore }}
+
+| {{ .BaseMetrics }} | {{ .BaseMetricValue }} |
+|--------|-------|
+| {{ .AVName }} | {{ .AVValue }} |
+| {{ .ACName }} | {{ .ACValue }} |
+| {{ .PRName }} | {{ .PRValue }} |
+| {{ .UIName }} | {{ .UIValue }} |
+| {{ .SName }} | {{ .SValue }} |
+| {{ .CName }} | {{ .CValue }} |
+| {{ .IName }} | {{ .IValue }} |
+| {{ .AName }} | {{ .AValue }} |
+
+## Temporal Metrics
+
+- Temporal Score: {{ .TemporalScore }}
+- {{ .SeverityName }}: {{ .SeverityValue }}
+
+| {{ .TemporalMetrics }} | {{ .TemporalMetricValue }} |
+|--------|-------|
+| {{ .EName }} | {{ .EValue }} |
+| {{ .RLName }} | {{ .RLValue }} |
+| {{ .RCName }} | {{ .RCValue }} |
+`
+
+func main() {
+	tm, err := metric.NewTemporal().Decode("CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:C/C:H/I:H/A:H/E:F/RL:W/RC:R") //CVE-2020-1472: ZeroLogon
 	if err != nil {
 		fmt.Fprintln(os.Stderr, err)
 		return
 	}
-	//lang := language.English
-	lang := language.Japanese
-
-	r, err := report.NewBase(m, lang).ExportWithTemplate(tr)
+	r, err := report.NewTemporal(tm).ExportWith(strings.NewReader(template))
 	if err != nil {
 		fmt.Fprintln(os.Stderr, err)
 		return
@@ -46,6 +54,35 @@ func main() {
 	if _, err := io.Copy(os.Stdout, r); err != nil {
 		fmt.Fprintln(os.Stderr, err)
 	}
+	// Output:
+	// - CVSS Version 3.1
+	// - Vector: CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:C/C:H/I:H/A:H/E:F/RL:W/RC:R
+	//
+	// ## Base Metrics
+	//
+	// - Base Score: 10
+	//
+	// | Base Metrics | Metric Value |
+	// |--------|-------|
+	// | Attack Vector | Network |
+	// | Attack Complexity | Low |
+	// | Privileges Required | None |
+	// | User Interaction | None |
+	// | Scope | Changed |
+	// | Confidentiality Impact | High |
+	// | Integrity Impact | High |
+	// | Availability Impact | High |
+	//
+	// ## Temporal Metrics
+	//
+	// - Temporal Score: 9.1
+	// - Severity: Critical
+	//
+	// | Temporal Metrics | Metric Value |
+	// |--------|-------|
+	// | Exploit Code Maturity | Functional |
+	// | Remediation Level | Workaround |
+	// | Report Confidence | Reasonable |
 }
 
 /* Copyright 2018-2020 Spiegel

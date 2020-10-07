@@ -10,7 +10,8 @@ func TestAttackComplexity(t *testing.T) {
 		value   float64
 		defined bool
 	}{
-		{input: "X", result: AttackComplexityUnknown, res: "", value: 0.0, defined: false},
+		{input: "Z", result: AttackComplexityUnknown, res: "", value: 0.0, defined: false},
+		{input: "X", result: AttackComplexityNotDefined, res: "X", value: 0.0, defined: true},
 		{input: "H", result: AttackComplexityHigh, res: "H", value: 0.44, defined: true},
 		{input: "L", result: AttackComplexityLow, res: "L", value: 0.77, defined: true},
 	}
@@ -28,7 +29,7 @@ func TestAttackComplexity(t *testing.T) {
 		if v != tc.value {
 			t.Errorf("AttackComplexity.Value(%v) = %v, want %v.", tc.input, v, tc.value)
 		}
-		if r.IsDefined() != tc.defined {
+		if r.IsUnknown() == tc.defined {
 			t.Errorf("AttackComplexity.IsDefined(%v) = %v, want %v.", tc.input, r.IsDefined(), tc.defined)
 		}
 	}

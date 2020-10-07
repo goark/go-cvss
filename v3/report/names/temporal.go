@@ -1,20 +1,23 @@
-package cvss
+package names
 
-import (
-	"github.com/spiegel-im-spiegel/go-cvss/v3/metric"
-)
+import "golang.org/x/text/language"
 
-//ImportBase creates new metric.Base instance from CVSSv3 vector string.
-func ImportBase(vector string) (*metric.Base, error) {
-	return metric.NewBase().Decode(vector)
+var temporalTitleMap = langNameMap{
+	language.English:  "Temporal Metrics",
+	language.Japanese: "現状評価基準",
 }
 
-//ImportTemporal creates new metric.Temporal instance from CVSSv3 vector string.
-func ImportTemporal(vector string) (*metric.Temporal, error) {
-	return metric.NewTemporal().Decode(vector)
+//TemporalMetrics returns string instance name for display
+func TemporalMetrics(lang language.Tag) string {
+	return temporalTitleMap.getNameInLang(lang)
 }
 
-/* Copyright 2020 Spiegel
+//TemporalMetricsValueOf returns string instance name for display
+func TemporalMetricsValueOf(lang language.Tag) string {
+	return metricVakueMap.getNameInLang(lang)
+}
+
+/* Copyright 2018-2020 Spiegel
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.

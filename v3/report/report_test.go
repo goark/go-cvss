@@ -11,6 +11,7 @@ import (
 
 const (
 	tstMd = `- CVSS Version {{ .Version }}
+- Vector: {{ .Vector }}
 - {{ .SeverityName }}: {{ .SeverityValue }} ({{ .BaseScore }})
 
 | {{ .BaseMetrics }} | {{ .BaseMetricValue }} |
@@ -24,20 +25,8 @@ const (
 | {{ .IName }} | {{ .IValue }} |
 | {{ .AName }} | {{ .AValue }} |
 `
-	tstResCsv = `Base Metrics,Metric Value
-CVSS Version,3.0
-Attack Vector,Network
-Attack Complexity,Low
-Privileges Required,None
-User Interaction,None
-Scope,Unchanged
-Confidentiality Impact,High
-Integrity Impact,High
-Availability Impact,High
-Base Score,9.8
-Severity,Critical
-`
 	tstResMd = `- CVSS Version 3.0
+- Vector: CVSS:3.0/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H
 - Severity: Critical (9.8)
 
 | Base Metrics | Metric Value |
@@ -53,19 +42,112 @@ Severity,Critical
 `
 )
 
-func TestReport(t *testing.T) {
+func TestBaseReport(t *testing.T) {
 	testCases := []struct {
 		vector  string
 		tmpdata string
 		lang    language.Tag
 		rep     string
 	}{
-		{vector: "CVSS:3.0/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H", tmpdata: "", lang: language.English, rep: tstResCsv},
 		{vector: "CVSS:3.0/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H", tmpdata: tstMd, lang: language.English, rep: tstResMd},
 	}
 
 	for _, tc := range testCases {
 		m, err := metric.NewBase().Decode(tc.vector)
+		if err != nil {
+			t.Errorf("Base.Decode(%v) = \"%v\", want nil.", tc.vector, err)
+		}
+		var tr io.Reader
+		if len(tc.tmpdata) > 0 {
+			tr = strings.NewReader(tc.tmpdata)
+		}
+		bldr := &strings.Builder{}
+		r, err := NewBase(m, WithOptionsLanguage(tc.lang)).ExportWith(tr)
+		if err != nil {
+			t.Errorf("Base.Report(%v) = \"%v\", want nil.", tc.lang, err)
+		}
+		if _, err := io.Copy(bldr, r); err != nil {
+			t.Errorf("Base.Report(nil, %v) = \"%v\", want nil.", tc.lang, err)
+		}
+		rep := bldr.String()
+		if rep != tc.rep {
+			t.Errorf("Metrics.Report(nil, %v) = \"%v\", want \"%v\".", tc.lang, rep, tc.rep)
+		}
+
+	}
+}
+
+const (
+	tstTempMd = `- CVSS Version {{ .Version }}
+- Vector: {{ .Vector }}
+
+## Base Metrics
+
+- Base Score: {{ .BaseScore }}
+
+| {{ .BaseMetrics }} | {{ .BaseMetricValue }} |
+|--------|-------|
+| {{ .AVName }} | {{ .AVValue }} |
+| {{ .ACName }} | {{ .ACValue }} |
+| {{ .PRName }} | {{ .PRValue }} |
+| {{ .UIName }} | {{ .UIValue }} |
+| {{ .SName }} | {{ .SValue }} |
+| {{ .CName }} | {{ .CValue }} |
+| {{ .IName }} | {{ .IValue }} |
+| {{ .AName }} | {{ .AValue }} |
+
+## Temporal Metrics
+
+- {{ .SeverityName }}: {{ .SeverityValue }} ({{ .TemporalScore }})
+
+| {{ .TemporalMetrics }} | {{ .TemporalMetricValue }} |
+|--------|-------|
+| {{ .EName }} | {{ .EValue }} |
+| {{ .RLName }} | {{ .RLValue }} |
+| {{ .RCName }} | {{ .RCValue }} |
+`
+	tstTempResMd = `- CVSS Version 3.0
+- Vector: CVSS:3.0/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H/E:F/RL:W/RC:R
+
+## Base Metrics
+
+- Base Score: 9.8
+
+| Base Metrics | Metric Value |
+|--------|-------|
+| Attack Vector | Network |
+| Attack Complexity | Low |
+| Privileges Required | None |
+| User Interaction | None |
+| Scope | Unchanged |
+| Confidentiality Impact | High |
+| Integrity Impact | High |
+| Availability Impact | High |
+
+## Temporal Metrics
+
+- Severity: High (8.9)
+
+| Temporal Metrics | Metric Value |
+|--------|-------|
+| Exploit Code Maturity | Functional |
+| Remediation Level | Workaround |
+| Report Confidence | Reasonable |
+`
+)
+
+func TestTemporalReport(t *testing.T) {
+	testCases := []struct {
+		vector  string
+		tmpdata string
+		lang    language.Tag
+		rep     string
+	}{
+		{vector: "CVSS:3.0/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H/E:F/RL:W/RC:R", tmpdata: tstTempMd, lang: language.English, rep: tstTempResMd},
+	}
+
+	for _, tc := range testCases {
+		m, err := metric.NewTemporal().Decode(tc.vector)
 		if err != nil {
 			t.Errorf("Metrics.Decode(%v) = \"%v\", want nil.", tc.vector, err)
 		}
@@ -74,7 +156,7 @@ func TestReport(t *testing.T) {
 			tr = strings.NewReader(tc.tmpdata)
 		}
 		bldr := &strings.Builder{}
-		r, err := NewBase(m, tc.lang).ExportWithTemplate(tr)
+		r, err := NewTemporal(m, WithOptionsLanguage(tc.lang)).ExportWith(tr)
 		if err != nil {
 			t.Errorf("Metrics.Report(%v) = \"%v\", want nil.", tc.lang, err)
 		}

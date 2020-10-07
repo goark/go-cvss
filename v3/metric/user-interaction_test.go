@@ -10,7 +10,8 @@ func TestUserInteraction(t *testing.T) {
 		value   float64
 		defined bool
 	}{
-		{input: "X", result: UserInteractionUnknown, res: "", value: 0.0, defined: false},
+		{input: "Z", result: UserInteractionUnknown, res: "", value: 0.0, defined: false},
+		{input: "X", result: UserInteractionNotDefined, res: "X", value: 0.0, defined: true},
 		{input: "R", result: UserInteractionRequired, res: "R", value: 0.62, defined: true},
 		{input: "N", result: UserInteractionNone, res: "N", value: 0.85, defined: true},
 	}
@@ -28,7 +29,7 @@ func TestUserInteraction(t *testing.T) {
 		if v != tc.value {
 			t.Errorf("UserInteraction.Value(%v) = %v, want %v.", tc.input, v, tc.value)
 		}
-		if r.IsDefined() != tc.defined {
+		if r.IsUnknown() == tc.defined {
 			t.Errorf("UserInteraction.IsDefined(%v) = %v, want %v.", tc.input, r.IsDefined(), tc.defined)
 		}
 	}

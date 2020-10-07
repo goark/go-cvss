@@ -10,7 +10,8 @@ func TestAvailabilityImpact(t *testing.T) {
 		value   float64
 		defined bool
 	}{
-		{input: "X", result: AvailabilityImpactUnknown, res: "", value: 0.0, defined: false},
+		{input: "Z", result: AvailabilityImpactUnknown, res: "", value: 0.0, defined: false},
+		{input: "X", result: AvailabilityImpactNotDefined, res: "X", value: 0.0, defined: true},
 		{input: "N", result: AvailabilityImpactNone, res: "N", value: 0.0, defined: true},
 		{input: "L", result: AvailabilityImpactLow, res: "L", value: 0.22, defined: true},
 		{input: "H", result: AvailabilityImpactHigh, res: "H", value: 0.56, defined: true},
@@ -29,7 +30,7 @@ func TestAvailabilityImpact(t *testing.T) {
 		if v != tc.value {
 			t.Errorf("AvailabilityImpact.Value(%v) = %v, want %v.", tc.input, v, tc.value)
 		}
-		if r.IsDefined() != tc.defined {
+		if r.IsUnknown() == tc.defined {
 			t.Errorf("AvailabilityImpact.IsDefined(%v) = %v, want %v.", tc.input, r.IsDefined(), tc.defined)
 		}
 	}

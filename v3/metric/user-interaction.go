@@ -8,18 +8,21 @@ type UserInteraction int
 //Constant of UserInteraction result
 const (
 	UserInteractionUnknown UserInteraction = iota
+	UserInteractionNotDefined
 	UserInteractionRequired
 	UserInteractionNone
 )
 
 var userInteractionMap = map[UserInteraction]string{
-	UserInteractionRequired: "R",
-	UserInteractionNone:     "N",
+	UserInteractionNotDefined: "X",
+	UserInteractionRequired:   "R",
+	UserInteractionNone:       "N",
 }
 
 var userInteractionValueMap = map[UserInteraction]float64{
-	UserInteractionRequired: 0.62,
-	UserInteractionNone:     0.85,
+	UserInteractionNotDefined: 0,
+	UserInteractionRequired:   0.62,
+	UserInteractionNone:       0.85,
 }
 
 //GetUserInteraction returns result of UserInteraction metric
@@ -48,9 +51,14 @@ func (ui UserInteraction) Value() float64 {
 	return 0.0
 }
 
+//IsUnknown returns false if undefined result value of metric
+func (ui UserInteraction) IsUnknown() bool {
+	return ui == UserInteractionUnknown
+}
+
 //IsDefined returns false if undefined result value of metric
 func (ui UserInteraction) IsDefined() bool {
-	return ui != UserInteractionUnknown
+	return !ui.IsUnknown() && ui != UserInteractionNotDefined
 }
 
 /* Copyright 2018-2020 Spiegel

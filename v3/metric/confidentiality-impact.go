@@ -8,21 +8,24 @@ type ConfidentialityImpact int
 //Constant of ConfidentialityImpact result
 const (
 	ConfidentialityImpactUnknown ConfidentialityImpact = iota
+	ConfidentialityImpactNotDefined
 	ConfidentialityImpactNone
 	ConfidentialityImpactLow
 	ConfidentialityImpactHigh
 )
 
 var confidentialityImpactMap = map[ConfidentialityImpact]string{
-	ConfidentialityImpactNone: "N",
-	ConfidentialityImpactLow:  "L",
-	ConfidentialityImpactHigh: "H",
+	ConfidentialityImpactNotDefined: "X",
+	ConfidentialityImpactNone:       "N",
+	ConfidentialityImpactLow:        "L",
+	ConfidentialityImpactHigh:       "H",
 }
 
 var confidentialityImpactValueMap = map[ConfidentialityImpact]float64{
-	ConfidentialityImpactNone: 0.00,
-	ConfidentialityImpactLow:  0.22,
-	ConfidentialityImpactHigh: 0.56,
+	ConfidentialityImpactNotDefined: 0.00,
+	ConfidentialityImpactNone:       0.00,
+	ConfidentialityImpactLow:        0.22,
+	ConfidentialityImpactHigh:       0.56,
 }
 
 //GetConfidentialityImpact returns result of ConfidentialityImpact metric
@@ -51,9 +54,14 @@ func (ci ConfidentialityImpact) Value() float64 {
 	return 0.0
 }
 
+//IsUnknown returns false if undefined result value of metric
+func (ci ConfidentialityImpact) IsUnknown() bool {
+	return ci == ConfidentialityImpactUnknown
+}
+
 //IsDefined returns false if undefined result value of metric
 func (ci ConfidentialityImpact) IsDefined() bool {
-	return ci != ConfidentialityImpactUnknown
+	return !ci.IsUnknown() && ci != ConfidentialityImpactNotDefined
 }
 
 /* Copyright 2018-2020 Spiegel

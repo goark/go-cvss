@@ -8,26 +8,30 @@ type PrivilegesRequired int
 //Constant of PrivilegesRequired result
 const (
 	PrivilegesRequiredUnknown PrivilegesRequired = iota
+	PrivilegesRequiredNotDefined
 	PrivilegesRequiredHigh
 	PrivilegesRequiredLow
 	PrivilegesRequiredNone
 )
 
 var privilegesRequiredMap = map[PrivilegesRequired]string{
-	PrivilegesRequiredHigh: "H",
-	PrivilegesRequiredLow:  "L",
-	PrivilegesRequiredNone: "N",
+	PrivilegesRequiredNotDefined: "X",
+	PrivilegesRequiredHigh:       "H",
+	PrivilegesRequiredLow:        "L",
+	PrivilegesRequiredNone:       "N",
 }
 
 var privilegesRequiredWithUValueMap = map[PrivilegesRequired]float64{
-	PrivilegesRequiredHigh: 0.27,
-	PrivilegesRequiredLow:  0.62,
-	PrivilegesRequiredNone: 0.85,
+	PrivilegesRequiredNotDefined: 0,
+	PrivilegesRequiredHigh:       0.27,
+	PrivilegesRequiredLow:        0.62,
+	PrivilegesRequiredNone:       0.85,
 }
 var privilegesRequiredWithCValueMap = map[PrivilegesRequired]float64{
-	PrivilegesRequiredHigh: 0.50,
-	PrivilegesRequiredLow:  0.68,
-	PrivilegesRequiredNone: 0.85,
+	PrivilegesRequiredNotDefined: 0,
+	PrivilegesRequiredHigh:       0.50,
+	PrivilegesRequiredLow:        0.68,
+	PrivilegesRequiredNone:       0.85,
 }
 
 //GetPrivilegesRequired returns result of PrivilegesRequired metric
@@ -65,9 +69,14 @@ func (pr PrivilegesRequired) Value(s Scope) float64 {
 	return 0.0
 }
 
+//IsUnknown returns false if undefined result value of metric
+func (pr PrivilegesRequired) IsUnknown() bool {
+	return pr == PrivilegesRequiredUnknown
+}
+
 //IsDefined returns false if undefined result value of metric
 func (pr PrivilegesRequired) IsDefined() bool {
-	return pr != PrivilegesRequiredUnknown
+	return !pr.IsUnknown() && pr != PrivilegesRequiredNotDefined
 }
 
 /* Copyright 2018-2020 Spiegel

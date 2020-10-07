@@ -1,28 +1,28 @@
-package names
+package report
 
 import "golang.org/x/text/language"
 
-var (
-	unknownValueNameMap = langNameMap{
-		language.English:  "Unknown",
-		language.Japanese: "未定義",
-	}
-	metricVakueMap = langNameMap{
-		language.English:  "Metric Value",
-		language.Japanese: "評価値",
-	}
-)
+type options struct {
+	lang language.Tag
+}
 
-type langNameMap map[language.Tag]string
+//ReportOptionsFunc type is self-referential function type for report.newOptions() function. (functional options pattern)
+type ReportOptionsFunc func(*options)
 
-func (ln langNameMap) getNameInLang(lang language.Tag) string {
-	if s, ok := ln[lang]; ok {
-		return s
+func newOptions(os ...ReportOptionsFunc) *options {
+	opts := &options{lang: language.English}
+	for _, o := range os {
+		o(opts)
 	}
-	if s, ok := ln[language.English]; ok {
-		return s
+	return opts
+}
+
+//WithOptionsLanguage function returns ReportOptionsFunc function value.
+//This function is used in Server.CreateClient method that represents http.Client.
+func WithOptionsLanguage(lang language.Tag) ReportOptionsFunc {
+	return func(opts *options) {
+		opts.lang = lang
 	}
-	return ""
 }
 
 /* Copyright 2020 Spiegel

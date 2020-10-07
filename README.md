@@ -1,13 +1,16 @@
-# [go-cvss] - Common Vulnerability Scoring System (CVSS) Version 3
+# [go-cvss] - Common Vulnerability Scoring System (CVSS)
 
 [![check vulns](https://github.com/spiegel-im-spiegel/go-cvss/workflows/vulns/badge.svg)](https://github.com/spiegel-im-spiegel/go-cvss/actions)
 [![lint status](https://github.com/spiegel-im-spiegel/go-cvss/workflows/lint/badge.svg)](https://github.com/spiegel-im-spiegel/go-cvss/actions)
 [![GitHub license](https://img.shields.io/badge/license-Apache%202-blue.svg)](https://raw.githubusercontent.com/spiegel-im-spiegel/go-cvss/master/LICENSE)
 [![GitHub release](https://img.shields.io/github/release/spiegel-im-spiegel/go-cvss.svg)](https://github.com/spiegel-im-spiegel/go-cvss/releases/latest)
 
-## Sample Code
+Importing CVSS vector and scoring.
 
-ref: [sample.go](https://github.com/spiegel-im-spiegel/go-cvss/blob/master/sample/sample.go)
+- Supoort CVSS version 3.0 and 3.1
+- Exporting CVSS information with template string
+
+## Sample Code
 
 ### Base Metrics
 
@@ -18,11 +21,11 @@ import (
     "fmt"
     "os"
 
-    cvss "github.com/spiegel-im-spiegel/go-cvss"
+    "github.com/spiegel-im-spiegel/go-cvss/v3/metric"
 )
 
 func main() {
-    bm, err := cvss.ImportV3Base("CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:C/C:H/I:H/A:H") //CVE-2020-1472: ZeroLogon
+    bm, err := metric.NewBase().Decode("CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:C/C:H/I:H/A:H") //CVE-2020-1472: ZeroLogon
     if err != nil {
         fmt.Fprintln(os.Stderr, err)
         return
@@ -42,11 +45,11 @@ import (
     "fmt"
     "os"
 
-    cvss "github.com/spiegel-im-spiegel/go-cvss"
+    "github.com/spiegel-im-spiegel/go-cvss/v3/metric"
 )
 
 func main() {
-    tm, err := cvss.ImportV3Temporal("CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:C/C:H/I:H/A:H/E:F/RL:W/RC:R") //CVE-2020-1472: ZeroLogon
+    tm, err := metric.NewTemporal().Decode("CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:C/C:H/I:H/A:H/E:F/RL:W/RC:R") //CVE-2020-1472: ZeroLogon
     if err != nil {
         fmt.Fprintln(os.Stderr, err)
         return
@@ -59,10 +62,13 @@ func main() {
 }
 ```
 
-## Bookmark
+### Reporting with template
+
+ref: [sample.go](https://github.com/spiegel-im-spiegel/go-cvss/blob/master/sample/sample.go)
+
+## Reference
 
 - [CVSS v3.0 Specification Document](https://www.first.org/cvss/v3.0/specification-document)
 - [CVSS v3.1 Specification Document](https://www.first.org/cvss/v3.1/specification-document)
-- [JVN が CVSSv3 による脆弱性評価を開始 — しっぽのさきっちょ | text.Baldanders.info](http://text.baldanders.info/remark/2015/cvss-v3-metrics-in-jvn/)
 
-[go-cvss]: https://github.com/spiegel-im-spiegel/cvss3
+[go-cvss]: https://github.com/spiegel-im-spiegel/go-cvss

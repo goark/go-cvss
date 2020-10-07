@@ -4,11 +4,11 @@ import (
 	"fmt"
 	"os"
 
-	cvss "github.com/spiegel-im-spiegel/go-cvss"
+	"github.com/spiegel-im-spiegel/go-cvss/v3/metric"
 )
 
 func main() {
-	tm, err := cvss.ImportTemporal("CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:C/C:H/I:H/A:H/E:F/RL:W/RC:R") //CVE-2020-1472: ZeroLogon
+	tm, err := metric.NewTemporal().Decode("CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:C/C:H/I:H/A:H/E:F/RL:W/RC:R") //CVE-2020-1472: ZeroLogon
 	if err != nil {
 		fmt.Fprintln(os.Stderr, err)
 		return
