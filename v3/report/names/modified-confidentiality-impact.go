@@ -6,40 +6,44 @@ import (
 )
 
 var (
-	acTitleMap = langNameMap{
-		language.English:  "Attack Complexity",
-		language.Japanese: "攻撃条件の複雑さ",
+	mcTileMap = langNameMap{
+		language.English:  "Modified Confidentiality Impact",
+		language.Japanese: "調整後の機密性への影響",
 	}
-	acNamesMap = map[metric.AttackComplexity]langNameMap{
-		metric.AttackComplexityNotDefined: {
+	mcNamesMap = map[metric.ModifiedConfidentialityImpact]langNameMap{
+		metric.ModifiedConfidentialityImpactNotDefined: {
 			language.English:  "Not Defined",
 			language.Japanese: "未評価",
 		},
-		metric.AttackComplexityHigh: {
-			language.English:  "High",
-			language.Japanese: "高",
+		metric.ModifiedConfidentialityImpactNone: {
+			language.English:  "None",
+			language.Japanese: "なし",
 		},
-		metric.AttackComplexityLow: {
+		metric.ModifiedConfidentialityImpactLow: {
 			language.English:  "Low",
 			language.Japanese: "低",
+		},
+		metric.ModifiedConfidentialityImpactHigh: {
+			language.English:  "High",
+			language.Japanese: "高",
 		},
 	}
 )
 
-//AttackComplexity returns string instance name for display
-func AttackComplexity(lang language.Tag) string {
-	return acTitleMap.getNameInLang(lang)
+//ModifiedConfidentialityImpact returns string instance name for display
+func ModifiedConfidentialityImpact(lang language.Tag) string {
+	return mcTileMap.getNameInLang(lang)
 }
 
-//ACValueOf returns string name of value for display
-func ACValueOf(ac metric.AttackComplexity, lang language.Tag) string {
-	if m, ok := acNamesMap[ac]; ok {
+//MCValueOf returns string name of value for display
+func MCValueOf(mc metric.ModifiedConfidentialityImpact, lang language.Tag) string {
+	if m, ok := mcNamesMap[mc]; ok {
 		return m.getNameInLang(lang)
 	}
 	return unknownValueNameMap.getNameInLang(lang)
 }
 
-/* Copyright 2018-2022 Spiegel
+/* Copyright 2022 Spiegel
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.

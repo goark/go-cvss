@@ -6,40 +6,44 @@ import (
 )
 
 var (
-	acTitleMap = langNameMap{
-		language.English:  "Attack Complexity",
-		language.Japanese: "攻撃条件の複雑さ",
+	crTitleMap = langNameMap{
+		language.English:  "Confidentiality Requirement",
+		language.Japanese: "機密性の要求度",
 	}
-	acNamesMap = map[metric.AttackComplexity]langNameMap{
-		metric.AttackComplexityNotDefined: {
+	crNamesMap = map[metric.ConfidentialityRequirement]langNameMap{
+		metric.ConfidentialityRequirementNotDefined: {
 			language.English:  "Not Defined",
 			language.Japanese: "未評価",
 		},
-		metric.AttackComplexityHigh: {
-			language.English:  "High",
-			language.Japanese: "高",
-		},
-		metric.AttackComplexityLow: {
+		metric.ConfidentialityRequirementLow: {
 			language.English:  "Low",
 			language.Japanese: "低",
+		},
+		metric.ConfidentialityRequirementMedium: {
+			language.English:  "Medium",
+			language.Japanese: "中",
+		},
+		metric.ConfidentialityRequirementHigh: {
+			language.English:  "High",
+			language.Japanese: "高",
 		},
 	}
 )
 
-//AttackComplexity returns string instance name for display
-func AttackComplexity(lang language.Tag) string {
-	return acTitleMap.getNameInLang(lang)
+//ConfidentialityRequirement returns string instance name for display
+func ConfidentialityRequirement(lang language.Tag) string {
+	return crTitleMap.getNameInLang(lang)
 }
 
-//ACValueOf returns string name of value for display
-func ACValueOf(ac metric.AttackComplexity, lang language.Tag) string {
-	if m, ok := acNamesMap[ac]; ok {
+//CRValueOf returns string name of value for display
+func CRValueOf(cr metric.ConfidentialityRequirement, lang language.Tag) string {
+	if m, ok := crNamesMap[cr]; ok {
 		return m.getNameInLang(lang)
 	}
 	return unknownValueNameMap.getNameInLang(lang)
 }
 
-/* Copyright 2018-2022 Spiegel
+/* Copyright 2022 Spiegel
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.

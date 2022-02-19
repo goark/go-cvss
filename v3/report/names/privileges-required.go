@@ -11,19 +11,19 @@ var (
 		language.Japanese: "必要な特権レベル",
 	}
 	prNamesMap = map[metric.PrivilegesRequired]langNameMap{
-		metric.PrivilegesRequiredNotDefined: langNameMap{
+		metric.PrivilegesRequiredNotDefined: {
 			language.English:  "Not Defined",
 			language.Japanese: "未評価",
 		},
-		metric.PrivilegesRequiredHigh: langNameMap{
+		metric.PrivilegesRequiredHigh: {
 			language.English:  "High",
 			language.Japanese: "高",
 		},
-		metric.PrivilegesRequiredLow: langNameMap{
+		metric.PrivilegesRequiredLow: {
 			language.English:  "Low",
 			language.Japanese: "低",
 		},
-		metric.PrivilegesRequiredNone: langNameMap{
+		metric.PrivilegesRequiredNone: {
 			language.English:  "None",
 			language.Japanese: "不要",
 		},
@@ -43,7 +43,7 @@ func PRValueOf(pr metric.PrivilegesRequired, lang language.Tag) string {
 	return unknownValueNameMap.getNameInLang(lang)
 }
 
-/* Copyright 2018-2020 Spiegel
+/* Copyright 2018-2022 Spiegel
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.

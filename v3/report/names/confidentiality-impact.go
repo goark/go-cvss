@@ -11,19 +11,19 @@ var (
 		language.Japanese: "機密性への影響",
 	}
 	cNamesMap = map[metric.ConfidentialityImpact]langNameMap{
-		metric.ConfidentialityImpactNotDefined: langNameMap{
+		metric.ConfidentialityImpactNotDefined: {
 			language.English:  "Not Defined",
 			language.Japanese: "未評価",
 		},
-		metric.ConfidentialityImpactNone: langNameMap{
+		metric.ConfidentialityImpactNone: {
 			language.English:  "None",
 			language.Japanese: "なし",
 		},
-		metric.ConfidentialityImpactLow: langNameMap{
+		metric.ConfidentialityImpactLow: {
 			language.English:  "Low",
 			language.Japanese: "低",
 		},
-		metric.ConfidentialityImpactHigh: langNameMap{
+		metric.ConfidentialityImpactHigh: {
 			language.English:  "High",
 			language.Japanese: "高",
 		},
@@ -43,7 +43,7 @@ func CValueOf(c metric.ConfidentialityImpact, lang language.Tag) string {
 	return unknownValueNameMap.getNameInLang(lang)
 }
 
-/* Copyright 2018-2020 Spiegel
+/* Copyright 2018-2022 Spiegel
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.

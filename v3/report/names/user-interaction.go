@@ -11,15 +11,15 @@ var (
 		language.Japanese: "ユーザ関与レベル",
 	}
 	uiNamesMap = map[metric.UserInteraction]langNameMap{
-		metric.UserInteractionNotDefined: langNameMap{
+		metric.UserInteractionNotDefined: {
 			language.English:  "Not Defined",
 			language.Japanese: "未評価",
 		},
-		metric.UserInteractionRequired: langNameMap{
+		metric.UserInteractionRequired: {
 			language.English:  "Required",
 			language.Japanese: "要",
 		},
-		metric.UserInteractionNone: langNameMap{
+		metric.UserInteractionNone: {
 			language.English:  "None",
 			language.Japanese: "不要",
 		},
@@ -39,7 +39,7 @@ func UIValueOf(ui metric.UserInteraction, lang language.Tag) string {
 	return unknownValueNameMap.getNameInLang(lang)
 }
 
-/* Copyright 2018-2020 Spiegel
+/* Copyright 2018-2022 Spiegel
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.

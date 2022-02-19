@@ -1,3 +1,6 @@
+//go:build run
+// +build run
+
 package main
 
 import (
@@ -38,15 +41,33 @@ var template = `- CVSS Version {{ .Version }}
 | {{ .EName }} | {{ .EValue }} |
 | {{ .RLName }} | {{ .RLValue }} |
 | {{ .RCName }} | {{ .RCValue }} |
+
+## Environmental Metrics
+
+- {{ .SeverityName }}: {{ .SeverityValue }} ({{ .EnvironmentalScore }})
+
+| {{ .EnvironmentalMetrics }} | {{ .EnvironmentalMetricValue }} |
+|--------|-------|
+| {{ .CRName }} | {{ .CRValue }} |
+| {{ .IRName }} | {{ .IRValue }} |
+| {{ .ARName }} | {{ .ARValue }} |
+| {{ .MAVName }} | {{ .MAVValue }} |
+| {{ .MACName }} | {{ .MACValue }} |
+| {{ .MPRName }} | {{ .MPRValue }} |
+| {{ .MUIName }} | {{ .MUIValue }} |
+| {{ .MSName }}  | {{ .MSValue }} |
+| {{ .MCName }}  | {{ .MCValue }} |
+| {{ .MIName }}  | {{ .MIValue }} |
+| {{ .MAName }}  | {{ .MAValue }} |
 `
 
 func main() {
-	tm, err := metric.NewTemporal().Decode("CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:C/C:H/I:H/A:H/E:F/RL:W/RC:R") //CVE-2020-1472: ZeroLogon
+	em, err := metric.NewEnvironmental().Decode("CVSS:3.1/AV:P/AC:H/PR:H/UI:N/S:U/C:H/I:H/A:H/E:F/RL:U/RC:C/CR:M/IR:H/AR:M/MAV:L/MAC:H/MPR:L/MUI:R/MS:U/MC:L/MI:H/MA:L") //Random CVSS Vector
 	if err != nil {
 		fmt.Fprintln(os.Stderr, err)
 		return
 	}
-	r, err := report.NewTemporal(tm).ExportWith(strings.NewReader(template))
+	r, err := report.NewEnvironmental(em).ExportWith(strings.NewReader(template))
 	if err != nil {
 		fmt.Fprintln(os.Stderr, err)
 		return
@@ -56,33 +77,51 @@ func main() {
 	}
 	// Output:
 	// - CVSS Version 3.1
-	// - Vector: CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:C/C:H/I:H/A:H/E:F/RL:W/RC:R
+	// - Vector: CVSS:3.1/AV:P/AC:H/PR:H/UI:N/S:U/C:H/I:H/A:H/CR:M/IR:H/AR:M/MAV:L/MAC:H/MPR:L/MUI:R/MS:U/MC:L/MI:H/MA:L
 	//
 	// ## Base Metrics
 	//
-	// - Base Score: 10
+	// - Base Score: 6.1
 	//
 	// | Base Metrics | Metric Value |
 	// |--------|-------|
-	// | Attack Vector | Network |
-	// | Attack Complexity | Low |
-	// | Privileges Required | None |
+	// | Attack Vector | Physical |
+	// | Attack Complexity | High |
+	// | Privileges Required | High |
 	// | User Interaction | None |
-	// | Scope | Changed |
+	// | Scope | Unchanged |
 	// | Confidentiality Impact | High |
 	// | Integrity Impact | High |
 	// | Availability Impact | High |
 	//
 	// ## Temporal Metrics
 	//
-	// - Temporal Score: 9.1
-	// - Severity: Critical
+	// - Temporal Score: 6
+	// - Severity: Medium
 	//
 	// | Temporal Metrics | Metric Value |
 	// |--------|-------|
 	// | Exploit Code Maturity | Functional |
-	// | Remediation Level | Workaround |
-	// | Report Confidence | Reasonable |
+	// | Remediation Level | Unavailable |
+	// | Report Confidence | Confirmed |
+	//
+	// ## Environmental Metrics
+	//
+	// - Severity: Medium (6.5)
+	//
+	// | Environmental Metrics | Metric Value |
+	// |--------|-------|
+	// | Confidentiality Requirement | Medium |
+	// | Integrity Requirement | High |
+	// | Availability Requirement | Medium |
+	// | Modified Attack Vector | Local |
+	// | Modified Attack Complexity | High |
+	// | Modified Privileges Required | Low |
+	// | Modified User Interaction | Required |
+	// | Modified Scope  | Unchanged |
+	// | Modified Confidentiality Impact  | Low |
+	// | Modified Integrity Impact  | High |
+	// | Modified Availability Impact  | Low |
 }
 
 /* Copyright 2018-2020 Spiegel

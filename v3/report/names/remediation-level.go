@@ -11,23 +11,23 @@ var (
 		language.Japanese: "利用可能な対策のレベル",
 	}
 	rlNamesMap = map[metric.RemediationLevel]langNameMap{
-		metric.RemediationLevelNotDefined: langNameMap{
+		metric.RemediationLevelNotDefined: {
 			language.English:  "Not Defined",
 			language.Japanese: "未評価",
 		},
-		metric.RemediationLevelOfficialFix: langNameMap{
+		metric.RemediationLevelOfficialFix: {
 			language.English:  "Official Fix",
 			language.Japanese: "正式",
 		},
-		metric.RemediationLevelTemporaryFix: langNameMap{
+		metric.RemediationLevelTemporaryFix: {
 			language.English:  "Temporary Fix",
 			language.Japanese: "暫定",
 		},
-		metric.RemediationLevelWorkaround: langNameMap{
+		metric.RemediationLevelWorkaround: {
 			language.English:  "Workaround",
 			language.Japanese: "非公式",
 		},
-		metric.RemediationLevelUnavailable: langNameMap{
+		metric.RemediationLevelUnavailable: {
 			language.English:  "Unavailable",
 			language.Japanese: "なし",
 		},
@@ -47,7 +47,7 @@ func RLValueOf(rl metric.RemediationLevel, lang language.Tag) string {
 	return unknownValueNameMap.getNameInLang(lang)
 }
 
-/* Copyright 2020 Spiegel
+/* Copyright 2020-2022 Spiegel
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.

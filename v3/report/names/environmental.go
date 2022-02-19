@@ -1,27 +1,23 @@
-//go:build run
-// +build run
+package names
 
-package main
+import "golang.org/x/text/language"
 
-import (
-	"fmt"
-	"os"
-
-	"github.com/spiegel-im-spiegel/go-cvss/v3/metric"
-)
-
-func main() {
-	bm, err := metric.NewBase().Decode("CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:C/C:H/I:H/A:H") //CVE-2020-1472: ZeroLogon
-	if err != nil {
-		fmt.Fprintln(os.Stderr, err)
-		return
-	}
-	fmt.Printf("Severity: %v (%v)\n", bm.Severity(), bm.Score())
-	// Output:
-	// Severity: Critical (10)
+var environmentalMap = langNameMap{
+	language.English:  "Environmental Metrics",
+	language.Japanese: "環境評価基準",
 }
 
-/* Copyright 2018-2020 Spiegel
+//EnvironmentalMetrics returns string instance name for display
+func EnvironmentalMetrics(lang language.Tag) string {
+	return environmentalMap.getNameInLang(lang)
+}
+
+//EnvironmentalMetricsValueOf returns string instance name for display
+func EnvironmentalMetricsValueOf(lang language.Tag) string {
+	return metricVakueMap.getNameInLang(lang)
+}
+
+/* Copyright 2022 Spiegel
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.

@@ -11,19 +11,19 @@ var (
 		language.Japanese: "脆弱性情報の信頼性",
 	}
 	rcNamesMap = map[metric.ReportConfidence]langNameMap{
-		metric.ReportConfidenceNotDefined: langNameMap{
+		metric.ReportConfidenceNotDefined: {
 			language.English:  "Not Defined",
 			language.Japanese: "未評価",
 		},
-		metric.ReportConfidenceUnknown: langNameMap{
+		metric.ReportConfidenceUnknown: {
 			language.English:  "Unknown",
 			language.Japanese: "未確認",
 		},
-		metric.ReportConfidenceReasonable: langNameMap{
+		metric.ReportConfidenceReasonable: {
 			language.English:  "Reasonable",
 			language.Japanese: "未確証",
 		},
-		metric.ReportConfidenceConfirmed: langNameMap{
+		metric.ReportConfidenceConfirmed: {
 			language.English:  "Confirmed",
 			language.Japanese: "確認済",
 		},
@@ -43,7 +43,7 @@ func RCValueOf(rc metric.ReportConfidence, lang language.Tag) string {
 	return unknownValueNameMap.getNameInLang(lang)
 }
 
-/* Copyright 2020 Spiegel
+/* Copyright 2020-2022 Spiegel
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.

@@ -216,5 +216,4 @@ func (em *Environmental) TemporalMetrics() *Temporal {
 	return em.Temporal
 }
 
-/* Copyright by Florent Viel, 2020 */
-/* Contributed by Spiegel, 2020 */
+/* Copyright 2022 thejohnbrown */

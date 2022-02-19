@@ -1,0 +1,31 @@
+version: '3'
+
+tasks:
+  default:
+    cmds:
+      - task: clean
+      - task: test
+      - task: nancy
+
+  test:
+    desc: Test and lint.
+    cmds:
+      - go mod verify
+      - go test -shuffle on ./...
+      - docker run --rm -v $(pwd):/app -w /app golangci/golangci-lint:v1.44.2 golangci-lint run --enable gosec --timeout 3m0s ./...
+    sources:
+      - ./go.mod
+      - '**/*.go'
+
+  nancy:
+    desc: Check vulnerability of external packages with Nancy.
+    cmds:
+      - depm list -j | docker run --rm -i sonatypecommunity/nancy:latest sleuth -n
+    sources:
+      - ./go.mod
+      - '**/*.go'
+
+  clean:
+    desc: Initialize module and build cache, and remake go.sum file.
+    cmds:
+      - go mod tidy -v -go=1.17

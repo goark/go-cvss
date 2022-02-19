@@ -6,40 +6,40 @@ import (
 )
 
 var (
-	acTitleMap = langNameMap{
-		language.English:  "Attack Complexity",
-		language.Japanese: "攻撃条件の複雑さ",
+	macTitleMap = langNameMap{
+		language.English:  "Modified Attack Complexity",
+		language.Japanese: "調整後の攻撃条件の複雑さ",
 	}
-	acNamesMap = map[metric.AttackComplexity]langNameMap{
-		metric.AttackComplexityNotDefined: {
+	macNamesMap = map[metric.ModifiedAttackComplexity]langNameMap{
+		metric.ModifiedAttackComplexityNotDefined: {
 			language.English:  "Not Defined",
 			language.Japanese: "未評価",
 		},
-		metric.AttackComplexityHigh: {
+		metric.ModifiedAttackComplexityHigh: {
 			language.English:  "High",
 			language.Japanese: "高",
 		},
-		metric.AttackComplexityLow: {
+		metric.ModifiedAttackComplexityLow: {
 			language.English:  "Low",
 			language.Japanese: "低",
 		},
 	}
 )
 
-//AttackComplexity returns string instance name for display
-func AttackComplexity(lang language.Tag) string {
-	return acTitleMap.getNameInLang(lang)
+//ModifiedAttackComplexity returns string instance name for display
+func ModifiedAttackComplexity(lang language.Tag) string {
+	return macTitleMap.getNameInLang(lang)
 }
 
-//ACValueOf returns string name of value for display
-func ACValueOf(ac metric.AttackComplexity, lang language.Tag) string {
-	if m, ok := acNamesMap[ac]; ok {
+//MACValueOf returns string name of value for display
+func MACValueOf(mac metric.ModifiedAttackComplexity, lang language.Tag) string {
+	if m, ok := macNamesMap[mac]; ok {
 		return m.getNameInLang(lang)
 	}
 	return unknownValueNameMap.getNameInLang(lang)
 }
 
-/* Copyright 2018-2022 Spiegel
+/* Copyright 2022 Spiegel
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.

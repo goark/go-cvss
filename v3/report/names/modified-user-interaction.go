@@ -6,40 +6,40 @@ import (
 )
 
 var (
-	acTitleMap = langNameMap{
-		language.English:  "Attack Complexity",
-		language.Japanese: "攻撃条件の複雑さ",
+	muiTitleMap = langNameMap{
+		language.English:  "Modified User Interaction",
+		language.Japanese: "調整後のユーザ関与レベル",
 	}
-	acNamesMap = map[metric.AttackComplexity]langNameMap{
-		metric.AttackComplexityNotDefined: {
+	muiNamesMap = map[metric.ModifiedUserInteraction]langNameMap{
+		metric.ModifiedUserInteractionNotDefined: {
 			language.English:  "Not Defined",
 			language.Japanese: "未評価",
 		},
-		metric.AttackComplexityHigh: {
-			language.English:  "High",
-			language.Japanese: "高",
+		metric.ModifiedUserInteractionRequired: {
+			language.English:  "Required",
+			language.Japanese: "要",
 		},
-		metric.AttackComplexityLow: {
-			language.English:  "Low",
-			language.Japanese: "低",
+		metric.ModifiedUserInteractionNone: {
+			language.English:  "None",
+			language.Japanese: "不要",
 		},
 	}
 )
 
-//AttackComplexity returns string instance name for display
-func AttackComplexity(lang language.Tag) string {
-	return acTitleMap.getNameInLang(lang)
+//ModifiedUserInteraction returns string instance name for display
+func ModifiedUserInteraction(lang language.Tag) string {
+	return muiTitleMap.getNameInLang(lang)
 }
 
-//ACValueOf returns string name of value for display
-func ACValueOf(ac metric.AttackComplexity, lang language.Tag) string {
-	if m, ok := acNamesMap[ac]; ok {
+//MUIValueOf returns string name of value for display
+func MUIValueOf(mui metric.ModifiedUserInteraction, lang language.Tag) string {
+	if m, ok := muiNamesMap[mui]; ok {
 		return m.getNameInLang(lang)
 	}
 	return unknownValueNameMap.getNameInLang(lang)
 }
 
-/* Copyright 2018-2022 Spiegel
+/* Copyright 2022 Spiegel
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
