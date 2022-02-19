@@ -6,48 +6,48 @@ import (
 )
 
 var (
-	avTitleMap = langNameMap{
-		language.English:  "Attack Vector",
-		language.Japanese: "攻撃元区分",
+	mavTitleMap = langNameMap{
+		language.English:  "Modified Attack Vector",
+		language.Japanese: "調整後の攻撃元区分",
 	}
-	avNamesMap = map[metric.AttackVector]langNameMap{
-		metric.AttackVectorNotDefined: {
+	mavNamesMap = map[metric.ModifiedAttackVector]langNameMap{
+		metric.ModifiedAttackVectorNotDefined: {
 			language.English:  "Not Defined",
 			language.Japanese: "未評価",
 		},
-		metric.AttackVectorPhysical: {
+		metric.ModifiedAttackVectorPhysical: {
 			language.English:  "Physical",
 			language.Japanese: "物理",
 		},
-		metric.AttackVectorLocal: {
+		metric.ModifiedAttackVectorLocal: {
 			language.English:  "Local",
 			language.Japanese: "ローカル",
 		},
-		metric.AttackVectorAdjacent: {
+		metric.ModifiedAttackVectorAdjacent: {
 			language.English:  "Adjacent",
 			language.Japanese: "隣接",
 		},
-		metric.AttackVectorNetwork: {
+		metric.ModifiedAttackVectorNetwork: {
 			language.English:  "Network",
 			language.Japanese: "ネットワーク",
 		},
 	}
 )
 
-//AttackVector returns string instance name for display
-func AttackVector(lang language.Tag) string {
-	return avTitleMap.getNameInLang(lang)
+//ModifiedAttackVector returns string instance name for display
+func ModifiedAttackVector(lang language.Tag) string {
+	return mavTitleMap.getNameInLang(lang)
 }
 
-//AVValueOf returns string name of value for display
-func AVValueOf(av metric.AttackVector, lang language.Tag) string {
-	if m, ok := avNamesMap[av]; ok {
+//MAVValueOf returns string name of value for display
+func MAVValueOf(mav metric.ModifiedAttackVector, lang language.Tag) string {
+	if m, ok := mavNamesMap[mav]; ok {
 		return m.getNameInLang(lang)
 	}
 	return unknownValueNameMap.getNameInLang(lang)
 }
 
-/* Copyright 2018-2022 Spiegel
+/* Copyright 2022 Spiegel
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.

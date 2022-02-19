@@ -11,23 +11,23 @@ var (
 		language.Japanese: "深刻度",
 	}
 	severityNamesMap = map[metric.Severity]langNameMap{
-		metric.SeverityNone: langNameMap{
+		metric.SeverityNone: {
 			language.English:  metric.SeverityNone.String(),
 			language.Japanese: "なし",
 		},
-		metric.SeverityLow: langNameMap{
+		metric.SeverityLow: {
 			language.English:  metric.SeverityLow.String(),
 			language.Japanese: "注意",
 		},
-		metric.SeverityMedium: langNameMap{
+		metric.SeverityMedium: {
 			language.English:  metric.SeverityMedium.String(),
 			language.Japanese: "警告",
 		},
-		metric.SeverityHigh: langNameMap{
+		metric.SeverityHigh: {
 			language.English:  metric.SeverityHigh.String(),
 			language.Japanese: "重要",
 		},
-		metric.SeverityCritical: langNameMap{
+		metric.SeverityCritical: {
 			language.English:  metric.SeverityCritical.String(),
 			language.Japanese: "緊急",
 		},
@@ -47,7 +47,7 @@ func SeverityValueOf(sv metric.Severity, lang language.Tag) string {
 	return unknownValueNameMap.getNameInLang(lang)
 }
 
-/* Copyright 2018-2020 Spiegel
+/* Copyright 2018-2022 Spiegel
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.

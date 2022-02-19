@@ -29,6 +29,50 @@ func TestBaseTitle(t *testing.T) {
 	}
 }
 
+func TestTemporalTitle(t *testing.T) {
+	testCases := []struct {
+		lang language.Tag
+		n    string
+		nv   string
+	}{
+		{lang: language.Und, n: "Temporal Metrics", nv: "Metric Value"},
+		{lang: language.English, n: "Temporal Metrics", nv: "Metric Value"},
+		{lang: language.Japanese, n: "現状評価基準", nv: "評価値"},
+	}
+	for _, tc := range testCases {
+		n := TemporalMetrics(tc.lang)
+		if n != tc.n {
+			t.Errorf("Metrics.Title(%v) = \"%v\", want \"%v\".", tc.lang, n, tc.n)
+		}
+		nv := TemporalMetricsValueOf(tc.lang)
+		if nv != tc.nv {
+			t.Errorf("Metrics.NameOfvalue(%v) = \"%v\", want \"%v\".", tc.lang, nv, tc.nv)
+		}
+	}
+}
+
+func TestEnvironmentalTitle(t *testing.T) {
+	testCases := []struct {
+		lang language.Tag
+		n    string
+		nv   string
+	}{
+		{lang: language.Und, n: "Environmental Metrics", nv: "Metric Value"},
+		{lang: language.English, n: "Environmental Metrics", nv: "Metric Value"},
+		{lang: language.Japanese, n: "環境評価基準", nv: "評価値"},
+	}
+	for _, tc := range testCases {
+		n := EnvironmentalMetrics(tc.lang)
+		if n != tc.n {
+			t.Errorf("Metrics.Title(%v) = \"%v\", want \"%v\".", tc.lang, n, tc.n)
+		}
+		nv := EnvironmentalMetricsValueOf(tc.lang)
+		if nv != tc.nv {
+			t.Errorf("Metrics.NameOfvalue(%v) = \"%v\", want \"%v\".", tc.lang, nv, tc.nv)
+		}
+	}
+}
+
 func TestAttackVectorTitle(t *testing.T) {
 	testCases := []struct {
 		lang language.Tag
@@ -72,6 +116,45 @@ func TestAttackVectorTitle(t *testing.T) {
 	}
 }
 
+func TestModifiedAttackVectorTitle(t *testing.T) {
+	testCases := []struct {
+		lang language.Tag
+		av   metric.ModifiedAttackVector
+		n    string
+		nv   string
+	}{
+		{lang: language.Und, av: metric.ModifiedAttackVectorNotDefined, n: "Modified Attack Vector", nv: "Not Defined"},
+		{lang: language.English, av: metric.ModifiedAttackVectorNotDefined, n: "Modified Attack Vector", nv: "Not Defined"},
+		{lang: language.Japanese, av: metric.ModifiedAttackVectorNotDefined, n: "調整後の攻撃元区分", nv: "未評価"},
+
+		{lang: language.Und, av: metric.ModifiedAttackVectorPhysical, n: "Modified Attack Vector", nv: "Physical"},
+		{lang: language.English, av: metric.ModifiedAttackVectorPhysical, n: "Modified Attack Vector", nv: "Physical"},
+		{lang: language.Japanese, av: metric.ModifiedAttackVectorPhysical, n: "調整後の攻撃元区分", nv: "物理"},
+
+		{lang: language.Und, av: metric.ModifiedAttackVectorLocal, n: "Modified Attack Vector", nv: "Local"},
+		{lang: language.English, av: metric.ModifiedAttackVectorLocal, n: "Modified Attack Vector", nv: "Local"},
+		{lang: language.Japanese, av: metric.ModifiedAttackVectorLocal, n: "調整後の攻撃元区分", nv: "ローカル"},
+
+		{lang: language.Und, av: metric.ModifiedAttackVectorAdjacent, n: "Modified Attack Vector", nv: "Adjacent"},
+		{lang: language.English, av: metric.ModifiedAttackVectorAdjacent, n: "Modified Attack Vector", nv: "Adjacent"},
+		{lang: language.Japanese, av: metric.ModifiedAttackVectorAdjacent, n: "調整後の攻撃元区分", nv: "隣接"},
+
+		{lang: language.Und, av: metric.ModifiedAttackVectorNetwork, n: "Modified Attack Vector", nv: "Network"},
+		{lang: language.English, av: metric.ModifiedAttackVectorNetwork, n: "Modified Attack Vector", nv: "Network"},
+		{lang: language.Japanese, av: metric.ModifiedAttackVectorNetwork, n: "調整後の攻撃元区分", nv: "ネットワーク"},
+	}
+	for _, tc := range testCases {
+		n := ModifiedAttackVector(tc.lang)
+		if n != tc.n {
+			t.Errorf("AttackVector.Title(%v) = \"%v\", want \"%v\".", tc.lang, n, tc.n)
+		}
+		nv := MAVValueOf(tc.av, tc.lang)
+		if nv != tc.nv {
+			t.Errorf("AttackVector.NameOfValue(%v) = \"%v\", want \"%v\".", tc.lang, nv, tc.nv)
+		}
+	}
+}
+
 func TestAttackComplexityTitle(t *testing.T) {
 	testCases := []struct {
 		lang language.Tag
@@ -101,6 +184,37 @@ func TestAttackComplexityTitle(t *testing.T) {
 			t.Errorf("AttackComplexity.Title(%v) = \"%v\", want \"%v\".", tc.lang, n, tc.n)
 		}
 		nv := ACValueOf(tc.ac, tc.lang)
+		if nv != tc.nv {
+			t.Errorf("AttackComplexity.NameOfValue(%v) = \"%v\", want \"%v\".", tc.lang, nv, tc.nv)
+		}
+	}
+}
+
+func TestModifiedAttackComplexityTitle(t *testing.T) {
+	testCases := []struct {
+		lang language.Tag
+		ac   metric.ModifiedAttackComplexity
+		n    string
+		nv   string
+	}{
+		{lang: language.Und, ac: metric.ModifiedAttackComplexityNotDefined, n: "Modified Attack Complexity", nv: "Not Defined"},
+		{lang: language.English, ac: metric.ModifiedAttackComplexityNotDefined, n: "Modified Attack Complexity", nv: "Not Defined"},
+		{lang: language.Japanese, ac: metric.ModifiedAttackComplexityNotDefined, n: "調整後の攻撃条件の複雑さ", nv: "未評価"},
+
+		{lang: language.Und, ac: metric.ModifiedAttackComplexityHigh, n: "Modified Attack Complexity", nv: "High"},
+		{lang: language.English, ac: metric.ModifiedAttackComplexityHigh, n: "Modified Attack Complexity", nv: "High"},
+		{lang: language.Japanese, ac: metric.ModifiedAttackComplexityHigh, n: "調整後の攻撃条件の複雑さ", nv: "高"},
+
+		{lang: language.Und, ac: metric.ModifiedAttackComplexityLow, n: "Modified Attack Complexity", nv: "Low"},
+		{lang: language.English, ac: metric.ModifiedAttackComplexityLow, n: "Modified Attack Complexity", nv: "Low"},
+		{lang: language.Japanese, ac: metric.ModifiedAttackComplexityLow, n: "調整後の攻撃条件の複雑さ", nv: "低"},
+	}
+	for _, tc := range testCases {
+		n := ModifiedAttackComplexity(tc.lang)
+		if n != tc.n {
+			t.Errorf("AttackComplexity.Title(%v) = \"%v\", want \"%v\".", tc.lang, n, tc.n)
+		}
+		nv := MACValueOf(tc.ac, tc.lang)
 		if nv != tc.nv {
 			t.Errorf("AttackComplexity.NameOfValue(%v) = \"%v\", want \"%v\".", tc.lang, nv, tc.nv)
 		}
@@ -146,6 +260,41 @@ func TestPrivilegesRequiredTitle(t *testing.T) {
 	}
 }
 
+func TestModifiedPrivilegesRequiredTitle(t *testing.T) {
+	testCases := []struct {
+		lang language.Tag
+		pr   metric.ModifiedPrivilegesRequired
+		n    string
+		nv   string
+	}{
+		{lang: language.Und, pr: metric.ModifiedPrivilegesRequiredNotDefined, n: "Modified Privileges Required", nv: "Not Defined"},
+		{lang: language.English, pr: metric.ModifiedPrivilegesRequiredNotDefined, n: "Modified Privileges Required", nv: "Not Defined"},
+		{lang: language.Japanese, pr: metric.ModifiedPrivilegesRequiredNotDefined, n: "調整後の必要な特権レベル", nv: "未評価"},
+
+		{lang: language.Und, pr: metric.ModifiedPrivilegesRequiredHigh, n: "Modified Privileges Required", nv: "High"},
+		{lang: language.English, pr: metric.ModifiedPrivilegesRequiredHigh, n: "Modified Privileges Required", nv: "High"},
+		{lang: language.Japanese, pr: metric.ModifiedPrivilegesRequiredHigh, n: "調整後の必要な特権レベル", nv: "高"},
+
+		{lang: language.Und, pr: metric.ModifiedPrivilegesRequiredLow, n: "Modified Privileges Required", nv: "Low"},
+		{lang: language.English, pr: metric.ModifiedPrivilegesRequiredLow, n: "Modified Privileges Required", nv: "Low"},
+		{lang: language.Japanese, pr: metric.ModifiedPrivilegesRequiredLow, n: "調整後の必要な特権レベル", nv: "低"},
+
+		{lang: language.Und, pr: metric.ModifiedPrivilegesRequiredNone, n: "Modified Privileges Required", nv: "None"},
+		{lang: language.English, pr: metric.ModifiedPrivilegesRequiredNone, n: "Modified Privileges Required", nv: "None"},
+		{lang: language.Japanese, pr: metric.ModifiedPrivilegesRequiredNone, n: "調整後の必要な特権レベル", nv: "不要"},
+	}
+	for _, tc := range testCases {
+		n := ModifiedPrivilegesRequired(tc.lang)
+		if n != tc.n {
+			t.Errorf("PrivilegesRequired.Title(%v) = \"%v\", want \"%v\".", tc.lang, n, tc.n)
+		}
+		nv := MPRValueOf(tc.pr, tc.lang)
+		if nv != tc.nv {
+			t.Errorf("PrivilegesRequired.NameOfValue(%v) = \"%v\", want \"%v\".", tc.lang, nv, tc.nv)
+		}
+	}
+}
+
 func TestUserInteractionTitle(t *testing.T) {
 	testCases := []struct {
 		lang language.Tag
@@ -181,6 +330,37 @@ func TestUserInteractionTitle(t *testing.T) {
 	}
 }
 
+func TestModifiedUserInteractionTitle(t *testing.T) {
+	testCases := []struct {
+		lang language.Tag
+		ui   metric.ModifiedUserInteraction
+		n    string
+		nv   string
+	}{
+		{lang: language.Und, ui: metric.ModifiedUserInteractionNotDefined, n: "Modified User Interaction", nv: "Not Defined"},
+		{lang: language.English, ui: metric.ModifiedUserInteractionNotDefined, n: "Modified User Interaction", nv: "Not Defined"},
+		{lang: language.Japanese, ui: metric.ModifiedUserInteractionNotDefined, n: "調整後のユーザ関与レベル", nv: "未評価"},
+
+		{lang: language.Und, ui: metric.ModifiedUserInteractionRequired, n: "Modified User Interaction", nv: "Required"},
+		{lang: language.English, ui: metric.ModifiedUserInteractionRequired, n: "Modified User Interaction", nv: "Required"},
+		{lang: language.Japanese, ui: metric.ModifiedUserInteractionRequired, n: "調整後のユーザ関与レベル", nv: "要"},
+
+		{lang: language.Und, ui: metric.ModifiedUserInteractionNone, n: "Modified User Interaction", nv: "None"},
+		{lang: language.English, ui: metric.ModifiedUserInteractionNone, n: "Modified User Interaction", nv: "None"},
+		{lang: language.Japanese, ui: metric.ModifiedUserInteractionNone, n: "調整後のユーザ関与レベル", nv: "不要"},
+	}
+	for _, tc := range testCases {
+		n := ModifiedUserInteraction(tc.lang)
+		if n != tc.n {
+			t.Errorf("UserInteraction.Title(%v) = \"%v\", want \"%v\".", tc.lang, n, tc.n)
+		}
+		nv := MUIValueOf(tc.ui, tc.lang)
+		if nv != tc.nv {
+			t.Errorf("UserInteraction.NameOfValue(%v) = \"%v\", want \"%v\".", tc.lang, nv, tc.nv)
+		}
+	}
+}
+
 func TestScopeTitle(t *testing.T) {
 	testCases := []struct {
 		lang language.Tag
@@ -210,6 +390,37 @@ func TestScopeTitle(t *testing.T) {
 			t.Errorf("UserInteraction.Title(%v) = \"%v\", want \"%v\".", tc.lang, n, tc.n)
 		}
 		nv := SValueOf(tc.s, tc.lang)
+		if nv != tc.nv {
+			t.Errorf("UserInteraction.NameOfValue(%v) = \"%v\", want \"%v\".", tc.lang, nv, tc.nv)
+		}
+	}
+}
+
+func TestModifiedScopeTitle(t *testing.T) {
+	testCases := []struct {
+		lang language.Tag
+		s    metric.ModifiedScope
+		n    string
+		nv   string
+	}{
+		{lang: language.Und, s: metric.ModifiedScopeNotDefined, n: "Modified Scope", nv: "Not Defined"},
+		{lang: language.English, s: metric.ModifiedScopeNotDefined, n: "Modified Scope", nv: "Not Defined"},
+		{lang: language.Japanese, s: metric.ModifiedScopeNotDefined, n: "調整後のスコープ", nv: "未評価"},
+
+		{lang: language.Und, s: metric.ModifiedScopeUnchanged, n: "Modified Scope", nv: "Unchanged"},
+		{lang: language.English, s: metric.ModifiedScopeUnchanged, n: "Modified Scope", nv: "Unchanged"},
+		{lang: language.Japanese, s: metric.ModifiedScopeUnchanged, n: "調整後のスコープ", nv: "変更なし"},
+
+		{lang: language.Und, s: metric.ModifiedScopeChanged, n: "Modified Scope", nv: "Changed"},
+		{lang: language.English, s: metric.ModifiedScopeChanged, n: "Modified Scope", nv: "Changed"},
+		{lang: language.Japanese, s: metric.ModifiedScopeChanged, n: "調整後のスコープ", nv: "変更あり"},
+	}
+	for _, tc := range testCases {
+		n := ModifiedScope(tc.lang)
+		if n != tc.n {
+			t.Errorf("UserInteraction.Title(%v) = \"%v\", want \"%v\".", tc.lang, n, tc.n)
+		}
+		nv := MSValueOf(tc.s, tc.lang)
 		if nv != tc.nv {
 			t.Errorf("UserInteraction.NameOfValue(%v) = \"%v\", want \"%v\".", tc.lang, nv, tc.nv)
 		}
@@ -255,6 +466,76 @@ func TestConfidentialityImpactTitle(t *testing.T) {
 	}
 }
 
+func TestModifiedConfidentialityImpactTitle(t *testing.T) {
+	testCases := []struct {
+		lang language.Tag
+		c    metric.ModifiedConfidentialityImpact
+		n    string
+		nv   string
+	}{
+		{lang: language.Und, c: metric.ModifiedConfidentialityImpactNotDefined, n: "Modified Confidentiality Impact", nv: "Not Defined"},
+		{lang: language.English, c: metric.ModifiedConfidentialityImpactNotDefined, n: "Modified Confidentiality Impact", nv: "Not Defined"},
+		{lang: language.Japanese, c: metric.ModifiedConfidentialityImpactNotDefined, n: "調整後の機密性への影響", nv: "未評価"},
+
+		{lang: language.Und, c: metric.ModifiedConfidentialityImpactNone, n: "Modified Confidentiality Impact", nv: "None"},
+		{lang: language.English, c: metric.ModifiedConfidentialityImpactNone, n: "Modified Confidentiality Impact", nv: "None"},
+		{lang: language.Japanese, c: metric.ModifiedConfidentialityImpactNone, n: "調整後の機密性への影響", nv: "なし"},
+
+		{lang: language.Und, c: metric.ModifiedConfidentialityImpactLow, n: "Modified Confidentiality Impact", nv: "Low"},
+		{lang: language.English, c: metric.ModifiedConfidentialityImpactLow, n: "Modified Confidentiality Impact", nv: "Low"},
+		{lang: language.Japanese, c: metric.ModifiedConfidentialityImpactLow, n: "調整後の機密性への影響", nv: "低"},
+
+		{lang: language.Und, c: metric.ModifiedConfidentialityImpactHigh, n: "Modified Confidentiality Impact", nv: "High"},
+		{lang: language.English, c: metric.ModifiedConfidentialityImpactHigh, n: "Modified Confidentiality Impact", nv: "High"},
+		{lang: language.Japanese, c: metric.ModifiedConfidentialityImpactHigh, n: "調整後の機密性への影響", nv: "高"},
+	}
+	for _, tc := range testCases {
+		n := ModifiedConfidentialityImpact(tc.lang)
+		if n != tc.n {
+			t.Errorf("ConfidentialityImpact.Title(%v) = \"%v\", want \"%v\".", tc.lang, n, tc.n)
+		}
+		nv := MCValueOf(tc.c, tc.lang)
+		if nv != tc.nv {
+			t.Errorf("ConfidentialityImpact.NameOfValue(%v) = \"%v\", want \"%v\".", tc.lang, nv, tc.nv)
+		}
+	}
+}
+
+func TestConfidentialityRequirementTitle(t *testing.T) {
+	testCases := []struct {
+		lang language.Tag
+		c    metric.ConfidentialityRequirement
+		n    string
+		nv   string
+	}{
+		{lang: language.Und, c: metric.ConfidentialityRequirementNotDefined, n: "Confidentiality Requirement", nv: "Not Defined"},
+		{lang: language.English, c: metric.ConfidentialityRequirementNotDefined, n: "Confidentiality Requirement", nv: "Not Defined"},
+		{lang: language.Japanese, c: metric.ConfidentialityRequirementNotDefined, n: "機密性の要求度", nv: "未評価"},
+
+		{lang: language.Und, c: metric.ConfidentialityRequirementLow, n: "Confidentiality Requirement", nv: "Low"},
+		{lang: language.English, c: metric.ConfidentialityRequirementLow, n: "Confidentiality Requirement", nv: "Low"},
+		{lang: language.Japanese, c: metric.ConfidentialityRequirementLow, n: "機密性の要求度", nv: "低"},
+
+		{lang: language.Und, c: metric.ConfidentialityRequirementMedium, n: "Confidentiality Requirement", nv: "Medium"},
+		{lang: language.English, c: metric.ConfidentialityRequirementMedium, n: "Confidentiality Requirement", nv: "Medium"},
+		{lang: language.Japanese, c: metric.ConfidentialityRequirementMedium, n: "機密性の要求度", nv: "中"},
+
+		{lang: language.Und, c: metric.ConfidentialityRequirementHigh, n: "Confidentiality Requirement", nv: "High"},
+		{lang: language.English, c: metric.ConfidentialityRequirementHigh, n: "Confidentiality Requirement", nv: "High"},
+		{lang: language.Japanese, c: metric.ConfidentialityRequirementHigh, n: "機密性の要求度", nv: "高"},
+	}
+	for _, tc := range testCases {
+		n := ConfidentialityRequirement(tc.lang)
+		if n != tc.n {
+			t.Errorf("ConfidentialityImpact.Title(%v) = \"%v\", want \"%v\".", tc.lang, n, tc.n)
+		}
+		nv := CRValueOf(tc.c, tc.lang)
+		if nv != tc.nv {
+			t.Errorf("ConfidentialityImpact.NameOfValue(%v) = \"%v\", want \"%v\".", tc.lang, nv, tc.nv)
+		}
+	}
+}
+
 func TestIntegrityImpactTitle(t *testing.T) {
 	testCases := []struct {
 		lang language.Tag
@@ -294,6 +575,76 @@ func TestIntegrityImpactTitle(t *testing.T) {
 	}
 }
 
+func TestModifiedIntegrityImpactTitle(t *testing.T) {
+	testCases := []struct {
+		lang language.Tag
+		i    metric.ModifiedIntegrityImpact
+		n    string
+		nv   string
+	}{
+		{lang: language.Und, i: metric.ModifiedIntegrityImpactNotDefined, n: "Modified Integrity Impact", nv: "Not Defined"},
+		{lang: language.English, i: metric.ModifiedIntegrityImpactNotDefined, n: "Modified Integrity Impact", nv: "Not Defined"},
+		{lang: language.Japanese, i: metric.ModifiedIntegrityImpactNotDefined, n: "調整後の完全性への影響", nv: "未評価"},
+
+		{lang: language.Und, i: metric.ModifiedIntegrityImpactNone, n: "Modified Integrity Impact", nv: "None"},
+		{lang: language.English, i: metric.ModifiedIntegrityImpactNone, n: "Modified Integrity Impact", nv: "None"},
+		{lang: language.Japanese, i: metric.ModifiedIntegrityImpactNone, n: "調整後の完全性への影響", nv: "なし"},
+
+		{lang: language.Und, i: metric.ModifiedIntegrityImpactLow, n: "Modified Integrity Impact", nv: "Low"},
+		{lang: language.English, i: metric.ModifiedIntegrityImpactLow, n: "Modified Integrity Impact", nv: "Low"},
+		{lang: language.Japanese, i: metric.ModifiedIntegrityImpactLow, n: "調整後の完全性への影響", nv: "低"},
+
+		{lang: language.Und, i: metric.ModifiedIntegrityImpactHigh, n: "Modified Integrity Impact", nv: "High"},
+		{lang: language.English, i: metric.ModifiedIntegrityImpactHigh, n: "Modified Integrity Impact", nv: "High"},
+		{lang: language.Japanese, i: metric.ModifiedIntegrityImpactHigh, n: "調整後の完全性への影響", nv: "高"},
+	}
+	for _, tc := range testCases {
+		n := ModifiedIntegrityImpact(tc.lang)
+		if n != tc.n {
+			t.Errorf("IntegrityImpact.Title(%v) = \"%v\", want \"%v\".", tc.lang, n, tc.n)
+		}
+		nv := MIValueOf(tc.i, tc.lang)
+		if nv != tc.nv {
+			t.Errorf("IntegrityImpact.NameOfValue(%v) = \"%v\", want \"%v\".", tc.lang, nv, tc.nv)
+		}
+	}
+}
+
+func TestIntegrityRequirementTitle(t *testing.T) {
+	testCases := []struct {
+		lang language.Tag
+		c    metric.IntegrityRequirement
+		n    string
+		nv   string
+	}{
+		{lang: language.Und, c: metric.IntegrityRequirementNotDefined, n: "Integrity Requirement", nv: "Not Defined"},
+		{lang: language.English, c: metric.IntegrityRequirementNotDefined, n: "Integrity Requirement", nv: "Not Defined"},
+		{lang: language.Japanese, c: metric.IntegrityRequirementNotDefined, n: "完全性の要求度", nv: "未評価"},
+
+		{lang: language.Und, c: metric.IntegrityRequirementLow, n: "Integrity Requirement", nv: "Low"},
+		{lang: language.English, c: metric.IntegrityRequirementLow, n: "Integrity Requirement", nv: "Low"},
+		{lang: language.Japanese, c: metric.IntegrityRequirementLow, n: "完全性の要求度", nv: "低"},
+
+		{lang: language.Und, c: metric.IntegrityRequirementMedium, n: "Integrity Requirement", nv: "Medium"},
+		{lang: language.English, c: metric.IntegrityRequirementMedium, n: "Integrity Requirement", nv: "Medium"},
+		{lang: language.Japanese, c: metric.IntegrityRequirementMedium, n: "完全性の要求度", nv: "中"},
+
+		{lang: language.Und, c: metric.IntegrityRequirementHigh, n: "Integrity Requirement", nv: "High"},
+		{lang: language.English, c: metric.IntegrityRequirementHigh, n: "Integrity Requirement", nv: "High"},
+		{lang: language.Japanese, c: metric.IntegrityRequirementHigh, n: "完全性の要求度", nv: "高"},
+	}
+	for _, tc := range testCases {
+		n := IntegrityRequirement(tc.lang)
+		if n != tc.n {
+			t.Errorf("ConfidentialityImpact.Title(%v) = \"%v\", want \"%v\".", tc.lang, n, tc.n)
+		}
+		nv := IRValueOf(tc.c, tc.lang)
+		if nv != tc.nv {
+			t.Errorf("ConfidentialityImpact.NameOfValue(%v) = \"%v\", want \"%v\".", tc.lang, nv, tc.nv)
+		}
+	}
+}
+
 func TestAvailabilityImpactTitle(t *testing.T) {
 	testCases := []struct {
 		lang language.Tag
@@ -329,6 +680,76 @@ func TestAvailabilityImpactTitle(t *testing.T) {
 		nv := AValueOf(tc.a, tc.lang)
 		if nv != tc.nv {
 			t.Errorf("AvailabilityImpact.NameOfValue(%v) = \"%v\", want \"%v\".", tc.lang, nv, tc.nv)
+		}
+	}
+}
+
+func TestModifiedAvailabilityImpactTitle(t *testing.T) {
+	testCases := []struct {
+		lang language.Tag
+		a    metric.ModifiedAvailabilityImpact
+		n    string
+		nv   string
+	}{
+		{lang: language.Und, a: metric.ModifiedAvailabilityImpactNotDefined, n: "Modified Availability Impact", nv: "Not Defined"},
+		{lang: language.English, a: metric.ModifiedAvailabilityImpactNotDefined, n: "Modified Availability Impact", nv: "Not Defined"},
+		{lang: language.Japanese, a: metric.ModifiedAvailabilityImpactNotDefined, n: "調整後の可用性への影響", nv: "未評価"},
+
+		{lang: language.Und, a: metric.ModifiedAvailabilityImpactNone, n: "Modified Availability Impact", nv: "None"},
+		{lang: language.English, a: metric.ModifiedAvailabilityImpactNone, n: "Modified Availability Impact", nv: "None"},
+		{lang: language.Japanese, a: metric.ModifiedAvailabilityImpactNone, n: "調整後の可用性への影響", nv: "なし"},
+
+		{lang: language.Und, a: metric.ModifiedAvailabilityImpactLow, n: "Modified Availability Impact", nv: "Low"},
+		{lang: language.English, a: metric.ModifiedAvailabilityImpactLow, n: "Modified Availability Impact", nv: "Low"},
+		{lang: language.Japanese, a: metric.ModifiedAvailabilityImpactLow, n: "調整後の可用性への影響", nv: "低"},
+
+		{lang: language.Und, a: metric.ModifiedAvailabilityImpactHigh, n: "Modified Availability Impact", nv: "High"},
+		{lang: language.English, a: metric.ModifiedAvailabilityImpactHigh, n: "Availability Impact", nv: "High"},
+		{lang: language.Japanese, a: metric.ModifiedAvailabilityImpactHigh, n: "調整後の可用性への影響", nv: "高"},
+	}
+	for _, tc := range testCases {
+		n := ModifiedAvailabilityImpact(tc.lang)
+		if n != tc.n {
+			t.Errorf("AvailabilityImpact.Title(%v) = \"%v\", want \"%v\".", tc.lang, n, tc.n)
+		}
+		nv := MAValueOf(tc.a, tc.lang)
+		if nv != tc.nv {
+			t.Errorf("AvailabilityImpact.NameOfValue(%v) = \"%v\", want \"%v\".", tc.lang, nv, tc.nv)
+		}
+	}
+}
+
+func TestAvailabilityRequirementTitle(t *testing.T) {
+	testCases := []struct {
+		lang language.Tag
+		c    metric.AvailabilityRequirement
+		n    string
+		nv   string
+	}{
+		{lang: language.Und, c: metric.AvailabilityRequirementNotDefined, n: "Availability Requirement", nv: "Not Defined"},
+		{lang: language.English, c: metric.AvailabilityRequirementNotDefined, n: "Availability Requirement", nv: "Not Defined"},
+		{lang: language.Japanese, c: metric.AvailabilityRequirementNotDefined, n: "可用性の要求度", nv: "未評価"},
+
+		{lang: language.Und, c: metric.AvailabilityRequirementLow, n: "Availability Requirement", nv: "Low"},
+		{lang: language.English, c: metric.AvailabilityRequirementLow, n: "Availability Requirement", nv: "Low"},
+		{lang: language.Japanese, c: metric.AvailabilityRequirementLow, n: "可用性の要求度", nv: "低"},
+
+		{lang: language.Und, c: metric.AvailabilityRequirementMedium, n: "Availability Requirement", nv: "Medium"},
+		{lang: language.English, c: metric.AvailabilityRequirementMedium, n: "Availability Requirement", nv: "Medium"},
+		{lang: language.Japanese, c: metric.AvailabilityRequirementMedium, n: "可用性の要求度", nv: "中"},
+
+		{lang: language.Und, c: metric.AvailabilityRequirementHigh, n: "Availability Requirement", nv: "High"},
+		{lang: language.English, c: metric.AvailabilityRequirementHigh, n: "Availability Requirement", nv: "High"},
+		{lang: language.Japanese, c: metric.AvailabilityRequirementHigh, n: "可用性の要求度", nv: "高"},
+	}
+	for _, tc := range testCases {
+		n := AvailabilityRequirement(tc.lang)
+		if n != tc.n {
+			t.Errorf("ConfidentialityImpact.Title(%v) = \"%v\", want \"%v\".", tc.lang, n, tc.n)
+		}
+		nv := ARValueOf(tc.c, tc.lang)
+		if nv != tc.nv {
+			t.Errorf("ConfidentialityImpact.NameOfValue(%v) = \"%v\", want \"%v\".", tc.lang, nv, tc.nv)
 		}
 	}
 }

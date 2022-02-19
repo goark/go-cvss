@@ -6,40 +6,44 @@ import (
 )
 
 var (
-	acTitleMap = langNameMap{
-		language.English:  "Attack Complexity",
-		language.Japanese: "攻撃条件の複雑さ",
+	arTitleMap = langNameMap{
+		language.English:  "Availability Requirement",
+		language.Japanese: "可用性の要求度",
 	}
-	acNamesMap = map[metric.AttackComplexity]langNameMap{
-		metric.AttackComplexityNotDefined: {
+	arNamesMap = map[metric.AvailabilityRequirement]langNameMap{
+		metric.AvailabilityRequirementNotDefined: {
 			language.English:  "Not Defined",
 			language.Japanese: "未評価",
 		},
-		metric.AttackComplexityHigh: {
-			language.English:  "High",
-			language.Japanese: "高",
-		},
-		metric.AttackComplexityLow: {
+		metric.AvailabilityRequirementLow: {
 			language.English:  "Low",
 			language.Japanese: "低",
+		},
+		metric.AvailabilityRequirementMedium: {
+			language.English:  "Medium",
+			language.Japanese: "中",
+		},
+		metric.AvailabilityRequirementHigh: {
+			language.English:  "High",
+			language.Japanese: "高",
 		},
 	}
 )
 
-//AttackComplexity returns string instance name for display
-func AttackComplexity(lang language.Tag) string {
-	return acTitleMap.getNameInLang(lang)
+//AvailabilityRequirement returns string instance name for display
+func AvailabilityRequirement(lang language.Tag) string {
+	return arTitleMap.getNameInLang(lang)
 }
 
-//ACValueOf returns string name of value for display
-func ACValueOf(ac metric.AttackComplexity, lang language.Tag) string {
-	if m, ok := acNamesMap[ac]; ok {
+//ARValueOf returns string name of value for display
+func ARValueOf(ar metric.AvailabilityRequirement, lang language.Tag) string {
+	if m, ok := arNamesMap[ar]; ok {
 		return m.getNameInLang(lang)
 	}
 	return unknownValueNameMap.getNameInLang(lang)
 }
 
-/* Copyright 2018-2022 Spiegel
+/* Copyright 2022 Spiegel
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
