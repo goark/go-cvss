@@ -24,6 +24,17 @@ type Metrics struct {
 	E   Exploitability
 	RL  RemediationLevel
 	RC  ReportConfidence
+	CR  ConfidentialityRequirement
+	IR  IntegrityRequirement
+	AR  AvailabilityRequirement
+	MAV ModifiedAttackVector
+	MAC ModifiedAttackComplexity
+	MPR ModifiedPrivilegesRequired
+	MUI ModifiedUserInteraction
+	MS  ModifiedScope
+	MC  ModifiedConfidentialityImpact
+	MI  ModifiedIntegrityImpact
+	MA  ModifiedAvailabilityImpact
 }
 
 //NewMetrics returns Metrics instance
@@ -41,6 +52,17 @@ func NewMetrics() *Metrics {
 		E:   ExploitabilityNotDefined,
 		RL:  RemediationLevelNotDefined,
 		RC:  ReportConfidenceNotDefined,
+		CR:  ConfidentialityRequirementNotDefined,
+		IR:  IntegrityRequirementNotDefined,
+		AR:  AvailabilityRequirementNotDefined,
+		MAV: ModifiedAttackVectorNotDefined,
+		MAC: ModifiedAttackComplexityNotDefined,
+		MPR: ModifiedPrivilegesRequiredNotDefined,
+		MUI: ModifiedUserInteractionNotDefined,
+		MS:  ModifiedScopeNotDefined,
+		MC:  ModifiedConfidentialityImpactNotDefined,
+		MI:  ModifiedIntegrityImpactNotDefined,
+		MA:  ModifiedAvailabilityImpactNotDefined,
 	}
 }
 
@@ -89,6 +111,28 @@ func Decode(vector string) (*Metrics, error) {
 			metrics.RL = GetRemediationLevel(metric[1])
 		case "RC": //RemediationLevel
 			metrics.RC = GetReportConfidence(metric[1])
+		case "CR":
+			metrics.CR = GetConfidentialityRequirement(metric[1])
+		case "IR":
+			metrics.IR = GetIntegrityRequirement(metric[1])
+		case "AR":
+			metrics.AR = GetAvailabilityRequirement(metric[1])
+		case "MAV":
+			metrics.MAV = GetModifiedAttackVector(metric[1])
+		case "MAC":
+			metrics.MAC = GetModifiedAttackComplexity(metric[1])
+		case "MPR":
+			metrics.MPR = GetModifiedPrivilegesRequired(metric[1])
+		case "MUI":
+			metrics.MUI = GetModifiedUserInteraction(metric[1])
+		case "MS":
+			metrics.MS = GetModifiedScope(metric[1])
+		case "MC":
+			metrics.MC = GetModifiedConfidentialityImpact(metric[1])
+		case "MI":
+			metrics.MI = GetModifiedIntegrityImpact(metric[1])
+		case "MA":
+			metrics.MA = GetModifiedAvailabilityImpact(metric[1])
 		default:
 			return nil, errs.Wrap(cvsserr.ErrInvalidVector, errs.WithContext("vector", value))
 		}
@@ -132,6 +176,50 @@ func (m *Metrics) Encode() (string, error) {
 
 	if m.RC.IsDefined() {
 		r.WriteString(fmt.Sprintf("/RC:%v", m.RC)) //Report Confidence
+	}
+
+	if m.CR.IsDefined() {
+		r.WriteString(fmt.Sprintf("/CR:%v", m.CR)) //Report Confidence
+	}
+
+	if m.IR.IsDefined() {
+		r.WriteString(fmt.Sprintf("/IR:%v", m.IR)) //Report Confidence
+	}
+
+	if m.AR.IsDefined() {
+		r.WriteString(fmt.Sprintf("/AR:%v", m.AR)) //Report Confidence
+	}
+
+	if m.MAV.IsDefined() {
+		r.WriteString(fmt.Sprintf("/MAV:%v", m.MAV)) //Report Confidence
+	}
+
+	if m.MAC.IsDefined() {
+		r.WriteString(fmt.Sprintf("/MAC:%v", m.MAC)) //Report Confidence
+	}
+
+	if m.MPR.IsDefined() {
+		r.WriteString(fmt.Sprintf("/MPR:%v", m.MPR)) //Report Confidence
+	}
+
+	if m.MUI.IsDefined() {
+		r.WriteString(fmt.Sprintf("/MUI:%v", m.MUI)) //Report Confidence
+	}
+
+	if m.MS.IsDefined() {
+		r.WriteString(fmt.Sprintf("/MS:%v", m.MS)) //Report Confidence
+	}
+
+	if m.MC.IsDefined() {
+		r.WriteString(fmt.Sprintf("/MC:%v", m.MC)) //Report Confidence
+	}
+
+	if m.MI.IsDefined() {
+		r.WriteString(fmt.Sprintf("/MI:%v", m.MI)) //Report Confidence
+	}
+
+	if m.MA.IsDefined() {
+		r.WriteString(fmt.Sprintf("/MA:%v", m.MA)) //Report Confidence
 	}
 
 	return r.String(), nil
@@ -196,6 +284,31 @@ func (m *Metrics) GetSeverity() Severity {
 
 func (m *Metrics) TemporalScore() float64 {
 	return roundUp(m.Score() * m.E.Value() * m.RL.Value() * m.RC.Value())
+}
+
+func (m *Metrics) EnvironmentalScore() float64 {
+	var score float64
+	fmt.Printf("Remediation Level: %f\n", m.RL.Value())
+	fmt.Printf("Report Confidence: %f\n", m.RC.Value())
+
+	ModifiedImpactSubScore := math.Min(1-(1-m.CR.Value()*m.MC.Value())*(1-m.IR.Value()*m.MI.Value())*(1-m.AR.Value()*m.MA.Value()), 0.915)
+	var ModifiedImpact float64
+	if m.MS == ModifiedScopeUnchanged {
+		ModifiedImpact = 6.42 * ModifiedImpactSubScore
+	} else {
+		ModifiedImpact = 7.52*(ModifiedImpactSubScore-0.029) - 3.25*math.Pow(ModifiedImpactSubScore*0.9731-0.02, 13)
+	}
+
+	ModifiedExploitability := 8.22 * m.MAV.Value() * m.MAC.Value() * m.MPR.Value(m.S) * m.MUI.Value()
+
+	if ModifiedImpact <= 0 {
+		score = 0.0
+	} else if m.MS == ModifiedScopeUnchanged {
+		score = roundUp(roundUp(math.Min((ModifiedImpact+ModifiedExploitability), 10)) * 0.94 * 0.96 * 0.92)
+	} else {
+		score = roundUp(roundUp(math.Min(1.08*(ModifiedImpact+ModifiedExploitability), 10)) * 0.94 * 0.96 * 0.92)
+	}
+	return score
 }
 
 func roundUp(input float64) float64 {
