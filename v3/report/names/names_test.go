@@ -704,7 +704,7 @@ func TestModifiedAvailabilityImpactTitle(t *testing.T) {
 		{lang: language.Japanese, a: metric.ModifiedAvailabilityImpactLow, n: "調整後の可用性への影響", nv: "低"},
 
 		{lang: language.Und, a: metric.ModifiedAvailabilityImpactHigh, n: "Modified Availability Impact", nv: "High"},
-		{lang: language.English, a: metric.ModifiedAvailabilityImpactHigh, n: "Availability Impact", nv: "High"},
+		{lang: language.English, a: metric.ModifiedAvailabilityImpactHigh, n: "Modified Availability Impact", nv: "High"},
 		{lang: language.Japanese, a: metric.ModifiedAvailabilityImpactHigh, n: "調整後の可用性への影響", nv: "高"},
 	}
 	for _, tc := range testCases {
