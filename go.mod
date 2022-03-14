@@ -1,8 +1,8 @@
-module github.com/spiegel-im-spiegel/go-cvss
+module github.com/goark/go-cvss
 
 go 1.17
 
 require (
-	github.com/spiegel-im-spiegel/errs v1.0.5
+	github.com/goark/errs v1.1.0
 	golang.org/x/text v0.3.7
 )

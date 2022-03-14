@@ -4,7 +4,7 @@ import (
 	"errors"
 	"testing"
 
-	"github.com/spiegel-im-spiegel/go-cvss/cvsserr"
+	"github.com/goark/go-cvss/cvsserr"
 )
 
 func TestVersion(t *testing.T) {

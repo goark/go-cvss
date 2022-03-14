@@ -1,14 +1,16 @@
 # [go-cvss] - Common Vulnerability Scoring System (CVSS)
 
-[![check vulns](https://github.com/spiegel-im-spiegel/go-cvss/workflows/vulns/badge.svg)](https://github.com/spiegel-im-spiegel/go-cvss/actions)
-[![lint status](https://github.com/spiegel-im-spiegel/go-cvss/workflows/lint/badge.svg)](https://github.com/spiegel-im-spiegel/go-cvss/actions)
-[![GitHub license](https://img.shields.io/badge/license-Apache%202-blue.svg)](https://raw.githubusercontent.com/spiegel-im-spiegel/go-cvss/master/LICENSE)
-[![GitHub release](https://img.shields.io/github/release/spiegel-im-spiegel/go-cvss.svg)](https://github.com/spiegel-im-spiegel/go-cvss/releases/latest)
+[![check vulns](https://github.com/goark/go-cvss/workflows/vulns/badge.svg)](https://github.com/goark/go-cvss/actions)
+[![lint status](https://github.com/goark/go-cvss/workflows/lint/badge.svg)](https://github.com/goark/go-cvss/actions)
+[![GitHub license](https://img.shields.io/badge/license-Apache%202-blue.svg)](https://raw.githubusercontent.com/goark/go-cvss/master/LICENSE)
+[![GitHub release](https://img.shields.io/github/release/goark/go-cvss.svg)](https://github.com/goark/go-cvss/releases/latest)
 
 Importing CVSS vector and scoring.
 
 - Supoort CVSS version 3.0 and 3.1
 - Exporting CVSS information with template string
+
+**Migrated repository to [github.com/goark/go-cvss][go-cvss]**
 
 ## Sample Code
 
@@ -21,7 +23,7 @@ import (
     "fmt"
     "os"
 
-    "github.com/spiegel-im-spiegel/go-cvss/v3/metric"
+    "github.com/goark/go-cvss/v3/metric"
 )
 
 func main() {
@@ -45,7 +47,7 @@ import (
     "fmt"
     "os"
 
-    "github.com/spiegel-im-spiegel/go-cvss/v3/metric"
+    "github.com/goark/go-cvss/v3/metric"
 )
 
 func main() {
@@ -69,7 +71,7 @@ package main
 
 import (
 	"fmt"
-	"go-cvss-internal/v3/metric"
+	"github.com/goark/go-cvss/v3/metric"
 	"os"
 )
 
@@ -90,11 +92,11 @@ func main() {
 ```
 ### Reporting with template
 
-ref: [sample.go](https://github.com/spiegel-im-spiegel/go-cvss/blob/master/sample/sample.go)
+ref: [sample.go](https://github.com/goark/go-cvss/blob/master/sample/sample.go)
 
 ## Reference
 
 - [CVSS v3.0 Specification Document](https://www.first.org/cvss/v3.0/specification-document)
 - [CVSS v3.1 Specification Document](https://www.first.org/cvss/v3.1/specification-document)
 
-[go-cvss]: https://github.com/spiegel-im-spiegel/go-cvss
+[go-cvss]: https://github.com/goark/go-cvss

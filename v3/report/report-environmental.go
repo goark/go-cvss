@@ -4,10 +4,10 @@ import (
 	"io"
 	"strconv"
 
-	"github.com/spiegel-im-spiegel/errs"
-	"github.com/spiegel-im-spiegel/go-cvss/cvsserr"
-	"github.com/spiegel-im-spiegel/go-cvss/v3/metric"
-	"github.com/spiegel-im-spiegel/go-cvss/v3/report/names"
+	"github.com/goark/errs"
+	"github.com/goark/go-cvss/cvsserr"
+	"github.com/goark/go-cvss/v3/metric"
+	"github.com/goark/go-cvss/v3/report/names"
 )
 
 //CVSSReport is dataset for CVSS report
