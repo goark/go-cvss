@@ -5,9 +5,9 @@ import (
 	"math"
 	"strings"
 
-	"github.com/spiegel-im-spiegel/errs"
-	"github.com/spiegel-im-spiegel/go-cvss/cvsserr"
-	"github.com/spiegel-im-spiegel/go-cvss/v3/version"
+	"github.com/goark/errs"
+	"github.com/goark/go-cvss/cvsserr"
+	"github.com/goark/go-cvss/v3/version"
 )
 
 //Metrics is Base Metrics for CVSSv3

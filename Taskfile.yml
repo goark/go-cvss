@@ -20,7 +20,7 @@ tasks:
   nancy:
     desc: Check vulnerability of external packages with Nancy.
     cmds:
-      - depm list -j | docker run --rm -i sonatypecommunity/nancy:latest sleuth -n
+      - depm list -j | nancy sleuth -n
     sources:
       - ./go.mod
       - '**/*.go'

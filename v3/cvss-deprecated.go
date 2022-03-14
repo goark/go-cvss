@@ -1,8 +1,8 @@
 package v3
 
 import (
-	"github.com/spiegel-im-spiegel/go-cvss/v3/base"
-	"github.com/spiegel-im-spiegel/go-cvss/v3/version"
+	"github.com/goark/go-cvss/v3/base"
+	"github.com/goark/go-cvss/v3/version"
 	"golang.org/x/text/language"
 )
 

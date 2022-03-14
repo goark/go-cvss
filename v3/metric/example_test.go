@@ -3,7 +3,7 @@ package metric_test
 import (
 	"fmt"
 
-	"github.com/spiegel-im-spiegel/go-cvss/v3/metric"
+	"github.com/goark/go-cvss/v3/metric"
 )
 
 func ExampleBase_Decode() {

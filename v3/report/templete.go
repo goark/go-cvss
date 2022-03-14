@@ -5,8 +5,8 @@ import (
 	"io"
 	"text/template"
 
-	"github.com/spiegel-im-spiegel/errs"
-	"github.com/spiegel-im-spiegel/go-cvss/cvsserr"
+	"github.com/goark/errs"
+	"github.com/goark/go-cvss/cvsserr"
 )
 
 func getTempleteString(r io.Reader) (string, error) {

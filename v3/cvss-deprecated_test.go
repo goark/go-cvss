@@ -7,7 +7,7 @@ import (
 	"os"
 	"testing"
 
-	"github.com/spiegel-im-spiegel/go-cvss/cvsserr"
+	"github.com/goark/go-cvss/cvsserr"
 	"golang.org/x/text/language"
 )
 

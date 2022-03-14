@@ -3,7 +3,7 @@ package names
 import (
 	"testing"
 
-	"github.com/spiegel-im-spiegel/go-cvss/v3/metric"
+	"github.com/goark/go-cvss/v3/metric"
 	"golang.org/x/text/language"
 )
 
