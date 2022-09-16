@@ -157,6 +157,15 @@ func (bm *Base) Severity() Severity {
 	return severity(bm.Score())
 }
 
+type Metrics interface {
+	// BaseMetrics returns the base type for any given metrics type.
+	BaseMetrics() *Base
+}
+
+func (bm *Base) BaseMetrics() *Base {
+	return bm
+}
+
 /* Copyright 2018-2020 Spiegel
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
