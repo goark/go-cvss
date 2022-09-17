@@ -15,3 +15,5 @@
 
 # Other files and folders
 vendor/
+.task/
+work/
