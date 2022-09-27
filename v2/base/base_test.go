@@ -438,3 +438,5 @@ func TestDecode(t *testing.T) {
 		})
 	}
 }
+
+/* Copyright 2022 luxifer */

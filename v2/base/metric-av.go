@@ -2,10 +2,10 @@ package base
 
 import "strings"
 
-//AccessVector is metric type for Base Metrics
+// AccessVector is metric type for Base Metrics
 type AccessVector int
 
-//Constant of AccessVector result
+// Constant of AccessVector result
 const (
 	AccessVectorUnknown AccessVector = iota
 	AccessVectorLocal
@@ -25,7 +25,7 @@ var accessVectorValueMap = map[AccessVector]float64{
 	AccessVectorNetwork:  1,
 }
 
-//GetAccessVector returns result of AccessVector metric
+// GetAccessVector returns result of AccessVector metric
 func GetAccessVector(s string) AccessVector {
 	s = strings.ToUpper(s)
 	for k, v := range accessVectorMap {
@@ -43,7 +43,7 @@ func (av AccessVector) String() string {
 	return ""
 }
 
-//Value returns value of AccessVector metric
+// Value returns value of AccessVector metric
 func (av AccessVector) Value() float64 {
 	if v, ok := accessVectorValueMap[av]; ok {
 		return v
@@ -51,22 +51,9 @@ func (av AccessVector) Value() float64 {
 	return 0.0
 }
 
-//IsDefined returns false if undefined result value of metric
+// IsDefined returns false if undefined result value of metric
 func (av AccessVector) IsDefined() bool {
 	return av != AccessVectorUnknown
 }
 
-/* Copyright 2018 Spiegel
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- * 	http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
+/* Copyright 2022 luxifer */
