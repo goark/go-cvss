@@ -8,7 +8,7 @@ import (
 	"github.com/goark/go-cvss/cvsserr"
 )
 
-//Base is Base Metrics for CVSSv3
+// Base is Base Metrics for CVSSv3
 type Base struct {
 	Ver Version
 	AV  AttackVector
@@ -21,7 +21,7 @@ type Base struct {
 	A   AvailabilityImpact
 }
 
-//NewBase returns Base Metrics instance
+// NewBase returns Base Metrics instance
 func NewBase() *Base {
 	return &Base{
 		Ver: VUnknown,
@@ -58,7 +58,7 @@ func (bm *Base) Decode(vector string) (*Base, error) {
 	for _, value := range values[1:] {
 		if err := bm.decodeOne(value); err != nil {
 			if !errs.Is(err, cvsserr.ErrNotSupportMetric) {
-				return bm, errs.Wrap(err, errs.WithContext("vector", vector))
+				return nil, errs.Wrap(err, errs.WithContext("vector", vector))
 			}
 			lastErr = err
 		}
@@ -70,7 +70,7 @@ func (bm *Base) Decode(vector string) (*Base, error) {
 }
 func (bm *Base) decodeOne(str string) error {
 	m := strings.Split(str, ":")
-	if len(m) != 2 {
+	if len(m) != 2 || len(m[1]) == 0 {
 		return errs.Wrap(cvsserr.ErrInvalidVector, errs.WithContext("metric", str))
 	}
 	switch strings.ToUpper(m[0]) {
@@ -96,7 +96,7 @@ func (bm *Base) decodeOne(str string) error {
 	return nil
 }
 
-//GetError returns error instance if undefined metric
+// GetError returns error instance if undefined metric
 func (bm *Base) GetError() error {
 	if bm == nil {
 		return errs.Wrap(cvsserr.ErrUndefinedMetric)
@@ -109,7 +109,7 @@ func (bm *Base) GetError() error {
 	}
 }
 
-//Encode returns CVSSv3 vector string
+// Encode returns CVSSv3 vector string
 func (bm *Base) Encode() (string, error) {
 	if err := bm.GetError(); err != nil {
 		return "", err
@@ -127,7 +127,7 @@ func (bm *Base) Encode() (string, error) {
 	return r.String(), nil
 }
 
-//Score returns score of Base metrics
+// Score returns score of Base metrics
 func (bm *Base) Score() float64 {
 	if err := bm.GetError(); err != nil {
 		return 0.0
@@ -152,7 +152,7 @@ func (bm *Base) Score() float64 {
 	return score
 }
 
-//Severity returns severity by score of Base metrics
+// Severity returns severity by score of Base metrics
 func (bm *Base) Severity() Severity {
 	return severity(bm.Score())
 }
