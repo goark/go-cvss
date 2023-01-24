@@ -7,7 +7,7 @@ import (
 	"github.com/goark/go-cvss/cvsserr"
 )
 
-//Base is Temporal Metrics for CVSSv3
+// Base is Temporal Metrics for CVSSv3
 type Temporal struct {
 	*Base
 	E  Exploitability
@@ -15,7 +15,7 @@ type Temporal struct {
 	RC ReportConfidence
 }
 
-//NewBase returns Base Metrics instance
+// NewBase returns Base Metrics instance
 func NewTemporal() *Temporal {
 	return &Temporal{
 		Base: NewBase(),
@@ -47,7 +47,7 @@ func (tm *Temporal) Decode(vector string) (*Temporal, error) {
 	for _, value := range values[1:] {
 		if err := tm.decodeOne(value); err != nil {
 			if !errs.Is(err, cvsserr.ErrNotSupportMetric) {
-				return tm, errs.Wrap(err, errs.WithContext("vector", vector))
+				return nil, errs.Wrap(err, errs.WithContext("vector", vector))
 			}
 			lastErr = err
 		}
@@ -66,7 +66,7 @@ func (tm *Temporal) decodeOne(str string) error {
 		return nil
 	}
 	m := strings.Split(str, ":")
-	if len(m) != 2 {
+	if len(m) != 2 || len(m[1]) == 0 {
 		return errs.Wrap(cvsserr.ErrInvalidVector, errs.WithContext("metric", str))
 	}
 	switch strings.ToUpper(m[0]) {
@@ -82,7 +82,7 @@ func (tm *Temporal) decodeOne(str string) error {
 	return nil
 }
 
-//GetError returns error instance if undefined metric
+// GetError returns error instance if undefined metric
 func (tm *Temporal) GetError() error {
 	if tm == nil {
 		return errs.Wrap(cvsserr.ErrUndefinedMetric)
@@ -98,7 +98,7 @@ func (tm *Temporal) GetError() error {
 	}
 }
 
-//Encode returns CVSSv3 vector string
+// Encode returns CVSSv3 vector string
 func (tm *Temporal) Encode() (string, error) {
 	if err := tm.GetError(); err != nil {
 		return "", errs.Wrap(err)
@@ -115,7 +115,7 @@ func (tm *Temporal) Encode() (string, error) {
 	return r.String(), nil
 }
 
-//Score returns score of Temporal metrics
+// Score returns score of Temporal metrics
 func (tm *Temporal) Score() float64 {
 	if err := tm.GetError(); err != nil {
 		return 0.0
@@ -123,12 +123,12 @@ func (tm *Temporal) Score() float64 {
 	return roundUp(tm.Base.Score() * tm.E.Value() * tm.RL.Value() * tm.RC.Value())
 }
 
-//Severity returns severity by score of Temporal metrics
+// Severity returns severity by score of Temporal metrics
 func (tm *Temporal) Severity() Severity {
 	return severity(tm.Score())
 }
 
-//BaseMetrics returns Base metrics in Temporal metrics instance
+// BaseMetrics returns Base metrics in Temporal metrics instance
 func (tm *Temporal) BaseMetrics() *Base {
 	if tm == nil {
 		return nil

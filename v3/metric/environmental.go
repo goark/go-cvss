@@ -8,7 +8,7 @@ import (
 	"github.com/goark/go-cvss/cvsserr"
 )
 
-//Base is Environmental Metrics for CVSSv3
+// Base is Environmental Metrics for CVSSv3
 type Environmental struct {
 	*Temporal
 	CR  ConfidentialityRequirement
@@ -24,7 +24,7 @@ type Environmental struct {
 	MA  ModifiedAvailabilityImpact
 }
 
-//NewBase returns Base Metrics instance
+// NewBase returns Base Metrics instance
 func NewEnvironmental() *Environmental {
 	return &Environmental{
 		Temporal: NewTemporal(),
@@ -64,7 +64,7 @@ func (em *Environmental) Decode(vector string) (*Environmental, error) {
 	for _, value := range values[1:] {
 		if err := em.decodeOne(value); err != nil {
 			if !errs.Is(err, cvsserr.ErrNotSupportMetric) {
-				return em, errs.Wrap(err, errs.WithContext("vector", vector))
+				return nil, errs.Wrap(err, errs.WithContext("vector", vector))
 			}
 			lastErr = err
 		}
@@ -83,7 +83,7 @@ func (em *Environmental) decodeOne(str string) error {
 		return nil
 	}
 	m := strings.Split(str, ":")
-	if len(m) != 2 {
+	if len(m) != 2 || len(m[1]) == 0 {
 		return errs.Wrap(cvsserr.ErrInvalidVector, errs.WithContext("metric", str))
 	}
 	switch strings.ToUpper(m[0]) {
@@ -115,7 +115,7 @@ func (em *Environmental) decodeOne(str string) error {
 	return nil
 }
 
-//GetError returns error instance if undefined metric
+// GetError returns error instance if undefined metric
 func (em *Environmental) GetError() error {
 	if em == nil {
 		return errs.Wrap(cvsserr.ErrUndefinedMetric)
@@ -132,7 +132,7 @@ func (em *Environmental) GetError() error {
 	}
 }
 
-//Encode returns CVSSv3 vector string
+// Encode returns CVSSv3 vector string
 func (em *Environmental) Encode() (string, error) {
 	if err := em.GetError(); err != nil {
 		return "", errs.Wrap(err)
@@ -196,12 +196,12 @@ func (em *Environmental) Score() float64 {
 	return score
 }
 
-//Severity returns severity by score of Environmental metrics
+// Severity returns severity by score of Environmental metrics
 func (em *Environmental) Severity() Severity {
 	return severity(em.Score())
 }
 
-//BaseMetrics returns Base metrics in Environmental metrics instance
+// BaseMetrics returns Base metrics in Environmental metrics instance
 func (em *Environmental) BaseMetrics() *Base {
 	if em == nil {
 		return nil
