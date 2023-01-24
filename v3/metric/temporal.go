@@ -66,7 +66,7 @@ func (tm *Temporal) decodeOne(str string) error {
 		return nil
 	}
 	m := strings.Split(str, ":")
-	if len(m) != 2 || len(m[1]) == 0 {
+	if len(m) != 2 || len(m[0]) == 0 || len(m[1]) == 0 {
 		return errs.Wrap(cvsserr.ErrInvalidVector, errs.WithContext("metric", str))
 	}
 	switch strings.ToUpper(m[0]) {
@@ -137,4 +137,17 @@ func (tm *Temporal) BaseMetrics() *Base {
 }
 
 /* Copyright by Florent Viel, 2020 */
-/* Contributed by Spiegel, 2020 */
+/* Copyright 2020-2023 Spiegel
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * 	http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */

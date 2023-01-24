@@ -10,7 +10,7 @@ import (
 	"github.com/goark/go-cvss/v3/version"
 )
 
-//Metrics is Base Metrics for CVSSv3
+// Metrics is Base Metrics for CVSSv3
 type Metrics struct {
 	Ver version.Num
 	AV  AttackVector
@@ -37,7 +37,7 @@ type Metrics struct {
 	MA  ModifiedAvailabilityImpact
 }
 
-//NewMetrics returns Metrics instance
+// NewMetrics returns Metrics instance
 func NewMetrics() *Metrics {
 	return &Metrics{
 		Ver: version.Unknown,
@@ -66,7 +66,7 @@ func NewMetrics() *Metrics {
 	}
 }
 
-//Decode returns Metrics instance by CVSSv3 vector
+// Decode returns Metrics instance by CVSSv3 vector
 func Decode(vector string) (*Metrics, error) {
 	values := strings.Split(vector, "/")
 	if len(values) < 9 {
@@ -85,7 +85,7 @@ func Decode(vector string) (*Metrics, error) {
 	metrics.Ver = num
 	for _, value := range values[1:] {
 		metric := strings.Split(value, ":")
-		if len(metric) != 2 {
+		if len(metric) != 2 || len(metric[0]) == 0 || len(metric[1]) == 0 {
 			return nil, errs.Wrap(cvsserr.ErrInvalidVector, errs.WithContext("vector", vector))
 		}
 		switch strings.ToUpper(metric[0]) {
@@ -150,7 +150,7 @@ func checkVersion(ver string) (version.Num, error) {
 	return version.Get(v[1]), nil
 }
 
-//Encode returns CVSSv3 vector string
+// Encode returns CVSSv3 vector string
 func (m *Metrics) Encode() (string, error) {
 	if err := m.GetError(); err != nil {
 		return "", err
@@ -225,7 +225,7 @@ func (m *Metrics) Encode() (string, error) {
 	return r.String(), nil
 }
 
-//GetError returns error instance if undefined metric
+// GetError returns error instance if undefined metric
 func (m *Metrics) GetError() error {
 	if m == nil {
 		return errs.Wrap(cvsserr.ErrUndefinedMetric)
@@ -238,7 +238,7 @@ func (m *Metrics) GetError() error {
 	}
 }
 
-//Score returns score of Base metrics
+// Score returns score of Base metrics
 func (m *Metrics) Score() float64 {
 	if err := m.GetError(); err != nil {
 		return 0.0
@@ -263,7 +263,7 @@ func (m *Metrics) Score() float64 {
 	return score
 }
 
-//GetSeverity returns severity by score of Base metrics
+// GetSeverity returns severity by score of Base metrics
 func (m *Metrics) GetSeverity() Severity {
 	score := m.Score()
 	switch true {
@@ -322,7 +322,7 @@ func roundUp(input float64) float64 {
 }
 
 /* Contributed by Florent Viel, 2020 */
-/* Copyright 2018-2020 Spiegel
+/* Copyright 2018-2023 Spiegel
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
