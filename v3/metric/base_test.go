@@ -20,6 +20,8 @@ func TestDecodeError(t *testing.T) {
 		{vector: "CVSS3.1/AV:X/AC:H/PR:H/UI:R/S:U/C:N/I:N/A:N", err: cvsserr.ErrInvalidVector},
 		{vector: "CVSS:3.1/AV:P/AC:H/PR:H/UI:R/S:U/C:N/I:N/A-N", err: cvsserr.ErrInvalidVector},
 		{vector: "CVSS:3.1/AV:P/AC:H/PR:H/UI:R/S:U/C:N/I:N/A:", err: cvsserr.ErrInvalidVector},
+		{vector: "CVSS:3.1/AV:P/AC:H/PR:H/UI:R/S:U/C:N/I:N/:N", err: cvsserr.ErrInvalidVector},
+		{vector: "CVSS:3.1/AV:P/AC:H/PR:H/UI:R/S:U/C:N/I:N/:", err: cvsserr.ErrInvalidVector},
 		{vector: "CVSS:3.1/AV:P/AC:H/PR:H/UI:R/S:U/C:N/I:N/X:N", err: cvsserr.ErrNotSupportMetric},
 		{vector: "CVSS:3.1/AV:P/AC:H/PR:H/UI:R/S:U/C:N/I:N/A:X", err: cvsserr.ErrUndefinedMetric},
 		{vector: "CVSS:3.1/AV:P/AC:H/PR:H/UI:R/S:U/C:N/I:X/A:N", err: cvsserr.ErrUndefinedMetric},
@@ -134,7 +136,7 @@ func TestScore(t *testing.T) {
 }
 
 /* Contributed by Florent Viel, 2020 */
-/* Copyright 2018-2020 Spiegel
+/* Copyright 2023 Spiegel
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.

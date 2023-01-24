@@ -70,7 +70,7 @@ func (bm *Base) Decode(vector string) (*Base, error) {
 }
 func (bm *Base) decodeOne(str string) error {
 	m := strings.Split(str, ":")
-	if len(m) != 2 || len(m[1]) == 0 {
+	if len(m) != 2 || len(m[0]) == 0 || len(m[1]) == 0 {
 		return errs.Wrap(cvsserr.ErrInvalidVector, errs.WithContext("metric", str))
 	}
 	switch strings.ToUpper(m[0]) {
@@ -166,7 +166,7 @@ func (bm *Base) BaseMetrics() *Base {
 	return bm
 }
 
-/* Copyright 2018-2020 Spiegel
+/* Copyright 2018-2023 Spiegel
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.

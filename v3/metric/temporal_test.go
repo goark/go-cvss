@@ -19,6 +19,8 @@ func TestTemporalScore(t *testing.T) {
 		{vector: "CVSS:3.0/AV:N/AC:L/PR:H/UI:N/C:L/I:L/A:N", err: cvsserr.ErrInvalidVector, score: 0, sav: SeverityNone},
 		{vector: "CVSS:3.0/S:U/AV:N/AC:L/PR:H/UI:N/C:L/I:L/X:N", err: cvsserr.ErrNotSupportMetric, score: 0, sav: SeverityNone},
 		{vector: "CVSS:3.0/S:U/AV:N/AC:L/PR:H/UI:N/C:L/I:L/RC:", err: cvsserr.ErrInvalidVector, score: 0, sav: SeverityNone},
+		{vector: "CVSS:3.0/S:U/AV:N/AC:L/PR:H/UI:N/C:L/I:L/:X", err: cvsserr.ErrInvalidVector, score: 0, sav: SeverityNone},
+		{vector: "CVSS:3.0/S:U/AV:N/AC:L/PR:H/UI:N/C:L/I:L/:", err: cvsserr.ErrInvalidVector, score: 0, sav: SeverityNone},
 		{vector: "CVSS:3.0/S:U/AV:N/AC:L/PR:H/UI:N/C:L/I:L/A:N", err: nil, score: 3.8, sav: SeverityLow},
 		{vector: "CVSS:3.1/S:U/AV:N/AC:L/PR:H/UI:N/C:L/I:L/A:N", err: nil, score: 3.8, sav: SeverityLow},
 		{vector: "CVSS:3.1/S:U/AV:N/AC:L/PR:H/UI:N/C:L/I:L/A:N/E:F", err: nil, score: 3.7, sav: SeverityLow},
@@ -43,7 +45,7 @@ func TestTemporalScore(t *testing.T) {
 }
 
 /* Contributed by Florent Viel, 2020 */
-/* Copyright 2018-2020 Spiegel
+/* Copyright 2018-2023 Spiegel
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
