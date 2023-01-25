@@ -84,10 +84,6 @@ func TestAttackVectorTitle(t *testing.T) {
 		{lang: language.English, av: metric.AttackVectorUnknown, n: "Attack Vector", nv: "Unknown"},
 		{lang: language.Japanese, av: metric.AttackVectorUnknown, n: "攻撃元区分", nv: "未定義"},
 
-		{lang: language.Und, av: metric.AttackVectorNotDefined, n: "Attack Vector", nv: "Not Defined"},
-		{lang: language.English, av: metric.AttackVectorNotDefined, n: "Attack Vector", nv: "Not Defined"},
-		{lang: language.Japanese, av: metric.AttackVectorNotDefined, n: "攻撃元区分", nv: "未評価"},
-
 		{lang: language.Und, av: metric.AttackVectorPhysical, n: "Attack Vector", nv: "Physical"},
 		{lang: language.English, av: metric.AttackVectorPhysical, n: "Attack Vector", nv: "Physical"},
 		{lang: language.Japanese, av: metric.AttackVectorPhysical, n: "攻撃元区分", nv: "物理"},
@@ -166,10 +162,6 @@ func TestAttackComplexityTitle(t *testing.T) {
 		{lang: language.English, ac: metric.AttackComplexityUnknown, n: "Attack Complexity", nv: "Unknown"},
 		{lang: language.Japanese, ac: metric.AttackComplexityUnknown, n: "攻撃条件の複雑さ", nv: "未定義"},
 
-		{lang: language.Und, ac: metric.AttackComplexityNotDefined, n: "Attack Complexity", nv: "Not Defined"},
-		{lang: language.English, ac: metric.AttackComplexityNotDefined, n: "Attack Complexity", nv: "Not Defined"},
-		{lang: language.Japanese, ac: metric.AttackComplexityNotDefined, n: "攻撃条件の複雑さ", nv: "未評価"},
-
 		{lang: language.Und, ac: metric.AttackComplexityHigh, n: "Attack Complexity", nv: "High"},
 		{lang: language.English, ac: metric.AttackComplexityHigh, n: "Attack Complexity", nv: "High"},
 		{lang: language.Japanese, ac: metric.AttackComplexityHigh, n: "攻撃条件の複雑さ", nv: "高"},
@@ -231,10 +223,6 @@ func TestPrivilegesRequiredTitle(t *testing.T) {
 		{lang: language.Und, pr: metric.PrivilegesRequiredUnknown, n: "Privileges Required", nv: "Unknown"},
 		{lang: language.English, pr: metric.PrivilegesRequiredUnknown, n: "Privileges Required", nv: "Unknown"},
 		{lang: language.Japanese, pr: metric.PrivilegesRequiredUnknown, n: "必要な特権レベル", nv: "未定義"},
-
-		{lang: language.Und, pr: metric.PrivilegesRequiredNotDefined, n: "Privileges Required", nv: "Not Defined"},
-		{lang: language.English, pr: metric.PrivilegesRequiredNotDefined, n: "Privileges Required", nv: "Not Defined"},
-		{lang: language.Japanese, pr: metric.PrivilegesRequiredNotDefined, n: "必要な特権レベル", nv: "未評価"},
 
 		{lang: language.Und, pr: metric.PrivilegesRequiredHigh, n: "Privileges Required", nv: "High"},
 		{lang: language.English, pr: metric.PrivilegesRequiredHigh, n: "Privileges Required", nv: "High"},
@@ -306,10 +294,6 @@ func TestUserInteractionTitle(t *testing.T) {
 		{lang: language.English, ui: metric.UserInteractionUnknown, n: "User Interaction", nv: "Unknown"},
 		{lang: language.Japanese, ui: metric.UserInteractionUnknown, n: "ユーザ関与レベル", nv: "未定義"},
 
-		{lang: language.Und, ui: metric.UserInteractionNotDefined, n: "User Interaction", nv: "Not Defined"},
-		{lang: language.English, ui: metric.UserInteractionNotDefined, n: "User Interaction", nv: "Not Defined"},
-		{lang: language.Japanese, ui: metric.UserInteractionNotDefined, n: "ユーザ関与レベル", nv: "未評価"},
-
 		{lang: language.Und, ui: metric.UserInteractionRequired, n: "User Interaction", nv: "Required"},
 		{lang: language.English, ui: metric.UserInteractionRequired, n: "User Interaction", nv: "Required"},
 		{lang: language.Japanese, ui: metric.UserInteractionRequired, n: "ユーザ関与レベル", nv: "要"},
@@ -372,10 +356,6 @@ func TestScopeTitle(t *testing.T) {
 		{lang: language.English, s: metric.ScopeUnknown, n: "Scope", nv: "Unknown"},
 		{lang: language.Japanese, s: metric.ScopeUnknown, n: "スコープ", nv: "未定義"},
 
-		{lang: language.Und, s: metric.ScopeNotDefined, n: "Scope", nv: "Not Defined"},
-		{lang: language.English, s: metric.ScopeNotDefined, n: "Scope", nv: "Not Defined"},
-		{lang: language.Japanese, s: metric.ScopeNotDefined, n: "スコープ", nv: "未評価"},
-
 		{lang: language.Und, s: metric.ScopeUnchanged, n: "Scope", nv: "Unchanged"},
 		{lang: language.English, s: metric.ScopeUnchanged, n: "Scope", nv: "Unchanged"},
 		{lang: language.Japanese, s: metric.ScopeUnchanged, n: "スコープ", nv: "変更なし"},
@@ -437,10 +417,6 @@ func TestConfidentialityImpactTitle(t *testing.T) {
 		{lang: language.Und, c: metric.ConfidentialityImpactUnknown, n: "Confidentiality Impact", nv: "Unknown"},
 		{lang: language.English, c: metric.ConfidentialityImpactUnknown, n: "Confidentiality Impact", nv: "Unknown"},
 		{lang: language.Japanese, c: metric.ConfidentialityImpactUnknown, n: "機密性への影響", nv: "未定義"},
-
-		{lang: language.Und, c: metric.ConfidentialityImpactNotDefined, n: "Confidentiality Impact", nv: "Not Defined"},
-		{lang: language.English, c: metric.ConfidentialityImpactNotDefined, n: "Confidentiality Impact", nv: "Not Defined"},
-		{lang: language.Japanese, c: metric.ConfidentialityImpactNotDefined, n: "機密性への影響", nv: "未評価"},
 
 		{lang: language.Und, c: metric.ConfidentialityImpactNone, n: "Confidentiality Impact", nv: "None"},
 		{lang: language.English, c: metric.ConfidentialityImpactNone, n: "Confidentiality Impact", nv: "None"},
@@ -547,10 +523,6 @@ func TestIntegrityImpactTitle(t *testing.T) {
 		{lang: language.English, i: metric.IntegrityImpactUnknown, n: "Integrity Impact", nv: "Unknown"},
 		{lang: language.Japanese, i: metric.IntegrityImpactUnknown, n: "完全性への影響", nv: "未定義"},
 
-		{lang: language.Und, i: metric.IntegrityImpactNotDefined, n: "Integrity Impact", nv: "Not Defined"},
-		{lang: language.English, i: metric.IntegrityImpactNotDefined, n: "Integrity Impact", nv: "Not Defined"},
-		{lang: language.Japanese, i: metric.IntegrityImpactNotDefined, n: "完全性への影響", nv: "未評価"},
-
 		{lang: language.Und, i: metric.IntegrityImpactNone, n: "Integrity Impact", nv: "None"},
 		{lang: language.English, i: metric.IntegrityImpactNone, n: "Integrity Impact", nv: "None"},
 		{lang: language.Japanese, i: metric.IntegrityImpactNone, n: "完全性への影響", nv: "なし"},
@@ -655,10 +627,6 @@ func TestAvailabilityImpactTitle(t *testing.T) {
 		{lang: language.Und, a: metric.AvailabilityImpactUnknown, n: "Availability Impact", nv: "Unknown"},
 		{lang: language.English, a: metric.AvailabilityImpactUnknown, n: "Availability Impact", nv: "Unknown"},
 		{lang: language.Japanese, a: metric.AvailabilityImpactUnknown, n: "可用性への影響", nv: "未定義"},
-
-		{lang: language.Und, a: metric.AvailabilityImpactNotDefined, n: "Availability Impact", nv: "Not Defined"},
-		{lang: language.English, a: metric.AvailabilityImpactNotDefined, n: "Availability Impact", nv: "Not Defined"},
-		{lang: language.Japanese, a: metric.AvailabilityImpactNotDefined, n: "可用性への影響", nv: "未評価"},
 
 		{lang: language.Und, a: metric.AvailabilityImpactNone, n: "Availability Impact", nv: "None"},
 		{lang: language.English, a: metric.AvailabilityImpactNone, n: "Availability Impact", nv: "None"},
@@ -910,7 +878,7 @@ func TestSeverityTitle(t *testing.T) {
 	}
 }
 
-/* Copyright 2018-2020 Spiegel
+/* Copyright 2018-2023 Spiegel
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.

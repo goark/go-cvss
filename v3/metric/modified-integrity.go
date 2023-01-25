@@ -2,12 +2,13 @@ package metric
 
 import "strings"
 
-//ModifiedIntegrityImpact is metric type for Base Metrics
+// ModifiedIntegrityImpact is metric type for Base Metrics
 type ModifiedIntegrityImpact int
 
-//Constant of ModifiedIntegrityImpact result
+// Constant of ModifiedIntegrityImpact result
 const (
-	ModifiedIntegrityImpactNotDefined ModifiedIntegrityImpact = iota
+	ModifiedIntegrityImpactInvalid ModifiedIntegrityImpact = iota
+	ModifiedIntegrityImpactNotDefined
 	ModifiedIntegrityImpactNone
 	ModifiedIntegrityImpactLow
 	ModifiedIntegrityImpactHigh
@@ -27,7 +28,7 @@ var ModifiedIntegrityImpactValueMap = map[ModifiedIntegrityImpact]float64{
 	ModifiedIntegrityImpactHigh:       0.56,
 }
 
-//GetModifiedIntegrityImpact returns result of ModifiedIntegrityImpact metric
+// GetModifiedIntegrityImpact returns result of ModifiedIntegrityImpact metric
 func GetModifiedIntegrityImpact(s string) ModifiedIntegrityImpact {
 	s = strings.ToUpper(s)
 	for k, v := range ModifiedIntegrityImpactMap {
@@ -35,7 +36,7 @@ func GetModifiedIntegrityImpact(s string) ModifiedIntegrityImpact {
 			return k
 		}
 	}
-	return ModifiedIntegrityImpactNotDefined
+	return ModifiedIntegrityImpactInvalid
 }
 
 func (mii ModifiedIntegrityImpact) String() string {
@@ -45,7 +46,7 @@ func (mii ModifiedIntegrityImpact) String() string {
 	return ""
 }
 
-//Value returns value of ModifiedIntegrityImpact metric
+// Value returns value of ModifiedIntegrityImpact metric
 func (mii ModifiedIntegrityImpact) Value(ii IntegrityImpact) float64 {
 	if mii.String() == ModifiedAttackComplexityNotDefined.String() {
 		if v, ok := integrityImpactValueMap[ii]; ok {
@@ -60,8 +61,8 @@ func (mii ModifiedIntegrityImpact) Value(ii IntegrityImpact) float64 {
 	}
 }
 
-//IsDefined returns false if undefined result value of metric
-func (mii ModifiedIntegrityImpact) IsDefined() bool {
+// IsDefined returns false if undefined result value of metric
+func (mii ModifiedIntegrityImpact) IsValid() bool {
 	_, ok := ModifiedIntegrityImpactValueMap[mii]
 	return ok
 }

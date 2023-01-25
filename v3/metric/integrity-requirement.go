@@ -2,12 +2,13 @@ package metric
 
 import "strings"
 
-//IntegrityRequirement is metric type for Base Metrics
+// IntegrityRequirement is metric type for Base Metrics
 type IntegrityRequirement int
 
-//Constant of IntegrityRequirement result
+// Constant of IntegrityRequirement result
 const (
-	IntegrityRequirementNotDefined IntegrityRequirement = iota
+	IntegrityRequirementInvalid IntegrityRequirement = iota
+	IntegrityRequirementNotDefined
 	IntegrityRequirementLow
 	IntegrityRequirementMedium
 	IntegrityRequirementHigh
@@ -27,7 +28,7 @@ var IntegrityRequirementValueMap = map[IntegrityRequirement]float64{
 	IntegrityRequirementHigh:       1.5,
 }
 
-//GetIntegrityRequirement returns result of ConfidentalityRequirement metric
+// GetIntegrityRequirement returns result of ConfidentalityRequirement metric
 func GetIntegrityRequirement(s string) IntegrityRequirement {
 	s = strings.ToUpper(s)
 	for k, v := range IntegrityRequirementMap {
@@ -35,7 +36,7 @@ func GetIntegrityRequirement(s string) IntegrityRequirement {
 			return k
 		}
 	}
-	return IntegrityRequirementNotDefined
+	return IntegrityRequirementInvalid
 }
 
 func (ir IntegrityRequirement) String() string {
@@ -45,7 +46,7 @@ func (ir IntegrityRequirement) String() string {
 	return ""
 }
 
-//Value returns value of AttackVector metric
+// Value returns value of AttackVector metric
 func (ir IntegrityRequirement) Value() float64 {
 	if v, ok := IntegrityRequirementValueMap[ir]; ok {
 		return v
@@ -53,8 +54,8 @@ func (ir IntegrityRequirement) Value() float64 {
 	return 0.0
 }
 
-//IsDefined returns false if undefined result value of metric
-func (ir IntegrityRequirement) IsDefined() bool {
+// IsDefined returns false if undefined result value of metric
+func (ir IntegrityRequirement) IsValid() bool {
 	_, ok := IntegrityRequirementValueMap[ir]
 	return ok
 }

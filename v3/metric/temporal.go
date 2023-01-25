@@ -10,18 +10,20 @@ import (
 // Base is Temporal Metrics for CVSSv3
 type Temporal struct {
 	*Base
-	E  Exploitability
-	RL RemediationLevel
-	RC ReportConfidence
+	E     Exploitability
+	RL    RemediationLevel
+	RC    ReportConfidence
+	names map[string]bool
 }
 
 // NewBase returns Base Metrics instance
 func NewTemporal() *Temporal {
 	return &Temporal{
-		Base: NewBase(),
-		E:    ExploitabilityNotDefined,
-		RL:   RemediationLevelNotDefined,
-		RC:   ReportConfidenceNotDefined,
+		Base:  NewBase(),
+		E:     ExploitabilityNotDefined,
+		RL:    RemediationLevelNotDefined,
+		RC:    ReportConfidenceNotDefined,
+		names: map[string]bool{},
 	}
 }
 
@@ -69,16 +71,30 @@ func (tm *Temporal) decodeOne(str string) error {
 	if len(m) != 2 || len(m[0]) == 0 || len(m[1]) == 0 {
 		return errs.Wrap(cvsserr.ErrInvalidVector, errs.WithContext("metric", str))
 	}
-	switch strings.ToUpper(m[0]) {
+	name := strings.ToUpper(m[0])
+	if tm.names[name] {
+		return errs.Wrap(cvsserr.ErrSameMetric, errs.WithContext("metric", str))
+	}
+	switch name {
 	case "E": //Exploitability
 		tm.E = GetExploitability(m[1])
+		if tm.E == ExploitabilityInvalid {
+			return errs.Wrap(cvsserr.ErrInvalidValue, errs.WithContext("metric", str))
+		}
 	case "RL": //RemediationLevel
 		tm.RL = GetRemediationLevel(m[1])
+		if tm.RL == RemediationLevelInvalid {
+			return errs.Wrap(cvsserr.ErrInvalidValue, errs.WithContext("metric", str))
+		}
 	case "RC": //RemediationLevel
 		tm.RC = GetReportConfidence(m[1])
+		if tm.RC == ReportConfidenceInvalid {
+			return errs.Wrap(cvsserr.ErrInvalidValue, errs.WithContext("metric", str))
+		}
 	default:
 		return errs.Wrap(cvsserr.ErrNotSupportMetric, errs.WithContext("metric", str))
 	}
+	tm.names[name] = true
 	return nil
 }
 
@@ -91,7 +107,7 @@ func (tm *Temporal) GetError() error {
 		return errs.Wrap(err)
 	}
 	switch true {
-	case !tm.E.IsDefined(), !tm.RL.IsDefined(), !tm.RC.IsDefined():
+	case !tm.E.IsValid(), !tm.RL.IsValid(), !tm.RC.IsValid():
 		return errs.Wrap(cvsserr.ErrUndefinedMetric)
 	default:
 		return nil

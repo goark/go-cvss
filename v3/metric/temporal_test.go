@@ -21,6 +21,10 @@ func TestTemporalScore(t *testing.T) {
 		{vector: "CVSS:3.0/S:U/AV:N/AC:L/PR:H/UI:N/C:L/I:L/RC:", err: cvsserr.ErrInvalidVector, score: 0, sav: SeverityNone},
 		{vector: "CVSS:3.0/S:U/AV:N/AC:L/PR:H/UI:N/C:L/I:L/:X", err: cvsserr.ErrInvalidVector, score: 0, sav: SeverityNone},
 		{vector: "CVSS:3.0/S:U/AV:N/AC:L/PR:H/UI:N/C:L/I:L/:", err: cvsserr.ErrInvalidVector, score: 0, sav: SeverityNone},
+		{vector: "CVSS:3.0/AV:P/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:N/E:F/RL:W/RC:R/RC:R", err: cvsserr.ErrSameMetric, score: 0, sav: SeverityNone},
+		{vector: "CVSS:3.0/AV:P/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:N/E:F/RL:W/RC:0", err: cvsserr.ErrInvalidValue, score: 0, sav: SeverityNone},
+		{vector: "CVSS:3.0/AV:P/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:N/E:F/RL:0/RC:R", err: cvsserr.ErrInvalidValue, score: 0, sav: SeverityNone},
+		{vector: "CVSS:3.0/AV:P/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:N/E:0/RL:W/RC:R", err: cvsserr.ErrInvalidValue, score: 0, sav: SeverityNone},
 		{vector: "CVSS:3.0/S:U/AV:N/AC:L/PR:H/UI:N/C:L/I:L/A:N", err: nil, score: 3.8, sav: SeverityLow},
 		{vector: "CVSS:3.1/S:U/AV:N/AC:L/PR:H/UI:N/C:L/I:L/A:N", err: nil, score: 3.8, sav: SeverityLow},
 		{vector: "CVSS:3.1/S:U/AV:N/AC:L/PR:H/UI:N/C:L/I:L/A:N/E:F", err: nil, score: 3.7, sav: SeverityLow},
@@ -33,13 +37,15 @@ func TestTemporalScore(t *testing.T) {
 		if !errors.Is(err, tc.err) {
 			t.Errorf("Decode(%s) = \"%+v\", want \"%v\".", tc.vector, err, tc.err)
 		}
-		score := m.Score()
-		if score != tc.score {
-			t.Errorf("Score(%s) = %v, want %v.", tc.vector, score, tc.score)
-		}
-		sav := m.Severity()
-		if sav != tc.sav {
-			t.Errorf("Severity(%s) = %v, want %v.", tc.vector, sav, tc.sav)
+		if err == nil {
+			score := m.Score()
+			if score != tc.score {
+				t.Errorf("Score(%s) = %v, want %v.", tc.vector, score, tc.score)
+			}
+			sav := m.Severity()
+			if sav != tc.sav {
+				t.Errorf("Severity(%s) = %v, want %v.", tc.vector, sav, tc.sav)
+			}
 		}
 	}
 }

@@ -29,8 +29,8 @@ func TestReportConfidence(t *testing.T) {
 		if v != tc.value {
 			t.Errorf("ReportConfidence.Value(%v) = %v, want %v.", tc.input, v, tc.value)
 		}
-		if r.IsDefined() != tc.defined {
-			t.Errorf("ReportConfidence.IsDefined(%v) = %v, want %v.", tc.input, r.IsDefined(), tc.defined)
+		if r.IsValid() != tc.defined {
+			t.Errorf("ReportConfidence.IsDefined(%v) = %v, want %v.", tc.input, r.IsValid(), tc.defined)
 		}
 	}
 }

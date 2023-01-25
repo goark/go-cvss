@@ -15,6 +15,8 @@ func TestDecodeError(t *testing.T) {
 		{vector: "CVSS:3.0/AV:P/AC:H/PR:H/UI:R/S:U/C:N/I:N/A:N", err: nil},
 		{vector: "CVSS:3.1/AV:P/AC:H/PR:H/UI:R/S:U/C:N/I:N/A:N", err: nil},
 		{vector: "XXX:3.0/AV:P/AC:H/PR:H/UI:R/S:U/C:N/I:N/A:N", err: cvsserr.ErrInvalidVector},
+		{vector: "CVSS:3.1/AV:A/AC:L/PR:N/UI:N/S:C/C:H/I:H/A:0/A:H", err: cvsserr.ErrInvalidValue},
+		{vector: "CVSS:3.1/AV:A/AC:L/PR:N/UI:N/S:C/C:H/I:H/A:H/A:H", err: cvsserr.ErrSameMetric},
 		{vector: "CVSS:2.0/AV:P/AC:H/PR:H/UI:R/S:U/C:N/I:N/A:N", err: cvsserr.ErrNotSupportVer},
 		{vector: "CVSS:3.1", err: cvsserr.ErrInvalidVector},
 		{vector: "CVSS3.1/AV:X/AC:H/PR:H/UI:R/S:U/C:N/I:N/A:N", err: cvsserr.ErrInvalidVector},
@@ -23,14 +25,14 @@ func TestDecodeError(t *testing.T) {
 		{vector: "CVSS:3.1/AV:P/AC:H/PR:H/UI:R/S:U/C:N/I:N/:N", err: cvsserr.ErrInvalidVector},
 		{vector: "CVSS:3.1/AV:P/AC:H/PR:H/UI:R/S:U/C:N/I:N/:", err: cvsserr.ErrInvalidVector},
 		{vector: "CVSS:3.1/AV:P/AC:H/PR:H/UI:R/S:U/C:N/I:N/X:N", err: cvsserr.ErrNotSupportMetric},
-		{vector: "CVSS:3.1/AV:P/AC:H/PR:H/UI:R/S:U/C:N/I:N/A:X", err: cvsserr.ErrUndefinedMetric},
-		{vector: "CVSS:3.1/AV:P/AC:H/PR:H/UI:R/S:U/C:N/I:X/A:N", err: cvsserr.ErrUndefinedMetric},
-		{vector: "CVSS:3.1/AV:P/AC:H/PR:H/UI:R/S:U/C:X/I:N/A:N", err: cvsserr.ErrUndefinedMetric},
-		{vector: "CVSS:3.1/AV:P/AC:H/PR:H/UI:R/S:X/C:N/I:N/A:N", err: cvsserr.ErrUndefinedMetric},
-		{vector: "CVSS:3.1/AV:P/AC:H/PR:H/UI:X/S:U/C:N/I:N/A:N", err: cvsserr.ErrUndefinedMetric},
-		{vector: "CVSS:3.1/AV:P/AC:H/PR:X/UI:R/S:U/C:N/I:N/A:N", err: cvsserr.ErrUndefinedMetric},
-		{vector: "CVSS:3.1/AV:P/AC:X/PR:H/UI:R/S:U/C:N/I:N/A:N", err: cvsserr.ErrUndefinedMetric},
-		{vector: "CVSS:3.1/AV:X/AC:H/PR:H/UI:R/S:U/C:N/I:N/A:N", err: cvsserr.ErrUndefinedMetric},
+		{vector: "CVSS:3.1/AV:P/AC:H/PR:H/UI:R/S:U/C:N/I:N/A:X", err: cvsserr.ErrInvalidValue},
+		{vector: "CVSS:3.1/AV:P/AC:H/PR:H/UI:R/S:U/C:N/I:X/A:N", err: cvsserr.ErrInvalidValue},
+		{vector: "CVSS:3.1/AV:P/AC:H/PR:H/UI:R/S:U/C:X/I:N/A:N", err: cvsserr.ErrInvalidValue},
+		{vector: "CVSS:3.1/AV:P/AC:H/PR:H/UI:R/S:X/C:N/I:N/A:N", err: cvsserr.ErrInvalidValue},
+		{vector: "CVSS:3.1/AV:P/AC:H/PR:H/UI:X/S:U/C:N/I:N/A:N", err: cvsserr.ErrInvalidValue},
+		{vector: "CVSS:3.1/AV:P/AC:H/PR:X/UI:R/S:U/C:N/I:N/A:N", err: cvsserr.ErrInvalidValue},
+		{vector: "CVSS:3.1/AV:P/AC:X/PR:H/UI:R/S:U/C:N/I:N/A:N", err: cvsserr.ErrInvalidValue},
+		{vector: "CVSS:3.1/AV:X/AC:H/PR:H/UI:R/S:U/C:N/I:N/A:N", err: cvsserr.ErrInvalidValue},
 	}
 
 	for _, tc := range testCases {
@@ -45,7 +47,7 @@ func TestDecodeEncode(t *testing.T) {
 		vector string
 		err    error
 	}{
-		{vector: "CVSS:3.0/AV:X/AC:X/PR:X/UI:X/S:X/C:X/I:X/A:X", err: cvsserr.ErrUndefinedMetric},
+		{vector: "CVSS:3.0/AV:X/AC:X/PR:X/UI:X/S:X/C:X/I:X/A:X", err: cvsserr.ErrInvalidValue},
 		{vector: "CVSS:3.0/AV:P/AC:H/PR:H/UI:R/S:U/C:N/I:N/A:N", err: nil},
 		{vector: "CVSS:3.0/AV:L/AC:L/PR:L/UI:N/S:C/C:L/I:L/A:L", err: nil},
 		{vector: "CVSS:3.0/AV:A/AC:L/PR:N/UI:N/S:C/C:H/I:H/A:H", err: nil},
@@ -57,11 +59,11 @@ func TestDecodeEncode(t *testing.T) {
 		if !errors.Is(err, tc.err) {
 			t.Errorf("Decode(%s) = \"%+v\", want \"%v\".", tc.vector, err, tc.err)
 		}
-		v, err := m.Encode()
-		if !errors.Is(err, tc.err) {
-			t.Errorf("Encode() = \"%+v\", want \"%v\".", err, tc.err)
-		}
 		if err == nil {
+			v, err := m.Encode()
+			if err != nil {
+				t.Errorf("Encode() = \"%+v\", want <nil>.", err)
+			}
 			if v != tc.vector {
 				t.Errorf("Encode() = \"%v\", want \"%v\".", v, tc.vector)
 			}

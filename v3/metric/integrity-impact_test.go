@@ -11,7 +11,6 @@ func TestIntegrityImpact(t *testing.T) {
 		defined bool
 	}{
 		{input: "Z", result: IntegrityImpactUnknown, res: "", value: 0.0, defined: false},
-		{input: "X", result: IntegrityImpactNotDefined, res: "X", value: 0.0, defined: true},
 		{input: "N", result: IntegrityImpactNone, res: "N", value: 0.0, defined: true},
 		{input: "L", result: IntegrityImpactLow, res: "L", value: 0.22, defined: true},
 		{input: "H", result: IntegrityImpactHigh, res: "H", value: 0.56, defined: true},
@@ -30,13 +29,13 @@ func TestIntegrityImpact(t *testing.T) {
 		if v != tc.value {
 			t.Errorf("IntegrityImpact.Value(%v) = %v, want %v.", tc.input, v, tc.value)
 		}
-		if r.IsUnKnown() == tc.defined {
-			t.Errorf("IntegrityImpact.IsDefined(%v) = %v, want %v.", tc.input, r.IsDefined(), tc.defined)
+		if r.IsUnknown() == tc.defined {
+			t.Errorf("IntegrityImpact.IsDefined(%v) = %v, want %v.", tc.input, r.IsUnknown(), tc.defined)
 		}
 	}
 }
 
-/* Copyright 2018-2020 Spiegel
+/* Copyright 2018-2023 Spiegel
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.

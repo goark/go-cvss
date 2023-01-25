@@ -30,8 +30,8 @@ func TestRemediationLevel(t *testing.T) {
 		if v != tc.value {
 			t.Errorf("RemediationLevel.Value(%v) = %v, want %v.", tc.input, v, tc.value)
 		}
-		if r.IsDefined() != tc.defined {
-			t.Errorf("RemediationLevel.IsDefined(%v) = %v, want %v.", tc.input, r.IsDefined(), tc.defined)
+		if r.IsValid() != tc.defined {
+			t.Errorf("RemediationLevel.IsDefined(%v) = %v, want %v.", tc.input, r.IsValid(), tc.defined)
 		}
 	}
 }

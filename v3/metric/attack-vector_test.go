@@ -11,7 +11,6 @@ func TestAttackVector(t *testing.T) {
 		defined bool
 	}{
 		{input: "Z", result: AttackVectorUnknown, res: "", value: 0.0, defined: false},
-		{input: "X", result: AttackVectorNotDefined, res: "X", value: 0.0, defined: true},
 		{input: "P", result: AttackVectorPhysical, res: "P", value: 0.20, defined: true},
 		{input: "L", result: AttackVectorLocal, res: "L", value: 0.55, defined: true},
 		{input: "A", result: AttackVectorAdjacent, res: "A", value: 0.62, defined: true},
@@ -32,12 +31,12 @@ func TestAttackVector(t *testing.T) {
 			t.Errorf("AttackVector.Value(%v) = %v, want %v.", tc.input, v, tc.value)
 		}
 		if r.IsUnknown() == tc.defined {
-			t.Errorf("AttackVector.IsDefined(%v) = %v, want %v.", tc.input, r.IsDefined(), tc.defined)
+			t.Errorf("AttackVector.IsDefined(%v) = %v, want %v.", tc.input, r.IsUnknown(), tc.defined)
 		}
 	}
 }
 
-/* Copyright 2018-2020 Spiegel
+/* Copyright 2018-2023 Spiegel
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
