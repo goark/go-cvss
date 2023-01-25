@@ -2,12 +2,13 @@ package metric
 
 import "strings"
 
-//AvailabilityRequirement is metric type for Base Metrics
+// AvailabilityRequirement is metric type for Base Metrics
 type AvailabilityRequirement int
 
-//Constant of AvailabilityRequirement result
+// Constant of AvailabilityRequirement result
 const (
-	AvailabilityRequirementNotDefined AvailabilityRequirement = iota
+	AvailabilityRequirementInvalid AvailabilityRequirement = iota
+	AvailabilityRequirementNotDefined
 	AvailabilityRequirementLow
 	AvailabilityRequirementMedium
 	AvailabilityRequirementHigh
@@ -27,7 +28,7 @@ var AvailabilityRequirementValueMap = map[AvailabilityRequirement]float64{
 	AvailabilityRequirementHigh:       1.5,
 }
 
-//GetAvailabilityRequirement returns result of AvailabilityRequirement metric
+// GetAvailabilityRequirement returns result of AvailabilityRequirement metric
 func GetAvailabilityRequirement(s string) AvailabilityRequirement {
 	s = strings.ToUpper(s)
 	for k, v := range AvailabilityRequirementMap {
@@ -35,7 +36,7 @@ func GetAvailabilityRequirement(s string) AvailabilityRequirement {
 			return k
 		}
 	}
-	return AvailabilityRequirementNotDefined
+	return AvailabilityRequirementInvalid
 }
 
 func (ar AvailabilityRequirement) String() string {
@@ -45,7 +46,7 @@ func (ar AvailabilityRequirement) String() string {
 	return ""
 }
 
-//Value returns value of AvailabilityRequirement metric
+// Value returns value of AvailabilityRequirement metric
 func (ar AvailabilityRequirement) Value() float64 {
 	if v, ok := AvailabilityRequirementValueMap[ar]; ok {
 		return v
@@ -53,8 +54,8 @@ func (ar AvailabilityRequirement) Value() float64 {
 	return 0.0
 }
 
-//IsDefined returns false if undefined result value of metric
-func (ar AvailabilityRequirement) IsDefined() bool {
+// IsDefined returns false if undefined result value of metric
+func (ar AvailabilityRequirement) IsValid() bool {
 	_, ok := AvailabilityRequirementValueMap[ar]
 	return ok
 }

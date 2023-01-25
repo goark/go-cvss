@@ -2,12 +2,13 @@ package metric
 
 import "strings"
 
-//ModifiedUserInteraction is metric type for Base Metrics
+// ModifiedUserInteraction is metric type for Base Metrics
 type ModifiedUserInteraction int
 
-//Constant of ModifiedUserInteraction result
+// Constant of ModifiedUserInteraction result
 const (
-	ModifiedUserInteractionNotDefined ModifiedUserInteraction = iota
+	ModifiedUserInteractionInvalid ModifiedUserInteraction = iota
+	ModifiedUserInteractionNotDefined
 	ModifiedUserInteractionRequired
 	ModifiedUserInteractionNone
 )
@@ -24,7 +25,7 @@ var ModifiedUserInteractionValueMap = map[ModifiedUserInteraction]float64{
 	ModifiedUserInteractionNone:       0.85,
 }
 
-//GetModifiedUserInteraction returns result of ModifiedUserInteraction metric
+// GetModifiedUserInteraction returns result of ModifiedUserInteraction metric
 func GetModifiedUserInteraction(s string) ModifiedUserInteraction {
 	s = strings.ToUpper(s)
 	for k, v := range ModifiedUserInteractionMap {
@@ -32,7 +33,7 @@ func GetModifiedUserInteraction(s string) ModifiedUserInteraction {
 			return k
 		}
 	}
-	return ModifiedUserInteractionNotDefined
+	return ModifiedUserInteractionInvalid
 }
 
 func (mui ModifiedUserInteraction) String() string {
@@ -42,7 +43,7 @@ func (mui ModifiedUserInteraction) String() string {
 	return ""
 }
 
-//Value returns value of ModifiedUserInteraction metric
+// Value returns value of ModifiedUserInteraction metric
 func (mui ModifiedUserInteraction) Value(ui UserInteraction) float64 {
 	if mui.String() == ModifiedUserInteractionNotDefined.String() {
 		if v, ok := userInteractionValueMap[ui]; ok {
@@ -57,8 +58,8 @@ func (mui ModifiedUserInteraction) Value(ui UserInteraction) float64 {
 	}
 }
 
-//IsDefined returns false if undefined result value of metric
-func (mui ModifiedUserInteraction) IsDefined() bool {
+// IsDefined returns false if undefined result value of metric
+func (mui ModifiedUserInteraction) IsValid() bool {
 	_, ok := ModifiedUserInteractionValueMap[mui]
 	return ok
 }

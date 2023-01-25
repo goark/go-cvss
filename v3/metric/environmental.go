@@ -11,17 +11,18 @@ import (
 // Base is Environmental Metrics for CVSSv3
 type Environmental struct {
 	*Temporal
-	CR  ConfidentialityRequirement
-	IR  IntegrityRequirement
-	AR  AvailabilityRequirement
-	MAV ModifiedAttackVector
-	MAC ModifiedAttackComplexity
-	MPR ModifiedPrivilegesRequired
-	MUI ModifiedUserInteraction
-	MS  ModifiedScope
-	MC  ModifiedConfidentialityImpact
-	MI  ModifiedIntegrityImpact
-	MA  ModifiedAvailabilityImpact
+	CR    ConfidentialityRequirement
+	IR    IntegrityRequirement
+	AR    AvailabilityRequirement
+	MAV   ModifiedAttackVector
+	MAC   ModifiedAttackComplexity
+	MPR   ModifiedPrivilegesRequired
+	MUI   ModifiedUserInteraction
+	MS    ModifiedScope
+	MC    ModifiedConfidentialityImpact
+	MI    ModifiedIntegrityImpact
+	MA    ModifiedAvailabilityImpact
+	names map[string]bool
 }
 
 // NewBase returns Base Metrics instance
@@ -39,6 +40,7 @@ func NewEnvironmental() *Environmental {
 		MC:       ModifiedConfidentialityImpactNotDefined,
 		MI:       ModifiedIntegrityImpactNotDefined,
 		MA:       ModifiedAvailabilityImpactNotDefined,
+		names:    map[string]bool{},
 	}
 }
 
@@ -86,32 +88,70 @@ func (em *Environmental) decodeOne(str string) error {
 	if len(m) != 2 || len(m[0]) == 0 || len(m[1]) == 0 {
 		return errs.Wrap(cvsserr.ErrInvalidVector, errs.WithContext("metric", str))
 	}
-	switch strings.ToUpper(m[0]) {
+	name := strings.ToUpper(m[0])
+	if em.names[name] {
+		return errs.Wrap(cvsserr.ErrSameMetric, errs.WithContext("metric", str))
+	}
+	switch name {
 	case "CR": //Exploitability
 		em.CR = GetConfidentialityRequirement(m[1])
+		if em.CR == ConfidentialityRequirementInvalid {
+			return errs.Wrap(cvsserr.ErrInvalidValue, errs.WithContext("metric", str))
+		}
 	case "IR": //RemediationLevel
 		em.IR = GetIntegrityRequirement(m[1])
+		if em.IR == IntegrityRequirementInvalid {
+			return errs.Wrap(cvsserr.ErrInvalidValue, errs.WithContext("metric", str))
+		}
 	case "AR": //RemediationLevel
 		em.AR = GetAvailabilityRequirement(m[1])
+		if em.AR == AvailabilityRequirementInvalid {
+			return errs.Wrap(cvsserr.ErrInvalidValue, errs.WithContext("metric", str))
+		}
 	case "MAV": //RemediationLevel
 		em.MAV = GetModifiedAttackVector(m[1])
+		if em.MAV == ModifiedAttackVectorInvalid {
+			return errs.Wrap(cvsserr.ErrInvalidValue, errs.WithContext("metric", str))
+		}
 	case "MAC": //RemediationLevel
 		em.MAC = GetModifiedAttackComplexity(m[1])
+		if em.MAC == ModifiedAttackComplexityInvalid {
+			return errs.Wrap(cvsserr.ErrInvalidValue, errs.WithContext("metric", str))
+		}
 	case "MPR": //RemediationLevel
 		em.MPR = GetModifiedPrivilegesRequired(m[1])
+		if em.MPR == ModifiedPrivilegesRequiredInvalid {
+			return errs.Wrap(cvsserr.ErrInvalidValue, errs.WithContext("metric", str))
+		}
 	case "MUI": //RemediationLevel
 		em.MUI = GetModifiedUserInteraction(m[1])
+		if em.MUI == ModifiedUserInteractionInvalid {
+			return errs.Wrap(cvsserr.ErrInvalidValue, errs.WithContext("metric", str))
+		}
 	case "MS": //RemediationLevel
 		em.MS = GetModifiedScope(m[1])
+		if em.MS == ModifiedScopeInvalid {
+			return errs.Wrap(cvsserr.ErrInvalidValue, errs.WithContext("metric", str))
+		}
 	case "MC": //RemediationLevel
 		em.MC = GetModifiedConfidentialityImpact(m[1])
+		if em.MC == ModifiedConfidentialityImpactInvalid {
+			return errs.Wrap(cvsserr.ErrInvalidValue, errs.WithContext("metric", str))
+		}
 	case "MI": //RemediationLevel
 		em.MI = GetModifiedIntegrityImpact(m[1])
+		if em.MI == ModifiedIntegrityImpactInvalid {
+			return errs.Wrap(cvsserr.ErrInvalidValue, errs.WithContext("metric", str))
+		}
 	case "MA": //RemediationLevel
 		em.MA = GetModifiedAvailabilityImpact(m[1])
+		if em.MA == ModifiedAvailabilityInvalid {
+			return errs.Wrap(cvsserr.ErrInvalidValue, errs.WithContext("metric", str))
+		}
 	default:
 		return errs.Wrap(cvsserr.ErrNotSupportMetric, errs.WithContext("metric", str))
 	}
+	em.names[name] = true
 	return nil
 }
 
@@ -124,8 +164,8 @@ func (em *Environmental) GetError() error {
 		return errs.Wrap(err)
 	}
 	switch true {
-	case !em.CR.IsDefined(), !em.IR.IsDefined(), !em.AR.IsDefined(), !em.MAV.IsDefined(), !em.MAC.IsDefined(), !em.MPR.IsDefined(), !em.MUI.IsDefined(),
-		!em.MS.IsDefined(), !em.MC.IsDefined(), !em.MI.IsDefined(), !em.MA.IsDefined():
+	case !em.CR.IsValid(), !em.IR.IsValid(), !em.AR.IsValid(), !em.MAV.IsValid(), !em.MAC.IsValid(), !em.MPR.IsValid(), !em.MUI.IsValid(),
+		!em.MS.IsValid(), !em.MC.IsValid(), !em.MI.IsValid(), !em.MA.IsValid():
 		return errs.Wrap(cvsserr.ErrUndefinedMetric)
 	default:
 		return nil

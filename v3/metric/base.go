@@ -10,29 +10,31 @@ import (
 
 // Base is Base Metrics for CVSSv3
 type Base struct {
-	Ver Version
-	AV  AttackVector
-	AC  AttackComplexity
-	PR  PrivilegesRequired
-	UI  UserInteraction
-	S   Scope
-	C   ConfidentialityImpact
-	I   IntegrityImpact
-	A   AvailabilityImpact
+	Ver   Version
+	AV    AttackVector
+	AC    AttackComplexity
+	PR    PrivilegesRequired
+	UI    UserInteraction
+	S     Scope
+	C     ConfidentialityImpact
+	I     IntegrityImpact
+	A     AvailabilityImpact
+	names map[string]bool
 }
 
 // NewBase returns Base Metrics instance
 func NewBase() *Base {
 	return &Base{
-		Ver: VUnknown,
-		AV:  AttackVectorUnknown,
-		AC:  AttackComplexityUnknown,
-		PR:  PrivilegesRequiredUnknown,
-		UI:  UserInteractionUnknown,
-		S:   ScopeUnknown,
-		C:   ConfidentialityImpactUnknown,
-		I:   IntegrityImpactUnknown,
-		A:   AvailabilityImpactUnknown,
+		Ver:   VUnknown,
+		AV:    AttackVectorUnknown,
+		AC:    AttackComplexityUnknown,
+		PR:    PrivilegesRequiredUnknown,
+		UI:    UserInteractionUnknown,
+		S:     ScopeUnknown,
+		C:     ConfidentialityImpactUnknown,
+		I:     IntegrityImpactUnknown,
+		A:     AvailabilityImpactUnknown,
+		names: map[string]bool{},
 	}
 }
 
@@ -73,26 +75,55 @@ func (bm *Base) decodeOne(str string) error {
 	if len(m) != 2 || len(m[0]) == 0 || len(m[1]) == 0 {
 		return errs.Wrap(cvsserr.ErrInvalidVector, errs.WithContext("metric", str))
 	}
-	switch strings.ToUpper(m[0]) {
+	name := strings.ToUpper(m[0])
+	if bm.names[name] {
+		return errs.Wrap(cvsserr.ErrSameMetric, errs.WithContext("metric", str))
+	}
+	switch name {
 	case "AV": //Attack Vector
 		bm.AV = GetAttackVector(m[1])
+		if bm.AV == AttackVectorUnknown {
+			return errs.Wrap(cvsserr.ErrInvalidValue, errs.WithContext("metric", str))
+		}
 	case "AC": //Attack Complexity
 		bm.AC = GetAttackComplexity(m[1])
+		if bm.AC == AttackComplexityUnknown {
+			return errs.Wrap(cvsserr.ErrInvalidValue, errs.WithContext("metric", str))
+		}
 	case "PR": //Privileges Required
 		bm.PR = GetPrivilegesRequired(m[1])
+		if bm.PR == PrivilegesRequiredUnknown {
+			return errs.Wrap(cvsserr.ErrInvalidValue, errs.WithContext("metric", str))
+		}
 	case "UI": //User Interaction
 		bm.UI = GetUserInteraction(m[1])
+		if bm.UI == UserInteractionUnknown {
+			return errs.Wrap(cvsserr.ErrInvalidValue, errs.WithContext("metric", str))
+		}
 	case "S": //Scope
 		bm.S = GetScope(m[1])
+		if bm.S == ScopeUnknown {
+			return errs.Wrap(cvsserr.ErrInvalidValue, errs.WithContext("metric", str))
+		}
 	case "C": //Confidentiality Impact
 		bm.C = GetConfidentialityImpact(m[1])
+		if bm.C == ConfidentialityImpactUnknown {
+			return errs.Wrap(cvsserr.ErrInvalidValue, errs.WithContext("metric", str))
+		}
 	case "I": //Integrity Impact
 		bm.I = GetIntegrityImpact(m[1])
+		if bm.I == IntegrityImpactUnknown {
+			return errs.Wrap(cvsserr.ErrInvalidValue, errs.WithContext("metric", str))
+		}
 	case "A": //Availability Impact
 		bm.A = GetAvailabilityImpact(m[1])
+		if bm.A == AvailabilityImpactUnknown {
+			return errs.Wrap(cvsserr.ErrInvalidValue, errs.WithContext("metric", str))
+		}
 	default:
 		return errs.Wrap(cvsserr.ErrNotSupportMetric, errs.WithContext("metric", str))
 	}
+	bm.names[name] = true
 	return nil
 }
 
@@ -102,7 +133,7 @@ func (bm *Base) GetError() error {
 		return errs.Wrap(cvsserr.ErrUndefinedMetric)
 	}
 	switch true {
-	case bm.Ver == VUnknown, !bm.AV.IsDefined(), !bm.AC.IsDefined(), !bm.PR.IsDefined(), !bm.UI.IsDefined(), !bm.S.IsDefined(), !bm.C.IsDefined(), !bm.I.IsDefined(), !bm.A.IsDefined():
+	case bm.Ver == VUnknown, bm.AV.IsUnknown(), bm.AC.IsUnknown(), bm.PR.IsUnknown(), bm.UI.IsUnknown(), bm.S.IsUnknown(), bm.C.IsUnknown(), bm.I.IsUnknown(), bm.A.IsUnknown():
 		return errs.Wrap(cvsserr.ErrUndefinedMetric)
 	default:
 		return nil

@@ -11,7 +11,6 @@ func TestAttackComplexity(t *testing.T) {
 		defined bool
 	}{
 		{input: "Z", result: AttackComplexityUnknown, res: "", value: 0.0, defined: false},
-		{input: "X", result: AttackComplexityNotDefined, res: "X", value: 0.0, defined: true},
 		{input: "H", result: AttackComplexityHigh, res: "H", value: 0.44, defined: true},
 		{input: "L", result: AttackComplexityLow, res: "L", value: 0.77, defined: true},
 	}
@@ -30,12 +29,12 @@ func TestAttackComplexity(t *testing.T) {
 			t.Errorf("AttackComplexity.Value(%v) = %v, want %v.", tc.input, v, tc.value)
 		}
 		if r.IsUnknown() == tc.defined {
-			t.Errorf("AttackComplexity.IsDefined(%v) = %v, want %v.", tc.input, r.IsDefined(), tc.defined)
+			t.Errorf("AttackComplexity.IsDefined(%v) = %v, want %v.", tc.input, r.IsUnknown(), tc.defined)
 		}
 	}
 }
 
-/* Copyright 2018-2020 Spiegel
+/* Copyright 2018-2023 Spiegel
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.

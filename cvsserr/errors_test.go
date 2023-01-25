@@ -16,7 +16,9 @@ func TestNumError(t *testing.T) {
 		{err: ErrNotSupportVer, str: "not support version"},
 		{err: ErrNotSupportMetric, str: "not support metric"},
 		{err: ErrInvalidTemplate, str: "invalid templete string"},
-		{err: Num(7), str: "unknown error (7)"},
+		{err: ErrSameMetric, str: "exist same metric"},
+		{err: ErrInvalidValue, str: "invalid value of metric"},
+		{err: Num(9), str: "unknown error (9)"},
 	}
 
 	for _, tc := range testCases {
@@ -28,7 +30,7 @@ func TestNumError(t *testing.T) {
 	}
 }
 
-/* Copyright 2019,2020 Spiegel
+/* Copyright 2019-2023 Spiegel
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.

@@ -2,7 +2,7 @@ package cvsserr
 
 import "fmt"
 
-//Num is error number for CVSS
+// Num is error number for CVSS
 type Num int
 
 const (
@@ -12,6 +12,8 @@ const (
 	ErrNotSupportVer
 	ErrNotSupportMetric
 	ErrInvalidTemplate
+	ErrSameMetric
+	ErrInvalidValue
 )
 
 var errMessage = map[Num]string{
@@ -21,6 +23,8 @@ var errMessage = map[Num]string{
 	ErrNotSupportVer:    "not support version",
 	ErrNotSupportMetric: "not support metric",
 	ErrInvalidTemplate:  "invalid templete string",
+	ErrSameMetric:       "exist same metric",
+	ErrInvalidValue:     "invalid value of metric",
 }
 
 func (n Num) Error() string {
@@ -30,7 +34,7 @@ func (n Num) Error() string {
 	return fmt.Sprintf("unknown error (%d)", int(n))
 }
 
-/* Copyright 2018-2020 Spiegel
+/* Copyright 2018-2023 Spiegel
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.

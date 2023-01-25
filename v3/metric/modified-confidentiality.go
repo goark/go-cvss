@@ -2,12 +2,13 @@ package metric
 
 import "strings"
 
-//ModifiedConfidentialityImpact is metric type for Base Metrics
+// ModifiedConfidentialityImpact is metric type for Base Metrics
 type ModifiedConfidentialityImpact int
 
-//Constant of ModifiedConfidentialityImpact result
+// Constant of ModifiedConfidentialityImpact result
 const (
-	ModifiedConfidentialityImpactNotDefined ModifiedConfidentialityImpact = iota
+	ModifiedConfidentialityImpactInvalid ModifiedConfidentialityImpact = iota
+	ModifiedConfidentialityImpactNotDefined
 	ModifiedConfidentialityImpactNone
 	ModifiedConfidentialityImpactLow
 	ModifiedConfidentialityImpactHigh
@@ -27,7 +28,7 @@ var ModifiedConfidentialityImpactValueMap = map[ModifiedConfidentialityImpact]fl
 	ModifiedConfidentialityImpactHigh:       0.56,
 }
 
-//GetModifiedConfidentialityImpact returns result of ModifiedConfidentialityImpact metric
+// GetModifiedConfidentialityImpact returns result of ModifiedConfidentialityImpact metric
 func GetModifiedConfidentialityImpact(s string) ModifiedConfidentialityImpact {
 	s = strings.ToUpper(s)
 	for k, v := range ModifiedConfidentialityImpactMap {
@@ -35,7 +36,7 @@ func GetModifiedConfidentialityImpact(s string) ModifiedConfidentialityImpact {
 			return k
 		}
 	}
-	return ModifiedConfidentialityImpactNotDefined
+	return ModifiedConfidentialityImpactInvalid
 }
 
 func (mci ModifiedConfidentialityImpact) String() string {
@@ -45,7 +46,7 @@ func (mci ModifiedConfidentialityImpact) String() string {
 	return ""
 }
 
-//Value returns value of ModifiedConfidentialityImpact metric
+// Value returns value of ModifiedConfidentialityImpact metric
 func (mci ModifiedConfidentialityImpact) Value(ci ConfidentialityImpact) float64 {
 	if mci.String() == ModifiedAttackComplexityNotDefined.String() {
 		if v, ok := confidentialityImpactValueMap[ci]; ok {
@@ -61,8 +62,8 @@ func (mci ModifiedConfidentialityImpact) Value(ci ConfidentialityImpact) float64
 
 }
 
-//IsDefined returns false if undefined result value of metric
-func (mci ModifiedConfidentialityImpact) IsDefined() bool {
+// IsDefined returns false if undefined result value of metric
+func (mci ModifiedConfidentialityImpact) IsValid() bool {
 	_, ok := ModifiedConfidentialityImpactValueMap[mci]
 	return ok
 }

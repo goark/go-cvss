@@ -2,24 +2,22 @@ package metric
 
 import "strings"
 
-//Scope is metric type for Base Metrics
+// Scope is metric type for Base Metrics
 type Scope int
 
-//Constant of Scope result
+// Constant of Scope result
 const (
 	ScopeUnknown Scope = iota
-	ScopeNotDefined
 	ScopeUnchanged
 	ScopeChanged
 )
 
 var scopeMap = map[Scope]string{
-	ScopeNotDefined: "X",
-	ScopeUnchanged:  "U",
-	ScopeChanged:    "C",
+	ScopeUnchanged: "U",
+	ScopeChanged:   "C",
 }
 
-//GetScope returns result of Scope metric
+// GetScope returns result of Scope metric
 func GetScope(s string) Scope {
 	s = strings.ToUpper(s)
 	for k, v := range scopeMap {
@@ -37,17 +35,12 @@ func (sc Scope) String() string {
 	return ""
 }
 
-//IsUnknown returns false if undefined result value of metric
+// IsUnknown returns false if undefined result value of metric
 func (sc Scope) IsUnknown() bool {
 	return sc == ScopeUnknown
 }
 
-//IsDefined returns false if undefined result value of metric
-func (sc Scope) IsDefined() bool {
-	return !sc.IsUnknown() && sc != ScopeNotDefined
-}
-
-/* Copyright 2018-2020 Spiegel
+/* Copyright 2018-2023 Spiegel
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.

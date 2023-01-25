@@ -11,7 +11,6 @@ func TestConfidentialityImpact(t *testing.T) {
 		defined bool
 	}{
 		{input: "Z", result: ConfidentialityImpactUnknown, res: "", value: 0.0, defined: false},
-		{input: "X", result: ConfidentialityImpactNotDefined, res: "X", value: 0.0, defined: true},
 		{input: "N", result: ConfidentialityImpactNone, res: "N", value: 0.0, defined: true},
 		{input: "L", result: ConfidentialityImpactLow, res: "L", value: 0.22, defined: true},
 		{input: "H", result: ConfidentialityImpactHigh, res: "H", value: 0.56, defined: true},
@@ -31,12 +30,12 @@ func TestConfidentialityImpact(t *testing.T) {
 			t.Errorf("ConfidentialityImpact.Value(%v) = %v, want %v.", tc.input, v, tc.value)
 		}
 		if r.IsUnknown() == tc.defined {
-			t.Errorf("ConfidentialityImpact.IsDefined(%v) = %v, want %v.", tc.input, r.IsDefined(), tc.defined)
+			t.Errorf("ConfidentialityImpact.IsDefined(%v) = %v, want %v.", tc.input, r.IsUnknown(), tc.defined)
 		}
 	}
 }
 
-/* Copyright 2018-2020 Spiegel
+/* Copyright 2018-2023 Spiegel
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.

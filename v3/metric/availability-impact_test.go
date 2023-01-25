@@ -11,7 +11,6 @@ func TestAvailabilityImpact(t *testing.T) {
 		defined bool
 	}{
 		{input: "Z", result: AvailabilityImpactUnknown, res: "", value: 0.0, defined: false},
-		{input: "X", result: AvailabilityImpactNotDefined, res: "X", value: 0.0, defined: true},
 		{input: "N", result: AvailabilityImpactNone, res: "N", value: 0.0, defined: true},
 		{input: "L", result: AvailabilityImpactLow, res: "L", value: 0.22, defined: true},
 		{input: "H", result: AvailabilityImpactHigh, res: "H", value: 0.56, defined: true},
@@ -31,12 +30,12 @@ func TestAvailabilityImpact(t *testing.T) {
 			t.Errorf("AvailabilityImpact.Value(%v) = %v, want %v.", tc.input, v, tc.value)
 		}
 		if r.IsUnknown() == tc.defined {
-			t.Errorf("AvailabilityImpact.IsDefined(%v) = %v, want %v.", tc.input, r.IsDefined(), tc.defined)
+			t.Errorf("AvailabilityImpact.IsDefined(%v) = %v, want %v.", tc.input, r.IsUnknown(), tc.defined)
 		}
 	}
 }
 
-/* Copyright 2018-2020 Spiegel
+/* Copyright 2018-2023 Spiegel
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.

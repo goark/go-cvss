@@ -11,10 +11,6 @@ var (
 		language.Japanese: "可用性への影響",
 	}
 	aNamesMap = map[metric.AvailabilityImpact]langNameMap{
-		metric.AvailabilityImpactNotDefined: {
-			language.English:  "Not Defined",
-			language.Japanese: "未評価",
-		},
 		metric.AvailabilityImpactNone: {
 			language.English:  "None",
 			language.Japanese: "なし",
@@ -30,12 +26,12 @@ var (
 	}
 )
 
-//AvailabilityImpact returns string instance name for display
+// AvailabilityImpact returns string instance name for display
 func AvailabilityImpact(lang language.Tag) string {
 	return aTitleMap.getNameInLang(lang)
 }
 
-//AValueOf returns string name of value for display
+// AValueOf returns string name of value for display
 func AValueOf(a metric.AvailabilityImpact, lang language.Tag) string {
 	if m, ok := aNamesMap[a]; ok {
 		return m.getNameInLang(lang)
@@ -43,7 +39,7 @@ func AValueOf(a metric.AvailabilityImpact, lang language.Tag) string {
 	return unknownValueNameMap.getNameInLang(lang)
 }
 
-/* Copyright 2018-2022 Spiegel
+/* Copyright 2018-2023 Spiegel
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.

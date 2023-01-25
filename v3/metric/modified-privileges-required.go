@@ -4,12 +4,13 @@ import (
 	"strings"
 )
 
-//ModifiedPrivilegesRequired is metric type for Base Metrics
+// ModifiedPrivilegesRequired is metric type for Base Metrics
 type ModifiedPrivilegesRequired int
 
-//Constant of ModifiedPrivilegesRequired result
+// Constant of ModifiedPrivilegesRequired result
 const (
-	ModifiedPrivilegesRequiredNotDefined ModifiedPrivilegesRequired = iota
+	ModifiedPrivilegesRequiredInvalid ModifiedPrivilegesRequired = iota
+	ModifiedPrivilegesRequiredNotDefined
 	ModifiedPrivilegesRequiredHigh
 	ModifiedPrivilegesRequiredLow
 	ModifiedPrivilegesRequiredNone
@@ -35,7 +36,7 @@ var ModifiedPrivilegesRequiredWithCValueMap = map[ModifiedPrivilegesRequired]flo
 	ModifiedPrivilegesRequiredNone:       0.85,
 }
 
-//GetModifiedPrivilegesRequired returns result of ModifiedPrivilegesRequired metric
+// GetModifiedPrivilegesRequired returns result of ModifiedPrivilegesRequired metric
 func GetModifiedPrivilegesRequired(s string) ModifiedPrivilegesRequired {
 	s = strings.ToUpper(s)
 	for k, v := range ModifiedPrivilegesRequiredMap {
@@ -43,7 +44,7 @@ func GetModifiedPrivilegesRequired(s string) ModifiedPrivilegesRequired {
 			return k
 		}
 	}
-	return ModifiedPrivilegesRequiredNotDefined
+	return ModifiedPrivilegesRequiredInvalid
 }
 
 func (mpr ModifiedPrivilegesRequired) String() string {
@@ -53,7 +54,7 @@ func (mpr ModifiedPrivilegesRequired) String() string {
 	return ""
 }
 
-//Value returns value of ModifiedPrivilegesRequired metric
+// Value returns value of ModifiedPrivilegesRequired metric
 func (mpr ModifiedPrivilegesRequired) Value(ms ModifiedScope, s Scope, pr PrivilegesRequired) float64 {
 	var m map[ModifiedPrivilegesRequired]float64
 	if mpr.String() == ModifiedPrivilegesRequiredNotDefined.String() {
@@ -90,8 +91,8 @@ func (mpr ModifiedPrivilegesRequired) Value(ms ModifiedScope, s Scope, pr Privil
 	return 0.0
 }
 
-//IsDefined returns false if undefined result value of metric
-func (mpr ModifiedPrivilegesRequired) IsDefined() bool {
+// IsDefined returns false if undefined result value of metric
+func (mpr ModifiedPrivilegesRequired) IsValid() bool {
 	_, ok := ModifiedPrivilegesRequiredWithCValueMap[mpr]
 	return ok
 }

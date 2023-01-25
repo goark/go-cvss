@@ -11,10 +11,6 @@ var (
 		language.Japanese: "攻撃元区分",
 	}
 	avNamesMap = map[metric.AttackVector]langNameMap{
-		metric.AttackVectorNotDefined: {
-			language.English:  "Not Defined",
-			language.Japanese: "未評価",
-		},
 		metric.AttackVectorPhysical: {
 			language.English:  "Physical",
 			language.Japanese: "物理",
@@ -34,12 +30,12 @@ var (
 	}
 )
 
-//AttackVector returns string instance name for display
+// AttackVector returns string instance name for display
 func AttackVector(lang language.Tag) string {
 	return avTitleMap.getNameInLang(lang)
 }
 
-//AVValueOf returns string name of value for display
+// AVValueOf returns string name of value for display
 func AVValueOf(av metric.AttackVector, lang language.Tag) string {
 	if m, ok := avNamesMap[av]; ok {
 		return m.getNameInLang(lang)
@@ -47,7 +43,7 @@ func AVValueOf(av metric.AttackVector, lang language.Tag) string {
 	return unknownValueNameMap.getNameInLang(lang)
 }
 
-/* Copyright 2018-2022 Spiegel
+/* Copyright 2018-2023 Spiegel
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
