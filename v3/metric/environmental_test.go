@@ -74,18 +74,33 @@ func TestEnvironmentalScore(t *testing.T) {
 	}
 }
 
+func TestEnvironmentalDecodeEncode(t *testing.T) {
+	testCases := []struct {
+		vector string
+		err    error
+	}{
+		{vector: "CVSS:3.1/AV:A/AC:H/PR:L/UI:N/S:C/C:L/I:H/A:L/E:P/RL:O/RC:U/CR:L/IR:M/AR:L/MAV:P/MAC:L/MPR:L/MUI:R/MS:C/MC:H/MI:H/MA:H", err: nil},
+	}
+
+	for _, tc := range testCases {
+		m, err := NewEnvironmental().Decode(tc.vector)
+		if !errors.Is(err, tc.err) {
+			t.Errorf("Decode(%s) = \"%+v\", want \"%v\".", tc.vector, err, tc.err)
+		}
+		if err == nil {
+			v, err := m.Encode()
+			if err != nil {
+				t.Errorf("Encode() = \"%+v\", want <nil>.", err)
+			}
+			if v != tc.vector {
+				t.Errorf("Encode() = \"%v\", want \"%v\".", v, tc.vector)
+			}
+			if m.String() != tc.vector {
+				t.Errorf("String() = \"%v\", want \"%v\".", m.String(), tc.vector)
+			}
+		}
+	}
+}
+
 /* Copyright 2022 thejohnbrown */
-/* Copyright 2023 Spiegel
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- * 	http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
+/* Copyright 2023 Spiegel */

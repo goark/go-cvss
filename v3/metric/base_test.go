@@ -77,6 +77,9 @@ func TestDecodeEncode(t *testing.T) {
 			if v != tc.vector {
 				t.Errorf("Encode() = \"%v\", want \"%v\".", v, tc.vector)
 			}
+			if m.String() != tc.vector {
+				t.Errorf("String() = \"%v\", want \"%v\".", m.String(), tc.vector)
+			}
 		}
 	}
 }

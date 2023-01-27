@@ -54,6 +54,34 @@ func TestTemporalScore(t *testing.T) {
 	}
 }
 
+func TestTemporalDecodeEncode(t *testing.T) {
+	testCases := []struct {
+		vector string
+		err    error
+	}{
+		{vector: "CVSS:3.1/AV:A/AC:H/PR:L/UI:N/S:C/C:L/I:H/A:L/E:P/RL:O/RC:U", err: nil},
+	}
+
+	for _, tc := range testCases {
+		m, err := NewTemporal().Decode(tc.vector)
+		if !errors.Is(err, tc.err) {
+			t.Errorf("Decode(%s) = \"%+v\", want \"%v\".", tc.vector, err, tc.err)
+		}
+		if err == nil {
+			v, err := m.Encode()
+			if err != nil {
+				t.Errorf("Encode() = \"%+v\", want <nil>.", err)
+			}
+			if v != tc.vector {
+				t.Errorf("Encode() = \"%v\", want \"%v\".", v, tc.vector)
+			}
+			if m.String() != tc.vector {
+				t.Errorf("String() = \"%v\", want \"%v\".", m.String(), tc.vector)
+			}
+		}
+	}
+}
+
 /* Contributed by Florent Viel, 2020 */
 /* Copyright 2018-2023 Spiegel
  *

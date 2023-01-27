@@ -158,6 +158,12 @@ func (bm *Base) Encode() (string, error) {
 	return r.String(), nil
 }
 
+// String is stringer method.
+func (bm *Base) String() string {
+	s, _ := bm.Encode()
+	return s
+}
+
 // Score returns score of Base metrics
 func (bm *Base) Score() float64 {
 	if err := bm.GetError(); err != nil {
