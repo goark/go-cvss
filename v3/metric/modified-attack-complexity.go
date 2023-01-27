@@ -1,7 +1,5 @@
 package metric
 
-import "strings"
-
 // ModifiedAttackComplexity is metric type for Base Metrics
 type ModifiedAttackComplexity int
 
@@ -27,7 +25,6 @@ var ModifiedAttackComplexityValueMap = map[ModifiedAttackComplexity]float64{
 
 // GetModifiedAttackComplexity returns result of ModifiedAttackComplexity metric
 func GetModifiedAttackComplexity(s string) ModifiedAttackComplexity {
-	s = strings.ToUpper(s)
 	for k, v := range ModifiedAttackComplexityMap {
 		if s == v {
 			return k

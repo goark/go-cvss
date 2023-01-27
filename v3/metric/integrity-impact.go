@@ -1,7 +1,5 @@
 package metric
 
-import "strings"
-
 // IntegrityImpact is metric type for Base Metrics
 type IntegrityImpact int
 
@@ -27,7 +25,6 @@ var integrityImpactValueMap = map[IntegrityImpact]float64{
 
 // GetIntegrityImpact returns result of IntegrityImpact metric
 func GetIntegrityImpact(s string) IntegrityImpact {
-	s = strings.ToUpper(s)
 	for k, v := range integrityImpactMap {
 		if s == v {
 			return k

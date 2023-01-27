@@ -1,7 +1,5 @@
 package metric
 
-import "strings"
-
 // Scope is metric type for Base Metrics
 type Scope int
 
@@ -19,7 +17,6 @@ var scopeMap = map[Scope]string{
 
 // GetScope returns result of Scope metric
 func GetScope(s string) Scope {
-	s = strings.ToUpper(s)
 	for k, v := range scopeMap {
 		if s == v {
 			return k

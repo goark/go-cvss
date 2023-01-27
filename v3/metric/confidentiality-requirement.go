@@ -1,7 +1,5 @@
 package metric
 
-import "strings"
-
 // ConfidentialityRequirement is metric type for Base Metrics
 type ConfidentialityRequirement int
 
@@ -30,7 +28,6 @@ var ConfidentialityRequirementValueMap = map[ConfidentialityRequirement]float64{
 
 // GetConfidentialityRequirement returns result of ConfidentalityRequirement metric
 func GetConfidentialityRequirement(s string) ConfidentialityRequirement {
-	s = strings.ToUpper(s)
 	for k, v := range ConfidentialityRequirementMap {
 		if s == v {
 			return k

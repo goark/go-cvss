@@ -1,7 +1,5 @@
 package metric
 
-import "strings"
-
 // ModifiedAttackVector is metric type for Base Metrics
 type ModifiedAttackVector int
 
@@ -33,7 +31,6 @@ var ModifiedAttackVectorValueMap = map[ModifiedAttackVector]float64{
 
 // GetModifiedAttackVector returns result of ModifiedAttackVector metric
 func GetModifiedAttackVector(s string) ModifiedAttackVector {
-	s = strings.ToUpper(s)
 	for k, v := range ModifiedAttackVectorMap {
 		if s == v {
 			return k

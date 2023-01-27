@@ -1,7 +1,5 @@
 package metric
 
-import "strings"
-
 // RemediationLevel is metric type for Temporal Metrics
 type RemediationLevel int
 
@@ -33,7 +31,6 @@ var remediationLevelValueMap = map[RemediationLevel]float64{
 
 // GetRemediationLevel returns result of RemediationLevel metric
 func GetRemediationLevel(s string) RemediationLevel {
-	s = strings.ToUpper(s)
 	for k, v := range remediationLevelMap {
 		if s == v {
 			return k

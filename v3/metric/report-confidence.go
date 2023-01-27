@@ -1,9 +1,5 @@
 package metric
 
-import (
-	"strings"
-)
-
 // ReportConfidence is metric type for Temporal Metrics
 type ReportConfidence int
 
@@ -32,7 +28,6 @@ var reportConfidenceValueMap = map[ReportConfidence]float64{
 
 // GetReportConfidence returns result of ReportConfidence metric
 func GetReportConfidence(s string) ReportConfidence {
-	s = strings.ToUpper(s)
 	for k, v := range reportConfidenceMap {
 		if s == v {
 			return k

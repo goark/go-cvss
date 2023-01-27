@@ -1,7 +1,5 @@
 package metric
 
-import "strings"
-
 // AvailabilityImpact is metric type for Base Metrics
 type AvailabilityImpact int
 
@@ -27,7 +25,6 @@ var availabilityImpactValueMap = map[AvailabilityImpact]float64{
 
 // GetAvailabilityImpact returns result of AvailabilityImpact metric
 func GetAvailabilityImpact(s string) AvailabilityImpact {
-	s = strings.ToUpper(s)
 	for k, v := range availabilityImpactMap {
 		if s == v {
 			return k

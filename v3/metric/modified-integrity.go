@@ -1,7 +1,5 @@
 package metric
 
-import "strings"
-
 // ModifiedIntegrityImpact is metric type for Base Metrics
 type ModifiedIntegrityImpact int
 
@@ -30,7 +28,6 @@ var ModifiedIntegrityImpactValueMap = map[ModifiedIntegrityImpact]float64{
 
 // GetModifiedIntegrityImpact returns result of ModifiedIntegrityImpact metric
 func GetModifiedIntegrityImpact(s string) ModifiedIntegrityImpact {
-	s = strings.ToUpper(s)
 	for k, v := range ModifiedIntegrityImpactMap {
 		if s == v {
 			return k

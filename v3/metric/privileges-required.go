@@ -1,7 +1,5 @@
 package metric
 
-import "strings"
-
 // PrivilegesRequired is metric type for Base Metrics
 type PrivilegesRequired int
 
@@ -32,7 +30,6 @@ var privilegesRequiredWithCValueMap = map[PrivilegesRequired]float64{
 
 // GetPrivilegesRequired returns result of PrivilegesRequired metric
 func GetPrivilegesRequired(s string) PrivilegesRequired {
-	s = strings.ToUpper(s)
 	for k, v := range privilegesRequiredMap {
 		if s == v {
 			return k

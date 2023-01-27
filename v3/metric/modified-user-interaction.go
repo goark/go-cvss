@@ -1,7 +1,5 @@
 package metric
 
-import "strings"
-
 // ModifiedUserInteraction is metric type for Base Metrics
 type ModifiedUserInteraction int
 
@@ -27,7 +25,6 @@ var ModifiedUserInteractionValueMap = map[ModifiedUserInteraction]float64{
 
 // GetModifiedUserInteraction returns result of ModifiedUserInteraction metric
 func GetModifiedUserInteraction(s string) ModifiedUserInteraction {
-	s = strings.ToUpper(s)
 	for k, v := range ModifiedUserInteractionMap {
 		if s == v {
 			return k

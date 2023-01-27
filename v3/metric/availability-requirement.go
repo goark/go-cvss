@@ -1,7 +1,5 @@
 package metric
 
-import "strings"
-
 // AvailabilityRequirement is metric type for Base Metrics
 type AvailabilityRequirement int
 
@@ -30,7 +28,6 @@ var AvailabilityRequirementValueMap = map[AvailabilityRequirement]float64{
 
 // GetAvailabilityRequirement returns result of AvailabilityRequirement metric
 func GetAvailabilityRequirement(s string) AvailabilityRequirement {
-	s = strings.ToUpper(s)
 	for k, v := range AvailabilityRequirementMap {
 		if s == v {
 			return k

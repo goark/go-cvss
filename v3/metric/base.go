@@ -75,7 +75,7 @@ func (bm *Base) decodeOne(str string) error {
 	if len(m) != 2 || len(m[0]) == 0 || len(m[1]) == 0 {
 		return errs.Wrap(cvsserr.ErrInvalidVector, errs.WithContext("metric", str))
 	}
-	name := strings.ToUpper(m[0])
+	name := m[0]
 	if bm.names[name] {
 		return errs.Wrap(cvsserr.ErrSameMetric, errs.WithContext("metric", str))
 	}

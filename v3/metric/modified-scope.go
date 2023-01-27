@@ -1,7 +1,5 @@
 package metric
 
-import "strings"
-
 // ModifiedScope is metric type for Base Metrics
 type ModifiedScope int
 
@@ -21,7 +19,6 @@ var ModifiedScopeValueMap = map[ModifiedScope]string{
 
 // GetModifiedScope returns result of ModifiedScope metric
 func GetModifiedScope(s string) ModifiedScope {
-	s = strings.ToUpper(s)
 	for k, v := range ModifiedScopeValueMap {
 		if s == v {
 			return k
