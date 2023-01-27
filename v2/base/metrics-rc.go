@@ -1,13 +1,12 @@
 package base
 
-import "strings"
-
 // ReportConfidence is metric type for Temporal Metrics
 type ReportConfidence int
 
 // Constant of ReportConfidence result
 const (
-	ReportConfidenceNotDefined ReportConfidence = iota
+	ReportConfidenceInvalid ReportConfidence = iota
+	ReportConfidenceNotDefined
 	ReportConfidenceUnconfirmed
 	ReportConfidenceUncorroborated
 	ReportConfidenceConfirmed
@@ -29,13 +28,12 @@ var reportConfidenceValueMap = map[ReportConfidence]float64{
 
 // GetReportConfidence returns result of ReportConfidence metric
 func GetReportConfidence(s string) ReportConfidence {
-	s = strings.ToUpper(s)
 	for k, v := range reportConfidenceMap {
 		if s == v {
 			return k
 		}
 	}
-	return ReportConfidenceNotDefined
+	return ReportConfidenceInvalid
 }
 
 func (ai ReportConfidence) String() string {
@@ -53,9 +51,15 @@ func (ai ReportConfidence) Value() float64 {
 	return 1
 }
 
+// IsValid returns false if invalid result value of metric
+func (ai ReportConfidence) IsValid() bool {
+	return ai != ReportConfidenceInvalid
+}
+
 // IsDefined returns false if undefined result value of metric
 func (ai ReportConfidence) IsDefined() bool {
-	return ai != ReportConfidenceNotDefined
+	return ai.IsValid() && ai != ReportConfidenceNotDefined
 }
 
 /* Copyright 2022 luxifer */
+/* Contributed by Spiegel, 2023 */

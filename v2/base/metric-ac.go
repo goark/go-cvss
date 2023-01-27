@@ -1,7 +1,5 @@
 package base
 
-import "strings"
-
 // AccessComplexity is metric type for Base Metrics
 type AccessComplexity int
 
@@ -27,7 +25,6 @@ var accessComplexityValueMap = map[AccessComplexity]float64{
 
 // GetAccessComplexity returns result of AccessComplexity metric
 func GetAccessComplexity(s string) AccessComplexity {
-	s = strings.ToUpper(s)
 	for k, v := range accessComplexityMap {
 		if s == v {
 			return k
@@ -57,3 +54,4 @@ func (ac AccessComplexity) IsDefined() bool {
 }
 
 /* Copyright 2022 luxifer */
+/* Contributed by Spiegel, 2023 */

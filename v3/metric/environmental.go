@@ -262,4 +262,4 @@ func (em *Environmental) TemporalMetrics() *Temporal {
 }
 
 /* Copyright 2022 thejohnbrown */
-/* Copyright 2023 Spiegel */
+/* Contributed by Spiegel, 2023 */

@@ -1,7 +1,5 @@
 package base
 
-import "strings"
-
 // AccessVector is metric type for Base Metrics
 type AccessVector int
 
@@ -27,7 +25,6 @@ var accessVectorValueMap = map[AccessVector]float64{
 
 // GetAccessVector returns result of AccessVector metric
 func GetAccessVector(s string) AccessVector {
-	s = strings.ToUpper(s)
 	for k, v := range accessVectorMap {
 		if s == v {
 			return k
@@ -57,3 +54,4 @@ func (av AccessVector) IsDefined() bool {
 }
 
 /* Copyright 2022 luxifer */
+/* Contributed by Spiegel, 2023 */

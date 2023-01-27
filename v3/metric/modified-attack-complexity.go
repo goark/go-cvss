@@ -62,3 +62,4 @@ func (mac ModifiedAttackComplexity) IsValid() bool {
 }
 
 /* Copyright 2022 thejohnbrown */
+/* Contributed by Spiegel, 2023 */

@@ -439,4 +439,25 @@ func TestDecode(t *testing.T) {
 	}
 }
 
+func TestEncode(t *testing.T) {
+	tests := []struct {
+		name   string
+		vector string
+	}{
+		{name: "CVE-2018-7846", vector: "AV:N/AC:L/Au:N/C:N/I:N/A:C/E:POC/RL:TF/RC:C"},
+		{name: "CVE-2020-7477", vector: "AV:N/AC:L/Au:S/C:N/I:N/A:P"},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			m, err := Decode(tt.vector)
+			if err != nil {
+				t.Error(err)
+			} else if m.String() != tt.vector {
+				t.Errorf("String() = %v, want %v.", m.String(), tt.vector)
+			}
+		})
+	}
+}
+
 /* Copyright 2022 luxifer */

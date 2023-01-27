@@ -1,13 +1,12 @@
 package base
 
-import "strings"
-
 // RemediationLevel is metric type for Temporal Metrics
 type RemediationLevel int
 
 // Constant of RemediationLevel result
 const (
-	RemediationLevelNotDefined RemediationLevel = iota
+	RemediationLevelInvalid RemediationLevel = iota
+	RemediationLevelNotDefined
 	RemediationLevelOfficialFix
 	RemediationLevelTemporaryFix
 	RemediationLevelWorkaround
@@ -32,13 +31,12 @@ var remediationLevelValueMap = map[RemediationLevel]float64{
 
 // GetRemediationLevel returns result of RemediationLevel metric
 func GetRemediationLevel(s string) RemediationLevel {
-	s = strings.ToUpper(s)
 	for k, v := range remediationLevelMap {
 		if s == v {
 			return k
 		}
 	}
-	return RemediationLevelNotDefined
+	return RemediationLevelInvalid
 }
 
 func (ai RemediationLevel) String() string {
@@ -56,9 +54,15 @@ func (ai RemediationLevel) Value() float64 {
 	return 1
 }
 
+// IsValid returns false if invalid result value of metric
+func (ai RemediationLevel) IsValid() bool {
+	return ai != RemediationLevelInvalid
+}
+
 // IsDefined returns false if undefined result value of metric
 func (ai RemediationLevel) IsDefined() bool {
-	return ai != RemediationLevelNotDefined
+	return ai.IsValid() && ai != RemediationLevelNotDefined
 }
 
 /* Copyright 2022 luxifer */
+/* Contributed by Spiegel, 2023 */
