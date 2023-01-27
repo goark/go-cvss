@@ -41,3 +41,4 @@ func (msc ModifiedScope) IsValid() bool {
 }
 
 /* Copyright 2022 thejohnbrown */
+/* Contributed by Spiegel, 2023 */

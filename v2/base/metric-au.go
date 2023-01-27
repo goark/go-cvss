@@ -1,7 +1,5 @@
 package base
 
-import "strings"
-
 // Authentication is metric type for Base Metrics
 type Authentication int
 
@@ -27,7 +25,6 @@ var authenticationValueMap = map[Authentication]float64{
 
 // GetAuthentication returns result of Authentication metric
 func GetAuthentication(s string) Authentication {
-	s = strings.ToUpper(s)
 	for k, v := range authenticationMap {
 		if s == v {
 			return k
@@ -57,3 +54,4 @@ func (av Authentication) IsDefined() bool {
 }
 
 /* Copyright 2022 luxifer */
+/* Contributed by Spiegel, 2023 */

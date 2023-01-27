@@ -11,29 +11,31 @@ import (
 
 // Metrics is Base Metrics for CVSSv2
 type Metrics struct {
-	AV AccessVector
-	AC AccessComplexity
-	Au Authentication
-	C  ConfidentialityImpact
-	I  IntegrityImpact
-	A  AvailabilityImpact
-	E  Exploitability
-	RL RemediationLevel
-	RC ReportConfidence
+	AV    AccessVector
+	AC    AccessComplexity
+	Au    Authentication
+	C     ConfidentialityImpact
+	I     IntegrityImpact
+	A     AvailabilityImpact
+	E     Exploitability
+	RL    RemediationLevel
+	RC    ReportConfidence
+	names map[string]bool
 }
 
 // NewMetrics returns Metrics instance
 func NewMetrics() *Metrics {
 	return &Metrics{
-		AV: AccessVectorUnknown,
-		AC: AccessComplexityUnknown,
-		Au: AuthenticationUnknown,
-		C:  ConfidentialityImpactUnknown,
-		I:  IntegrityImpactUnknown,
-		A:  AvailabilityImpactUnknown,
-		E:  ExploitabilityNotDefined,
-		RL: RemediationLevelNotDefined,
-		RC: ReportConfidenceNotDefined,
+		AV:    AccessVectorUnknown,
+		AC:    AccessComplexityUnknown,
+		Au:    AuthenticationUnknown,
+		C:     ConfidentialityImpactUnknown,
+		I:     IntegrityImpactUnknown,
+		A:     AvailabilityImpactUnknown,
+		E:     ExploitabilityNotDefined,
+		RL:    RemediationLevelNotDefined,
+		RC:    ReportConfidenceNotDefined,
+		names: map[string]bool{},
 	}
 }
 
@@ -50,19 +52,41 @@ func Decode(vector string) (*Metrics, error) {
 		if len(metric) != 2 || len(metric[0]) == 0 || len(metric[1]) == 0 {
 			return nil, errs.Wrap(cvsserr.ErrInvalidVector, errs.WithContext("vector", vector))
 		}
+		name := metric[0]
+		if metrics.names[name] {
+			return nil, errs.Wrap(cvsserr.ErrSameMetric, errs.WithContext("metric", metric))
+		}
 		switch strings.ToUpper(metric[0]) {
 		case "AV": // Access Vector
 			metrics.AV = GetAccessVector(metric[1])
+			if metrics.AV == AccessVectorUnknown {
+				return nil, errs.Wrap(cvsserr.ErrInvalidValue, errs.WithContext("metric", metric))
+			}
 		case "AC": // Access Complexity
 			metrics.AC = GetAccessComplexity(metric[1])
+			if metrics.AC == AccessComplexityUnknown {
+				return nil, errs.Wrap(cvsserr.ErrInvalidValue, errs.WithContext("metric", metric))
+			}
 		case "AU": // Authentication
 			metrics.Au = GetAuthentication(metric[1])
+			if metrics.Au == AuthenticationUnknown {
+				return nil, errs.Wrap(cvsserr.ErrInvalidValue, errs.WithContext("metric", metric))
+			}
 		case "C": // Confidentiality Impact
 			metrics.C = GetConfidentialityImpact(metric[1])
+			if metrics.C == ConfidentialityImpactUnknown {
+				return nil, errs.Wrap(cvsserr.ErrInvalidValue, errs.WithContext("metric", metric))
+			}
 		case "I": // Integrity Impact
 			metrics.I = GetIntegrityImpact(metric[1])
+			if metrics.I == IntegrityImpactUnknown {
+				return nil, errs.Wrap(cvsserr.ErrInvalidValue, errs.WithContext("metric", metric))
+			}
 		case "A": // Availability Impact
 			metrics.A = GetAvailabilityImpact(metric[1])
+			if metrics.A == AvailabilityImpactUnknown {
+				return nil, errs.Wrap(cvsserr.ErrInvalidValue, errs.WithContext("metric", metric))
+			}
 		case "E": // Exploitability
 			metrics.E = GetExploitability(metric[1])
 		case "RL": // RemediationLevel
@@ -72,6 +96,7 @@ func Decode(vector string) (*Metrics, error) {
 		default:
 			return nil, errs.Wrap(cvsserr.ErrInvalidVector, errs.WithContext("vector", value))
 		}
+		metrics.names[name] = true
 	}
 	return metrics, metrics.GetError()
 }
@@ -104,13 +129,19 @@ func (m *Metrics) Encode() (string, error) {
 	return r.String(), nil
 }
 
+// String is stringer method.
+func (m *Metrics) String() string {
+	s, _ := m.Encode()
+	return s
+}
+
 // GetError returns error instance if undefined metric
 func (m *Metrics) GetError() error {
 	if m == nil {
 		return errs.Wrap(cvsserr.ErrUndefinedMetric)
 	}
 	switch true {
-	case !m.AV.IsDefined(), !m.AC.IsDefined(), !m.Au.IsDefined(), !m.C.IsDefined(), !m.I.IsDefined(), !m.A.IsDefined():
+	case !m.AV.IsDefined(), !m.AC.IsDefined(), !m.Au.IsDefined(), !m.C.IsDefined(), !m.I.IsDefined(), !m.A.IsDefined(), !m.E.IsValid(), !m.RL.IsValid(), !m.RC.IsValid():
 		return errs.Wrap(cvsserr.ErrUndefinedMetric)
 	default:
 		return nil
@@ -154,17 +185,4 @@ func (m *Metrics) TemporalScore() float64 {
 }
 
 /* Copyright 2022 luxifer */
-/* Copyright 2023 Spiegel
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- * 	http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
+/* Contributed by Spiegel, 2023 */

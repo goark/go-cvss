@@ -1,7 +1,5 @@
 package base
 
-import "strings"
-
 // ConfidentialityImpact is metric type for Base Metrics
 type ConfidentialityImpact int
 
@@ -27,7 +25,6 @@ var confidentialityImpactValueMap = map[ConfidentialityImpact]float64{
 
 // GetConfidentialityImpact returns result of ConfidentialityImpact metric
 func GetConfidentialityImpact(s string) ConfidentialityImpact {
-	s = strings.ToUpper(s)
 	for k, v := range confidentialityImpactMap {
 		if s == v {
 			return k
@@ -57,3 +54,4 @@ func (ci ConfidentialityImpact) IsDefined() bool {
 }
 
 /* Copyright 2022 luxifer */
+/* Contributed by Spiegel, 2023 */

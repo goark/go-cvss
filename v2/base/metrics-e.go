@@ -1,13 +1,12 @@
 package base
 
-import "strings"
-
 // Exploitability is metric type for Temporal Metrics
 type Exploitability int
 
 // Constant of Exploitability result
 const (
-	ExploitabilityNotDefined Exploitability = iota
+	ExploitabilityInvalid Exploitability = iota
+	ExploitabilityNotDefined
 	ExploitabilityUnproven
 	ExploitabilityProofOfConcept
 	ExploitabilityFunctional
@@ -32,13 +31,12 @@ var exploitabilityValueMap = map[Exploitability]float64{
 
 // GetExploitability returns result of Exploitability metric
 func GetExploitability(s string) Exploitability {
-	s = strings.ToUpper(s)
 	for k, v := range exploitabilityMap {
 		if s == v {
 			return k
 		}
 	}
-	return ExploitabilityNotDefined
+	return ExploitabilityInvalid
 }
 
 func (ai Exploitability) String() string {
@@ -56,9 +54,15 @@ func (ai Exploitability) Value() float64 {
 	return 1
 }
 
+// IsValid returns false if invalid result value of metric
+func (ai Exploitability) IsValid() bool {
+	return ai != ExploitabilityInvalid
+}
+
 // IsDefined returns false if undefined result value of metric
 func (ai Exploitability) IsDefined() bool {
-	return ai != ExploitabilityNotDefined
+	return ai.IsValid() && ai != ExploitabilityNotDefined
 }
 
 /* Copyright 2022 luxifer */
+/* Contributed by Spiegel, 2023 */

@@ -103,4 +103,4 @@ func TestEnvironmentalDecodeEncode(t *testing.T) {
 }
 
 /* Copyright 2022 thejohnbrown */
-/* Copyright 2023 Spiegel */
+/* Contributed by Spiegel, 2023 */

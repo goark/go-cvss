@@ -159,4 +159,4 @@ func (tm *Temporal) BaseMetrics() *Base {
 }
 
 /* Copyright by Florent Viel, 2020 */
-/* Copyright 2020-2023 Spiegel */
+/* Contributed by Spiegel, 2020-2023 */
