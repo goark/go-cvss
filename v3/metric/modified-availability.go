@@ -1,7 +1,5 @@
 package metric
 
-import "strings"
-
 // ModifiedAvailabilityImpact is metric type for Base Metrics
 type ModifiedAvailabilityImpact int
 
@@ -30,7 +28,6 @@ var ModifiedAvailabilityImpactValueMap = map[ModifiedAvailabilityImpact]float64{
 
 // GetModifiedAvailabilityImpact returns result of ModifiedAvailabilityImpact metric
 func GetModifiedAvailabilityImpact(s string) ModifiedAvailabilityImpact {
-	s = strings.ToUpper(s)
 	for k, v := range ModifiedAvailabilityImpactMap {
 		if s == v {
 			return k

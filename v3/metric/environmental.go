@@ -25,7 +25,7 @@ type Environmental struct {
 	names map[string]bool
 }
 
-// NewBase returns Base Metrics instance
+// NewBase returns Environmental Metrics instance
 func NewEnvironmental() *Environmental {
 	return &Environmental{
 		Temporal: NewTemporal(),
@@ -88,7 +88,7 @@ func (em *Environmental) decodeOne(str string) error {
 	if len(m) != 2 || len(m[0]) == 0 || len(m[1]) == 0 {
 		return errs.Wrap(cvsserr.ErrInvalidVector, errs.WithContext("metric", str))
 	}
-	name := strings.ToUpper(m[0])
+	name := m[0]
 	if em.names[name] {
 		return errs.Wrap(cvsserr.ErrSameMetric, errs.WithContext("metric", str))
 	}
@@ -177,12 +177,12 @@ func (em *Environmental) Encode() (string, error) {
 	if err := em.GetError(); err != nil {
 		return "", errs.Wrap(err)
 	}
-	bs, err := em.Base.Encode()
+	bs, err := em.Temporal.Encode()
 	if err != nil {
 		return "", errs.Wrap(err)
 	}
 	r := &strings.Builder{}
-	r.WriteString(bs)                        //Vector of Base metrics
+	r.WriteString(bs)                        //Vector of Temporal metrics
 	r.WriteString("/CR:" + em.CR.String())   //Exploitability
 	r.WriteString("/IR:" + em.IR.String())   //Remediation Level
 	r.WriteString("/AR:" + em.AR.String())   //Report Confidence
@@ -197,8 +197,13 @@ func (em *Environmental) Encode() (string, error) {
 	return r.String(), nil
 }
 
-//Score returns score of Environmental metrics
+// String is stringer method.
+func (em *Environmental) String() string {
+	s, _ := em.Encode()
+	return s
+}
 
+// Score returns score of Environmental metrics
 func (em *Environmental) Score() float64 {
 	if err := em.GetError(); err != nil {
 		return 0.0
@@ -257,17 +262,4 @@ func (em *Environmental) TemporalMetrics() *Temporal {
 }
 
 /* Copyright 2022 thejohnbrown */
-/* Copyright 2023 Spiegel
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- * 	http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
+/* Copyright 2023 Spiegel */

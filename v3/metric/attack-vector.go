@@ -1,7 +1,5 @@
 package metric
 
-import "strings"
-
 // AttackVector is metric type for Base Metrics
 type AttackVector int
 
@@ -30,7 +28,6 @@ var attackVectorValueMap = map[AttackVector]float64{
 
 // GetAttackVector returns result of AttackVector metric
 func GetAttackVector(s string) AttackVector {
-	s = strings.ToUpper(s)
 	for k, v := range attackVectorMap {
 		if s == v {
 			return k

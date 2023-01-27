@@ -219,7 +219,7 @@ const (
 | {{ .MAName }}  | {{ .MAValue }} |
 `
 	tstEnvResMd = `- CVSS Version 3.1
-- Vector: CVSS:3.1/AV:A/AC:H/PR:L/UI:N/S:C/C:L/I:H/A:L/CR:L/IR:M/AR:L/MAV:P/MAC:L/MPR:L/MUI:R/MS:C/MC:H/MI:H/MA:H
+- Vector: CVSS:3.1/AV:A/AC:H/PR:L/UI:N/S:C/C:L/I:H/A:L/E:P/RL:O/RC:U/CR:L/IR:M/AR:L/MAV:P/MAC:L/MPR:L/MUI:R/MS:C/MC:H/MI:H/MA:H
 
 ## Base Metrics
 
@@ -301,7 +301,7 @@ func TestEnvironmentalReport(t *testing.T) {
 	}
 }
 
-/* Copyright 2018-2022 Spiegel
+/* Copyright 2018-2023 Spiegel
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.

@@ -1,9 +1,5 @@
 package metric
 
-import (
-	"strings"
-)
-
 // ModifiedPrivilegesRequired is metric type for Base Metrics
 type ModifiedPrivilegesRequired int
 
@@ -38,7 +34,6 @@ var ModifiedPrivilegesRequiredWithCValueMap = map[ModifiedPrivilegesRequired]flo
 
 // GetModifiedPrivilegesRequired returns result of ModifiedPrivilegesRequired metric
 func GetModifiedPrivilegesRequired(s string) ModifiedPrivilegesRequired {
-	s = strings.ToUpper(s)
 	for k, v := range ModifiedPrivilegesRequiredMap {
 		if s == v {
 			return k

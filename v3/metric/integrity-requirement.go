@@ -1,7 +1,5 @@
 package metric
 
-import "strings"
-
 // IntegrityRequirement is metric type for Base Metrics
 type IntegrityRequirement int
 
@@ -30,7 +28,6 @@ var IntegrityRequirementValueMap = map[IntegrityRequirement]float64{
 
 // GetIntegrityRequirement returns result of ConfidentalityRequirement metric
 func GetIntegrityRequirement(s string) IntegrityRequirement {
-	s = strings.ToUpper(s)
 	for k, v := range IntegrityRequirementMap {
 		if s == v {
 			return k

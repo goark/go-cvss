@@ -1,7 +1,5 @@
 package metric
 
-import "strings"
-
 // UserInteraction is metric type for Base Metrics
 type UserInteraction int
 
@@ -24,7 +22,6 @@ var userInteractionValueMap = map[UserInteraction]float64{
 
 // GetUserInteraction returns result of UserInteraction metric
 func GetUserInteraction(s string) UserInteraction {
-	s = strings.ToUpper(s)
 	for k, v := range userInteractionMap {
 		if s == v {
 			return k

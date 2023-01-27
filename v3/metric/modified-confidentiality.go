@@ -1,7 +1,5 @@
 package metric
 
-import "strings"
-
 // ModifiedConfidentialityImpact is metric type for Base Metrics
 type ModifiedConfidentialityImpact int
 
@@ -30,7 +28,6 @@ var ModifiedConfidentialityImpactValueMap = map[ModifiedConfidentialityImpact]fl
 
 // GetModifiedConfidentialityImpact returns result of ModifiedConfidentialityImpact metric
 func GetModifiedConfidentialityImpact(s string) ModifiedConfidentialityImpact {
-	s = strings.ToUpper(s)
 	for k, v := range ModifiedConfidentialityImpactMap {
 		if s == v {
 			return k
