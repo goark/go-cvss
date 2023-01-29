@@ -90,51 +90,51 @@ func TestScore(t *testing.T) {
 		score    float64
 		severity Severity
 	}{
-		// {vector: "CVSS:3.0/AV:P/AC:H/PR:H/UI:R/S:U/C:N/I:N/A:X", score: 0.0, severity: SeverityNone}, //error
-		// //CVSSv3.0
-		// {vector: "CVSS:3.0/AV:P/AC:H/PR:H/UI:R/S:U/C:N/I:N/A:N", score: 0.0, severity: SeverityNone},     //Zero metrics
-		// {vector: "CVSS:3.0/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:N/A:N", score: 7.5, severity: SeverityHigh},     //CVE-2015-8252
-		// {vector: "CVSS:3.0/AV:N/AC:L/PR:N/UI:R/S:C/C:L/I:L/A:N", score: 6.1, severity: SeverityMedium},   //CVE-2013-1937
-		// {vector: "CVSS:3.0/AV:N/AC:L/PR:L/UI:N/S:C/C:L/I:L/A:N", score: 6.4, severity: SeverityMedium},   //CVE-2013-0375
-		// {vector: "CVSS:3.0/AV:N/AC:H/PR:N/UI:R/S:U/C:L/I:N/A:N", score: 3.1, severity: SeverityLow},      //CVE-2014-3566
-		// {vector: "CVSS:3.0/AV:N/AC:L/PR:L/UI:N/S:C/C:H/I:H/A:H", score: 9.9, severity: SeverityCritical}, //CVE-2012-1516
-		// {vector: "CVSS:3.0/AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H", score: 8.8, severity: SeverityHigh},     //CVE-2012-0384
-		// {vector: "CVSS:3.0/AV:L/AC:L/PR:N/UI:R/S:U/C:H/I:H/A:H", score: 7.8, severity: SeverityHigh},     //CVE-2015-1098
-		// {vector: "CVSS:3.0/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:N/A:N", score: 7.5, severity: SeverityHigh},     //CVE-2014-0160
-		// {vector: "CVSS:3.0/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H", score: 9.8, severity: SeverityCritical}, //CVE-2014-6271
-		// {vector: "CVSS:3.0/AV:N/AC:H/PR:N/UI:N/S:C/C:N/I:H/A:N", score: 6.8, severity: SeverityMedium},   //CVE-2008-1447
-		// {vector: "CVSS:3.0/AV:P/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H", score: 6.8, severity: SeverityMedium},   //CVE-2014-2005
-		// {vector: "CVSS:3.0/AV:N/AC:L/PR:N/UI:N/S:C/C:L/I:N/A:N", score: 5.8, severity: SeverityMedium},   //CVE-2010-0467
-		// {vector: "CVSS:3.0/AV:N/AC:L/PR:N/UI:N/S:C/C:N/I:L/A:N", score: 5.8, severity: SeverityMedium},   //CVE-2012-1342
-		// {vector: "CVSS:3.0/AV:N/AC:L/PR:L/UI:R/S:C/C:L/I:L/A:N", score: 5.4, severity: SeverityMedium},   //CVE-2014-9253
-		// {vector: "CVSS:3.0/AV:L/AC:L/PR:N/UI:R/S:U/C:H/I:H/A:H", score: 7.8, severity: SeverityHigh},     //CVE-2009-0658
-		// {vector: "CVSS:3.0/AV:A/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H", score: 8.8, severity: SeverityHigh},     //CVE-2011-1265
-		// {vector: "CVSS:3.0/AV:P/AC:L/PR:N/UI:N/S:U/C:N/I:H/A:N", score: 4.6, severity: SeverityMedium},   //CVE-2014-2019
-		// {vector: "CVSS:3.0/AV:N/AC:L/PR:N/UI:R/S:U/C:H/I:H/A:H", score: 8.8, severity: SeverityHigh},     //CVE-2015-0970
-		// {vector: "CVSS:3.0/AV:N/AC:H/PR:N/UI:N/S:U/C:H/I:H/A:N", score: 7.4, severity: SeverityHigh},     //CVE-2014-0224
-		// {vector: "CVSS:3.0/AV:N/AC:L/PR:N/UI:R/S:C/C:H/I:H/A:H", score: 9.6, severity: SeverityCritical}, //CVE-2012-5376
-		// //CVSSv3.1
-		// {vector: "CVSS:3.1/AV:P/AC:H/PR:H/UI:R/S:U/C:N/I:N/A:N", score: 0.0, severity: SeverityNone},     //Zero metrics
-		// {vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:N/A:N", score: 7.5, severity: SeverityHigh},     //CVE-2015-8252
-		// {vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:C/C:L/I:L/A:N", score: 6.1, severity: SeverityMedium},   //CVE-2013-1937
-		// {vector: "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:C/C:L/I:L/A:N", score: 6.4, severity: SeverityMedium},   //CVE-2013-0375
-		// {vector: "CVSS:3.1/AV:N/AC:H/PR:N/UI:R/S:U/C:L/I:N/A:N", score: 3.1, severity: SeverityLow},      //CVE-2014-3566
-		// {vector: "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:C/C:H/I:H/A:H", score: 9.9, severity: SeverityCritical}, //CVE-2012-1516
-		// {vector: "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H", score: 8.8, severity: SeverityHigh},     //CVE-2012-0384
-		// {vector: "CVSS:3.1/AV:L/AC:L/PR:N/UI:R/S:U/C:H/I:H/A:H", score: 7.8, severity: SeverityHigh},     //CVE-2015-1098
-		// {vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:N/A:N", score: 7.5, severity: SeverityHigh},     //CVE-2014-0160
-		// {vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H", score: 9.8, severity: SeverityCritical}, //CVE-2014-6271
-		// {vector: "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:C/C:N/I:H/A:N", score: 6.8, severity: SeverityMedium},   //CVE-2008-1447
-		// {vector: "CVSS:3.1/AV:P/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H", score: 6.8, severity: SeverityMedium},   //CVE-2014-2005
-		// {vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:C/C:L/I:N/A:N", score: 5.8, severity: SeverityMedium},   //CVE-2010-0467
-		// {vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:C/C:N/I:L/A:N", score: 5.8, severity: SeverityMedium},   //CVE-2012-1342
-		// {vector: "CVSS:3.1/AV:N/AC:L/PR:L/UI:R/S:C/C:L/I:L/A:N", score: 5.4, severity: SeverityMedium},   //CVE-2014-9253
-		// {vector: "CVSS:3.1/AV:L/AC:L/PR:N/UI:R/S:U/C:H/I:H/A:H", score: 7.8, severity: SeverityHigh},     //CVE-2009-0658
-		// {vector: "CVSS:3.1/AV:A/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H", score: 8.8, severity: SeverityHigh},     //CVE-2011-1265
-		// {vector: "CVSS:3.1/AV:P/AC:L/PR:N/UI:N/S:U/C:N/I:H/A:N", score: 4.6, severity: SeverityMedium},   //CVE-2014-2019
-		// {vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:H/I:H/A:H", score: 8.8, severity: SeverityHigh},     //CVE-2015-0970
-		// {vector: "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:H/I:H/A:N", score: 7.4, severity: SeverityHigh},     //CVE-2014-0224
-		// {vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:C/C:H/I:H/A:H", score: 9.6, severity: SeverityCritical}, //CVE-2012-5376
+		{vector: "CVSS:3.0/AV:P/AC:H/PR:H/UI:R/S:U/C:N/I:N/A:X", score: 0.0, severity: SeverityNone}, //error
+		//CVSSv3.0
+		{vector: "CVSS:3.0/AV:P/AC:H/PR:H/UI:R/S:U/C:N/I:N/A:N", score: 0.0, severity: SeverityNone},     //Zero metrics
+		{vector: "CVSS:3.0/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:N/A:N", score: 7.5, severity: SeverityHigh},     //CVE-2015-8252
+		{vector: "CVSS:3.0/AV:N/AC:L/PR:N/UI:R/S:C/C:L/I:L/A:N", score: 6.1, severity: SeverityMedium},   //CVE-2013-1937
+		{vector: "CVSS:3.0/AV:N/AC:L/PR:L/UI:N/S:C/C:L/I:L/A:N", score: 6.4, severity: SeverityMedium},   //CVE-2013-0375
+		{vector: "CVSS:3.0/AV:N/AC:H/PR:N/UI:R/S:U/C:L/I:N/A:N", score: 3.1, severity: SeverityLow},      //CVE-2014-3566
+		{vector: "CVSS:3.0/AV:N/AC:L/PR:L/UI:N/S:C/C:H/I:H/A:H", score: 9.9, severity: SeverityCritical}, //CVE-2012-1516
+		{vector: "CVSS:3.0/AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H", score: 8.8, severity: SeverityHigh},     //CVE-2012-0384
+		{vector: "CVSS:3.0/AV:L/AC:L/PR:N/UI:R/S:U/C:H/I:H/A:H", score: 7.8, severity: SeverityHigh},     //CVE-2015-1098
+		{vector: "CVSS:3.0/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:N/A:N", score: 7.5, severity: SeverityHigh},     //CVE-2014-0160
+		{vector: "CVSS:3.0/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H", score: 9.8, severity: SeverityCritical}, //CVE-2014-6271
+		{vector: "CVSS:3.0/AV:N/AC:H/PR:N/UI:N/S:C/C:N/I:H/A:N", score: 6.8, severity: SeverityMedium},   //CVE-2008-1447
+		{vector: "CVSS:3.0/AV:P/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H", score: 6.8, severity: SeverityMedium},   //CVE-2014-2005
+		{vector: "CVSS:3.0/AV:N/AC:L/PR:N/UI:N/S:C/C:L/I:N/A:N", score: 5.8, severity: SeverityMedium},   //CVE-2010-0467
+		{vector: "CVSS:3.0/AV:N/AC:L/PR:N/UI:N/S:C/C:N/I:L/A:N", score: 5.8, severity: SeverityMedium},   //CVE-2012-1342
+		{vector: "CVSS:3.0/AV:N/AC:L/PR:L/UI:R/S:C/C:L/I:L/A:N", score: 5.4, severity: SeverityMedium},   //CVE-2014-9253
+		{vector: "CVSS:3.0/AV:L/AC:L/PR:N/UI:R/S:U/C:H/I:H/A:H", score: 7.8, severity: SeverityHigh},     //CVE-2009-0658
+		{vector: "CVSS:3.0/AV:A/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H", score: 8.8, severity: SeverityHigh},     //CVE-2011-1265
+		{vector: "CVSS:3.0/AV:P/AC:L/PR:N/UI:N/S:U/C:N/I:H/A:N", score: 4.6, severity: SeverityMedium},   //CVE-2014-2019
+		{vector: "CVSS:3.0/AV:N/AC:L/PR:N/UI:R/S:U/C:H/I:H/A:H", score: 8.8, severity: SeverityHigh},     //CVE-2015-0970
+		{vector: "CVSS:3.0/AV:N/AC:H/PR:N/UI:N/S:U/C:H/I:H/A:N", score: 7.4, severity: SeverityHigh},     //CVE-2014-0224
+		{vector: "CVSS:3.0/AV:N/AC:L/PR:N/UI:R/S:C/C:H/I:H/A:H", score: 9.6, severity: SeverityCritical}, //CVE-2012-5376
+		//CVSSv3.1
+		{vector: "CVSS:3.1/AV:P/AC:H/PR:H/UI:R/S:U/C:N/I:N/A:N", score: 0.0, severity: SeverityNone},     //Zero metrics
+		{vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:N/A:N", score: 7.5, severity: SeverityHigh},     //CVE-2015-8252
+		{vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:C/C:L/I:L/A:N", score: 6.1, severity: SeverityMedium},   //CVE-2013-1937
+		{vector: "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:C/C:L/I:L/A:N", score: 6.4, severity: SeverityMedium},   //CVE-2013-0375
+		{vector: "CVSS:3.1/AV:N/AC:H/PR:N/UI:R/S:U/C:L/I:N/A:N", score: 3.1, severity: SeverityLow},      //CVE-2014-3566
+		{vector: "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:C/C:H/I:H/A:H", score: 9.9, severity: SeverityCritical}, //CVE-2012-1516
+		{vector: "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H", score: 8.8, severity: SeverityHigh},     //CVE-2012-0384
+		{vector: "CVSS:3.1/AV:L/AC:L/PR:N/UI:R/S:U/C:H/I:H/A:H", score: 7.8, severity: SeverityHigh},     //CVE-2015-1098
+		{vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:N/A:N", score: 7.5, severity: SeverityHigh},     //CVE-2014-0160
+		{vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H", score: 9.8, severity: SeverityCritical}, //CVE-2014-6271
+		{vector: "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:C/C:N/I:H/A:N", score: 6.8, severity: SeverityMedium},   //CVE-2008-1447
+		{vector: "CVSS:3.1/AV:P/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H", score: 6.8, severity: SeverityMedium},   //CVE-2014-2005
+		{vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:C/C:L/I:N/A:N", score: 5.8, severity: SeverityMedium},   //CVE-2010-0467
+		{vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:C/C:N/I:L/A:N", score: 5.8, severity: SeverityMedium},   //CVE-2012-1342
+		{vector: "CVSS:3.1/AV:N/AC:L/PR:L/UI:R/S:C/C:L/I:L/A:N", score: 5.4, severity: SeverityMedium},   //CVE-2014-9253
+		{vector: "CVSS:3.1/AV:L/AC:L/PR:N/UI:R/S:U/C:H/I:H/A:H", score: 7.8, severity: SeverityHigh},     //CVE-2009-0658
+		{vector: "CVSS:3.1/AV:A/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H", score: 8.8, severity: SeverityHigh},     //CVE-2011-1265
+		{vector: "CVSS:3.1/AV:P/AC:L/PR:N/UI:N/S:U/C:N/I:H/A:N", score: 4.6, severity: SeverityMedium},   //CVE-2014-2019
+		{vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:H/I:H/A:H", score: 8.8, severity: SeverityHigh},     //CVE-2015-0970
+		{vector: "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:H/I:H/A:N", score: 7.4, severity: SeverityHigh},     //CVE-2014-0224
+		{vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:C/C:H/I:H/A:H", score: 9.6, severity: SeverityCritical}, //CVE-2012-5376
 
 		{vector: "CVSS:3.1/AV:A/AC:H/PR:L/UI:N/S:C/C:H/I:L/A:N", score: 6.5, severity: SeverityMedium}, //Issue #18
 	}
