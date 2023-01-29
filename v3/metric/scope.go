@@ -25,6 +25,11 @@ func GetScope(s string) Scope {
 	return ScopeUnknown
 }
 
+// IsChanged returns true if Scope value is ScopeChanged.
+func (sc Scope) IsChanged() bool {
+	return sc == ScopeChanged
+}
+
 func (sc Scope) String() string {
 	if s, ok := scopeMap[sc]; ok {
 		return s

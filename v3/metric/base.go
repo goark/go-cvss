@@ -170,23 +170,23 @@ func (bm *Base) Score() float64 {
 		return 0.0
 	}
 
+	changed := bm.S.IsChanged()
 	impact := 1.0 - (1-bm.C.Value())*(1-bm.I.Value())*(1-bm.A.Value())
-	if bm.S == ScopeUnchanged {
-		impact *= 6.42
-	} else {
+	if changed {
 		impact = 7.52*(impact-0.029) - 3.25*math.Pow(impact-0.02, 15.0)
+	} else {
+		impact *= 6.42
 	}
+	if impact <= 0 {
+		return 0.0
+	}
+
 	ease := 8.22 * bm.AV.Value() * bm.AC.Value() * bm.PR.Value(bm.S) * bm.UI.Value()
 
-	var score float64
-	if impact <= 0 {
-		score = 0.0
-	} else if bm.S == ScopeUnchanged {
-		score = roundUp(math.Min(impact+ease, 10))
-	} else {
-		score = roundUp(math.Min(1.08*(impact+ease), 10))
+	if changed {
+		return roundUp(math.Min(1.08*(impact+ease), 10))
 	}
-	return score
+	return roundUp(math.Min(impact+ease, 10))
 }
 
 // Severity returns severity by score of Base metrics

@@ -42,7 +42,7 @@ func (mac ModifiedAttackComplexity) String() string {
 
 // Value returns value of ModifiedAttackComplexity metric
 func (mac ModifiedAttackComplexity) Value(ac AttackComplexity) float64 {
-	if mac.String() == ModifiedAttackComplexityNotDefined.String() {
+	if mac == ModifiedAttackComplexityNotDefined {
 		if v, ok := attackComplexityValueMap[ac]; ok {
 			return v
 		}

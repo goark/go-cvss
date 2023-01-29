@@ -48,7 +48,7 @@ func (mav ModifiedAttackVector) String() string {
 
 // Value returns value of ModifiedAttackVector metric
 func (mav ModifiedAttackVector) Value(av AttackVector) float64 {
-	if mav.String() == ModifiedAttackVectorNotDefined.String() {
+	if mav == ModifiedAttackVectorNotDefined {
 		if v, ok := attackVectorValueMap[av]; ok {
 			return v
 		}
