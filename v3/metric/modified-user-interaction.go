@@ -42,7 +42,7 @@ func (mui ModifiedUserInteraction) String() string {
 
 // Value returns value of ModifiedUserInteraction metric
 func (mui ModifiedUserInteraction) Value(ui UserInteraction) float64 {
-	if mui.String() == ModifiedUserInteractionNotDefined.String() {
+	if mui == ModifiedUserInteractionNotDefined {
 		if v, ok := userInteractionValueMap[ui]; ok {
 			return v
 		}

@@ -27,6 +27,14 @@ func GetModifiedScope(s string) ModifiedScope {
 	return ModifiedScopeInvalid
 }
 
+// IsChanged returns true if ModifiedScope value is ModifiedScopeChanged.
+func (msc ModifiedScope) IsChanged(sc Scope) bool {
+	if msc == ModifiedScopeNotDefined {
+		return sc.IsChanged()
+	}
+	return msc == ModifiedScopeChanged
+}
+
 func (msc ModifiedScope) String() string {
 	if s, ok := ModifiedScopeValueMap[msc]; ok {
 		return s

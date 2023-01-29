@@ -208,37 +208,28 @@ func (em *Environmental) Score() float64 {
 	if err := em.GetError(); err != nil {
 		return 0.0
 	}
-	var score, ModifiedImpact float64
-	ModifiedImpactSubScore := math.Min(1-(1-em.CR.Value()*em.MC.Value(em.C))*(1-em.IR.Value()*em.MI.Value(em.I))*(1-em.AR.Value()*em.MA.Value(em.A)), 0.915)
-
-	if em.MS == ModifiedScopeUnchanged {
-		ModifiedImpact = 6.42 * ModifiedImpactSubScore
-	} else if em.MS == ModifiedScopeChanged {
-		ModifiedImpact = 7.52*(ModifiedImpactSubScore-0.029) - 3.25*math.Pow(ModifiedImpactSubScore*0.9731-0.02, 13)
-	} else {
-		if em.S == ScopeUnchanged {
-			ModifiedImpact = 6.42 * ModifiedImpactSubScore
-		} else {
+	ModifiedImpactSubScore := math.Min(1-((1-em.CR.Value()*em.MC.Value(em.C))*(1-em.IR.Value()*em.MI.Value(em.I))*(1-em.AR.Value()*em.MA.Value(em.A))), 0.915)
+	changes := em.MS.IsChanged(em.S)
+	var ModifiedImpact float64
+	if changes {
+		if em.Ver == V3_1 {
 			ModifiedImpact = 7.52*(ModifiedImpactSubScore-0.029) - 3.25*math.Pow(ModifiedImpactSubScore*0.9731-0.02, 13)
+		} else {
+			ModifiedImpact = 7.52*(ModifiedImpactSubScore-0.029) - 3.25*math.Pow(ModifiedImpactSubScore-0.02, 15)
 		}
+	} else {
+		ModifiedImpact = 6.42 * ModifiedImpactSubScore
+	}
+	if ModifiedImpact <= 0 {
+		return 0.0
 	}
 
 	ModifiedExploitability := 8.22 * em.MAV.Value(em.AV) * em.MAC.Value(em.AC) * em.MPR.Value(em.MS, em.S, em.PR) * em.MUI.Value(em.UI)
 
-	if ModifiedImpact <= 0 {
-		score = 0.0
-	} else if em.MS == ModifiedScopeUnchanged {
-		score = roundUp(roundUp(math.Min((ModifiedImpact+ModifiedExploitability), 10)) * em.E.Value() * em.RL.Value() * em.RC.Value())
-	} else if em.MS == ModifiedScopeChanged {
-		score = roundUp(roundUp(math.Min(1.08*(ModifiedImpact+ModifiedExploitability), 10)) * em.E.Value() * em.RL.Value() * em.RC.Value())
-	} else {
-		if em.S == ScopeUnchanged {
-			score = roundUp(roundUp(math.Min((ModifiedImpact+ModifiedExploitability), 10)) * em.E.Value() * em.RL.Value() * em.RC.Value())
-		} else {
-			score = roundUp(roundUp(math.Min(1.08*(ModifiedImpact+ModifiedExploitability), 10)) * em.E.Value() * em.RL.Value() * em.RC.Value())
-		}
+	if changes {
+		return roundUp(roundUp(math.Min(1.08*(ModifiedImpact+ModifiedExploitability), 10)) * em.E.Value() * em.RL.Value() * em.RC.Value())
 	}
-	return score
+	return roundUp(roundUp(math.Min((ModifiedImpact+ModifiedExploitability), 10)) * em.E.Value() * em.RL.Value() * em.RC.Value())
 }
 
 // Severity returns severity by score of Environmental metrics
