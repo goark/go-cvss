@@ -96,6 +96,7 @@ ref: [sample.go](https://github.com/goark/go-cvss/blob/master/sample/sample.go)
 
 ## Reference
 
+- [CVSS v2 Complete Documentation](https://www.first.org/cvss/v2/guide)
 - [CVSS v3.0 Specification Document](https://www.first.org/cvss/v3.0/specification-document)
 - [CVSS v3.1 Specification Document](https://www.first.org/cvss/v3.1/specification-document)
 
