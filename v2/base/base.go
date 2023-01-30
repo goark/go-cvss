@@ -20,6 +20,11 @@ type Metrics struct {
 	E     Exploitability
 	RL    RemediationLevel
 	RC    ReportConfidence
+	CDP   CollateralDamagePotential
+	TD    TargetDistribution
+	CR    ConfidentialityRequirement
+	IR    IntegrityRequirement
+	AR    AvailabilityRequirement
 	names map[string]bool
 }
 
@@ -35,6 +40,11 @@ func NewMetrics() *Metrics {
 		E:     ExploitabilityNotDefined,
 		RL:    RemediationLevelNotDefined,
 		RC:    ReportConfidenceNotDefined,
+		CDP:   CollateralDamagePotentialNotDefined,
+		TD:    TargetDistributionNotDefined,
+		CR:    ConfidentialityRequirementNotDefined,
+		IR:    IntegrityRequirementNotDefined,
+		AR:    AvailabilityRequirementNotDefined,
 		names: map[string]bool{},
 	}
 }
@@ -56,7 +66,7 @@ func Decode(vector string) (*Metrics, error) {
 		if metrics.names[name] {
 			return nil, errs.Wrap(cvsserr.ErrSameMetric, errs.WithContext("metric", metric))
 		}
-		switch strings.ToUpper(metric[0]) {
+		switch name {
 		case "AV": // Access Vector
 			metrics.AV = GetAccessVector(metric[1])
 			if metrics.AV == AccessVectorUnknown {
@@ -67,7 +77,7 @@ func Decode(vector string) (*Metrics, error) {
 			if metrics.AC == AccessComplexityUnknown {
 				return nil, errs.Wrap(cvsserr.ErrInvalidValue, errs.WithContext("metric", metric))
 			}
-		case "AU": // Authentication
+		case "Au": // Authentication
 			metrics.Au = GetAuthentication(metric[1])
 			if metrics.Au == AuthenticationUnknown {
 				return nil, errs.Wrap(cvsserr.ErrInvalidValue, errs.WithContext("metric", metric))
@@ -89,12 +99,46 @@ func Decode(vector string) (*Metrics, error) {
 			}
 		case "E": // Exploitability
 			metrics.E = GetExploitability(metric[1])
+			if metrics.E == ExploitabilityInvalid {
+				return nil, errs.Wrap(cvsserr.ErrInvalidValue, errs.WithContext("metric", metric))
+			}
 		case "RL": // RemediationLevel
 			metrics.RL = GetRemediationLevel(metric[1])
+			if metrics.RL == RemediationLevelInvalid {
+				return nil, errs.Wrap(cvsserr.ErrInvalidValue, errs.WithContext("metric", metric))
+			}
 		case "RC": // RemediationLevel
 			metrics.RC = GetReportConfidence(metric[1])
+			if metrics.RC == ReportConfidenceInvalid {
+				return nil, errs.Wrap(cvsserr.ErrInvalidValue, errs.WithContext("metric", metric))
+			}
+		case "CDP": // CollateralDamagePotential
+			metrics.CDP = GetCollateralDamagePotential(metric[1])
+			if metrics.CDP == CollateralDamagePotentialInvalid {
+				return nil, errs.Wrap(cvsserr.ErrInvalidValue, errs.WithContext("metric", metric))
+			}
+		case "TD": // TargetDistribution
+			metrics.TD = GetTargetDistribution(metric[1])
+			if metrics.TD == TargetDistributionInvalid {
+				return nil, errs.Wrap(cvsserr.ErrInvalidValue, errs.WithContext("metric", metric))
+			}
+		case "CR": // ConfidentialityRequirement
+			metrics.CR = GetConfidentialityRequirement(metric[1])
+			if metrics.CR == ConfidentialityRequirementInvalid {
+				return nil, errs.Wrap(cvsserr.ErrInvalidValue, errs.WithContext("metric", metric))
+			}
+		case "IR": // IntegrityRequirement
+			metrics.IR = GetIntegrityRequirement(metric[1])
+			if metrics.IR == IntegrityRequirementInvalid {
+				return nil, errs.Wrap(cvsserr.ErrInvalidValue, errs.WithContext("metric", metric))
+			}
+		case "AR": // AvailabilityRequirement
+			metrics.AR = GetAvailabilityRequirement(metric[1])
+			if metrics.AR == AvailabilityRequirementInvalid {
+				return nil, errs.Wrap(cvsserr.ErrInvalidValue, errs.WithContext("metric", metric))
+			}
 		default:
-			return nil, errs.Wrap(cvsserr.ErrInvalidVector, errs.WithContext("vector", value))
+			return nil, errs.Wrap(cvsserr.ErrNotSupportMetric, errs.WithContext("vector", value))
 		}
 		metrics.names[name] = true
 	}
@@ -117,13 +161,27 @@ func (m *Metrics) Encode() (string, error) {
 	if m.E.IsDefined() {
 		r.WriteString(fmt.Sprintf("/E:%v", m.E)) // Exploitability
 	}
-
 	if m.RL.IsDefined() {
 		r.WriteString(fmt.Sprintf("/RL:%v", m.RL)) // Remediation Level
 	}
-
 	if m.RC.IsDefined() {
 		r.WriteString(fmt.Sprintf("/RC:%v", m.RC)) // Report Confidence
+	}
+
+	if m.CDP.IsDefined() {
+		r.WriteString(fmt.Sprintf("/CDP:%v", m.CDP)) // Collateral Damage Potential
+	}
+	if m.TD.IsDefined() {
+		r.WriteString(fmt.Sprintf("/TD:%v", m.TD)) // Target Distribution
+	}
+	if m.CR.IsDefined() {
+		r.WriteString(fmt.Sprintf("/CR:%v", m.CR)) // Confidentiality Requirement
+	}
+	if m.IR.IsDefined() {
+		r.WriteString(fmt.Sprintf("/IR:%v", m.IR)) // Integrity Requirement
+	}
+	if m.AR.IsDefined() {
+		r.WriteString(fmt.Sprintf("/AR:%v", m.AR)) // Availability Requirement
 	}
 
 	return r.String(), nil
@@ -141,7 +199,9 @@ func (m *Metrics) GetError() error {
 		return errs.Wrap(cvsserr.ErrUndefinedMetric)
 	}
 	switch true {
-	case !m.AV.IsDefined(), !m.AC.IsDefined(), !m.Au.IsDefined(), !m.C.IsDefined(), !m.I.IsDefined(), !m.A.IsDefined(), !m.E.IsValid(), !m.RL.IsValid(), !m.RC.IsValid():
+	case !m.AV.IsDefined(), !m.AC.IsDefined(), !m.Au.IsDefined(), !m.C.IsDefined(), !m.I.IsDefined(), !m.A.IsDefined(),
+		!m.E.IsValid(), !m.RL.IsValid(), !m.RC.IsValid(),
+		!m.CDP.IsValid(), !m.TD.IsValid(), !m.CR.IsValid(), !m.IR.IsValid(), !m.AR.IsValid():
 		return errs.Wrap(cvsserr.ErrUndefinedMetric)
 	default:
 		return nil
@@ -153,15 +213,19 @@ func (m *Metrics) Score() float64 {
 	if err := m.GetError(); err != nil {
 		return 0
 	}
-
 	impact := 10.41 * (1 - (1-m.C.Value())*(1-m.I.Value())*(1-m.A.Value()))
+	return m.baseScore(impact)
+}
+
+func (m *Metrics) baseScore(impact float64) float64 {
+	if err := m.GetError(); err != nil {
+		return 0
+	}
 	exploitability := 20 * m.AV.Value() * m.AC.Value() * m.Au.Value()
 	fimpact := 1.176
-
 	if impact == 0 {
 		fimpact = 0
 	}
-
 	return math.Round(((0.6*impact)+(0.4*exploitability)-1.5)*fimpact*10) / 10
 }
 
@@ -180,8 +244,21 @@ func (m *Metrics) GetSeverity() Severity {
 	}
 }
 
+// TemporalScore returns score of Temporal metrics
 func (m *Metrics) TemporalScore() float64 {
-	return math.Round(m.Score()*m.E.Value()*m.RL.Value()*m.RC.Value()*10) / 10
+	return m.temporalScore(m.Score())
+}
+
+func (m *Metrics) temporalScore(baseScore float64) float64 {
+	return math.Round(baseScore*m.E.Value()*m.RL.Value()*m.RC.Value()*10) / 10
+}
+
+// EnvironmentalScore returns score of Environmental metrics
+func (m *Metrics) EnvironmentalScore() float64 {
+	adjustedImpact := math.Min(10.0, 10.41*(1-(1-m.C.Value()*m.CR.Value())*(1-m.I.Value()*m.IR.Value())*(1-m.A.Value()*m.AR.Value())))
+	baseScore := m.baseScore(adjustedImpact)
+	adjustedTemporal := m.temporalScore(baseScore)
+	return math.Round((adjustedTemporal+(10-adjustedTemporal)*m.CDP.Value()*m.TD.Value())*10) / 10
 }
 
 /* Copyright 2022 luxifer */
