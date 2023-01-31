@@ -198,17 +198,17 @@ func (em *Environmental) Encode() (string, error) {
 	}
 	r := &strings.Builder{}
 	r.WriteString(bs)                                       //Vector of Temporal metrics
-	r.WriteString(fmt.Sprintf("/%v:%v", metricCR, em.CR))   //Exploitability
-	r.WriteString(fmt.Sprintf("/%v:%v", metricIR, em.IR))   //Remediation Level
-	r.WriteString(fmt.Sprintf("/%v:%v", metricAR, em.AR))   //Report Confidence
-	r.WriteString(fmt.Sprintf("/%v:%v", metricMAV, em.MAV)) //Report Confidence
-	r.WriteString(fmt.Sprintf("/%v:%v", metricMAC, em.MAC)) //Report Confidence
-	r.WriteString(fmt.Sprintf("/%v:%v", metricMPR, em.MPR)) //Report Confidence
-	r.WriteString(fmt.Sprintf("/%v:%v", metricMUI, em.MUI)) //Report Confidence
-	r.WriteString(fmt.Sprintf("/%v:%v", metricMS, em.MS))   //Report Confidence
-	r.WriteString(fmt.Sprintf("/%v:%v", metricMC, em.MC))   //Report Confidence
-	r.WriteString(fmt.Sprintf("/%v:%v", metricMI, em.MI))   //Report Confidence
-	r.WriteString(fmt.Sprintf("/%v:%v", metricMA, em.MA))   //Report Confidence
+	r.WriteString(fmt.Sprintf("/%v:%v", metricCR, em.CR))   //Confidentiality Requirement
+	r.WriteString(fmt.Sprintf("/%v:%v", metricIR, em.IR))   //Integrity Requirement
+	r.WriteString(fmt.Sprintf("/%v:%v", metricAR, em.AR))   //Availability Requirement
+	r.WriteString(fmt.Sprintf("/%v:%v", metricMAV, em.MAV)) //Modified Attack Vector
+	r.WriteString(fmt.Sprintf("/%v:%v", metricMAC, em.MAC)) //Modified Attack Complexity
+	r.WriteString(fmt.Sprintf("/%v:%v", metricMPR, em.MPR)) //Modified Privileges Required
+	r.WriteString(fmt.Sprintf("/%v:%v", metricMUI, em.MUI)) //Modified User Interaction
+	r.WriteString(fmt.Sprintf("/%v:%v", metricMS, em.MS))   //Modified Scope
+	r.WriteString(fmt.Sprintf("/%v:%v", metricMC, em.MC))   //Modified Confidentiality Impact
+	r.WriteString(fmt.Sprintf("/%v:%v", metricMI, em.MI))   //Modified Integrity Impact
+	r.WriteString(fmt.Sprintf("/%v:%v", metricMA, em.MA))   //Modified Availability Impact
 	return r.String(), nil
 }
 
