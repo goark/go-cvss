@@ -50,7 +50,7 @@ func (m *Metrics) EnvironmentalScore() float64 {
 //
 // Deprecated: migrated github.com/goark/go-cvss/v2/metric package
 func (m *Metrics) GetSeverity() Severity {
-	return Severity(m.Base.GetSeverity())
+	return Severity(m.Base.Severity())
 }
 
 /* Copyright 2022 luxifer */

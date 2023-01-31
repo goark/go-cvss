@@ -3,47 +3,46 @@ package metric_test
 import (
 	"fmt"
 
-	"github.com/goark/go-cvss/v3/metric"
+	"github.com/goark/go-cvss/v2/metric"
 )
 
 func ExampleBase_Decode() {
-	m, err := metric.NewBase().Decode("CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:N/A:N") //CVE-2015-8252
+	m, err := metric.NewBase().Decode("AV:N/AC:L/Au:N/C:N/I:N/A:C") //CVE-2002-0392
 	if err != nil {
 		return
 	}
 	fmt.Println("Score =", m.Score())
 	fmt.Println("Severity =", m.Severity())
 	//Output:
-	//Score = 7.5
+	//Score = 7.8
 	//Severity = High
 }
 
 func ExampleTemporal_Decode() {
-	m, err := metric.NewTemporal().Decode("CVSS:3.1/AV:A/AC:H/PR:L/UI:N/S:C/C:L/I:H/A:L/E:P/RL:O/RC:U")
+	m, err := metric.NewTemporal().Decode("AV:N/AC:L/Au:N/C:N/I:N/A:C/E:F/RL:OF/RC:C") //CVE-2002-0392
 	if err != nil {
 		return
 	}
 	fmt.Println("Score =", m.Score())
 	fmt.Println("Severity =", m.Severity())
 	//Output:
-	//Score = 5.9
+	//Score = 6.4
 	//Severity = Medium
 }
 
 func ExampleEnvironmental_Decode() {
-	m, err := metric.NewEnvironmental().Decode("CVSS:3.1/AV:A/AC:H/PR:L/UI:N/S:C/C:L/I:H/A:L/E:P/RL:O/RC:U/CR:L/IR:M/AR:L/MAV:P/MAC:L/MPR:L/MUI:R/MS:C/MC:H/MI:H/MA:H")
+	m, err := metric.NewEnvironmental().Decode("AV:N/AC:L/Au:N/C:N/I:N/A:C/E:F/RL:OF/RC:C/CDP:H/TD:H/CR:M/IR:M/AR:H") //CVE-2002-0392
 	if err != nil {
 		return
 	}
 	fmt.Println("Score =", m.Score())
 	fmt.Println("Severity =", m.Severity())
 	//Output:
-	//Score = 5.5
-	//Severity = Medium
+	//Score = 9.2
+	//Severity = High
 }
 
-/* Contributed by Florent Viel, 2020 */
-/* Copyright 2018-2023 Spiegel
+/* Copyright 2023 Spiegel
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.

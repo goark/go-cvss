@@ -153,7 +153,7 @@ func (m *Temporal) score(baseScore float64) float64 {
 }
 
 // GetSeverity returns severity by score of Base metrics
-func (m *Temporal) GetSeverity() Severity {
+func (m *Temporal) Severity() Severity {
 	return severity(m.Score())
 }
 

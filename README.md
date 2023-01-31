@@ -90,7 +90,86 @@ func main() {
 	// Environmental Severity: Critical (6.5)
 }
 ```
-### Reporting with template
+
+### CVSSv2 Base Metrics
+
+```go
+package main
+
+import (
+	"fmt"
+	"os"
+
+	"github.com/goark/go-cvss/v2/metric"
+)
+
+func main() {
+	bm, err := metric.NewBase().Decode("AV:N/AC:L/Au:N/C:N/I:N/A:C") //CVE-2002-0392
+	if err != nil {
+		fmt.Fprintln(os.Stderr, err)
+		return
+	}
+	fmt.Printf("Severity: %v (%v)\n", bm.Severity(), bm.Score())
+	// Output:
+	// Severity: Severity: High (7.8)
+}
+```
+
+### CVSSv2 Temporal Metrics
+
+```go
+package main
+
+import (
+	"fmt"
+	"os"
+
+	"github.com/goark/go-cvss/v2/metric"
+)
+
+func main() {
+	tm, err := metric.NewTemporal().Decode("AV:N/AC:L/Au:N/C:N/I:N/A:C/E:F/RL:OF/RC:C") //CVE-2002-0392
+	if err != nil {
+		fmt.Fprintln(os.Stderr, err)
+		return
+	}
+	fmt.Printf("Severity (Base): %v (%v)\n", tm.Base.Severity(), tm.Base.Score())
+	fmt.Printf("Severity (Temporal): %v (%v)\n", tm.Severity(), tm.Score())
+	// Output:
+	// Severity (Base): High (7.8)
+	// Severity (Temporal): Medium (6.4)
+}
+```
+
+### CVSSv2 Environmental Metrics
+
+```go
+package main
+
+import (
+	"fmt"
+	"os"
+
+	"github.com/goark/go-cvss/v2/metric"
+)
+
+func main() {
+	tm, err := metric.NewEnvironmental().Decode("AV:N/AC:L/Au:N/C:N/I:N/A:C/E:F/RL:OF/RC:C/CDP:H/TD:H/CR:M/IR:M/AR:H") //CVE-2002-0392
+	if err != nil {
+		fmt.Fprintln(os.Stderr, err)
+		return
+	}
+	fmt.Printf("Severity (Base): %v (%v)\n", tm.Base.Severity(), tm.Base.Score())
+	fmt.Printf("Severity (Temporal): %v (%v)\n", tm.Temporal.Severity(), tm.Temporal.Score())
+	fmt.Printf("Severity (Environmental): %v (%v)\n", tm.Severity(), tm.Score())
+	// Output:
+	// Severity (Base): High (7.8)
+	// Severity (Temporal): Medium (6.4)
+	// Severity (Environmental): High (9.2)
+}
+```
+
+### Reporting with template (CVSSv3 only)
 
 ref: [sample.go](https://github.com/goark/go-cvss/blob/master/sample/sample.go)
 
