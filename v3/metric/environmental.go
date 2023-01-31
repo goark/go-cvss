@@ -175,7 +175,7 @@ func (em *Environmental) GetError() error {
 	if em == nil {
 		return errs.Wrap(cvsserr.ErrUndefinedMetric)
 	}
-	if err := em.Base.GetError(); err != nil {
+	if err := em.Temporal.GetError(); err != nil {
 		return errs.Wrap(err)
 	}
 	switch true {
@@ -260,6 +260,7 @@ func (em *Environmental) BaseMetrics() *Base {
 	return em.Base
 }
 
+// TemporalMetrics returns Temporal metrics in Environmental metrics instance
 func (em *Environmental) TemporalMetrics() *Temporal {
 	if em == nil {
 		return nil

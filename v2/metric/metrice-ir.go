@@ -1,4 +1,4 @@
-package base
+package metric
 
 // IntegrityRequirement is metric type for Temporal Metrics
 type IntegrityRequirement int

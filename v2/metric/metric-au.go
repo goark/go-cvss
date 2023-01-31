@@ -1,4 +1,4 @@
-package base
+package metric
 
 // Authentication is metric type for Base Metrics
 type Authentication int
@@ -48,8 +48,8 @@ func (av Authentication) Value() float64 {
 	return 0.0
 }
 
-// IsDefined returns false if undefined result value of metric
-func (av Authentication) IsDefined() bool {
+// IsUnknown returns false if undefined result value of metric
+func (av Authentication) IsUnknown() bool {
 	return av != AuthenticationUnknown
 }
 

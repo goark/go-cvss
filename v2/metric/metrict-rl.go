@@ -1,4 +1,4 @@
-package base
+package metric
 
 // RemediationLevel is metric type for Temporal Metrics
 type RemediationLevel int

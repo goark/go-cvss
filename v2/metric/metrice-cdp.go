@@ -1,4 +1,4 @@
-package base
+package metric
 
 // CollateralDamagePotential is metric type for Temporal Metrics
 type CollateralDamagePotential int

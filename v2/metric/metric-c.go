@@ -1,4 +1,4 @@
-package base
+package metric
 
 // ConfidentialityImpact is metric type for Base Metrics
 type ConfidentialityImpact int
@@ -48,8 +48,8 @@ func (ci ConfidentialityImpact) Value() float64 {
 	return 0.0
 }
 
-// IsDefined returns false if undefined result value of metric
-func (ci ConfidentialityImpact) IsDefined() bool {
+// IsUnknown returns false if undefined result value of metric
+func (ci ConfidentialityImpact) IsUnknown() bool {
 	return ci != ConfidentialityImpactUnknown
 }
 

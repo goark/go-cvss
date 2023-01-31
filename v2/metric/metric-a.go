@@ -1,4 +1,4 @@
-package base
+package metric
 
 // AvailabilityImpact is metric type for Base Metrics
 type AvailabilityImpact int
@@ -48,8 +48,8 @@ func (ai AvailabilityImpact) Value() float64 {
 	return 0.0
 }
 
-// IsDefined returns false if undefined result value of metric
-func (ai AvailabilityImpact) IsDefined() bool {
+// IsUnknown returns false if undefined result value of metric
+func (ai AvailabilityImpact) IsUnknown() bool {
 	return ai != AvailabilityImpactUnknown
 }
 

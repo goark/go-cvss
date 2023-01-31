@@ -1,4 +1,4 @@
-package base
+package metric
 
 // ReportConfidence is metric type for Temporal Metrics
 type ReportConfidence int

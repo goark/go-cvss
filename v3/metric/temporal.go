@@ -23,7 +23,7 @@ type Temporal struct {
 	names map[string]bool
 }
 
-// NewBase returns Temporal Metrics instance
+// NewTemporal returns Temporal Metrics instance
 func NewTemporal() *Temporal {
 	return &Temporal{
 		Base:  NewBase(),

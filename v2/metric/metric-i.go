@@ -1,4 +1,4 @@
-package base
+package metric
 
 // IntegrityImpact is metric type for Base Metrics
 type IntegrityImpact int
@@ -48,8 +48,8 @@ func (ii IntegrityImpact) Value() float64 {
 	return 0.0
 }
 
-// IsDefined returns false if undefined result value of metric
-func (ii IntegrityImpact) IsDefined() bool {
+// IsUnknown returns false if undefined result value of metric
+func (ii IntegrityImpact) IsUnknown() bool {
 	return ii != IntegrityImpactUnknown
 }
 
