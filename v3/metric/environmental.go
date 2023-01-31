@@ -1,11 +1,26 @@
 package metric
 
 import (
+	"fmt"
 	"math"
 	"strings"
 
 	"github.com/goark/errs"
 	"github.com/goark/go-cvss/cvsserr"
+)
+
+const (
+	metricCR  = "CR"
+	metricIR  = "IR"
+	metricAR  = "AR"
+	metricMAV = "MAV"
+	metricMAC = "MAC"
+	metricMPR = "MPR"
+	metricMUI = "MUI"
+	metricMS  = "MS"
+	metricMC  = "MC"
+	metricMI  = "MI"
+	metricMA  = "MA"
 )
 
 // Base is Environmental Metrics for CVSSv3
@@ -93,57 +108,57 @@ func (em *Environmental) decodeOne(str string) error {
 		return errs.Wrap(cvsserr.ErrSameMetric, errs.WithContext("metric", str))
 	}
 	switch name {
-	case "CR": //Exploitability
+	case metricCR: //ConfidentialityRequirement
 		em.CR = GetConfidentialityRequirement(m[1])
 		if em.CR == ConfidentialityRequirementInvalid {
 			return errs.Wrap(cvsserr.ErrInvalidValue, errs.WithContext("metric", str))
 		}
-	case "IR": //RemediationLevel
+	case metricIR: //IntegrityRequirement
 		em.IR = GetIntegrityRequirement(m[1])
 		if em.IR == IntegrityRequirementInvalid {
 			return errs.Wrap(cvsserr.ErrInvalidValue, errs.WithContext("metric", str))
 		}
-	case "AR": //RemediationLevel
+	case metricAR: //AvailabilityRequirement
 		em.AR = GetAvailabilityRequirement(m[1])
 		if em.AR == AvailabilityRequirementInvalid {
 			return errs.Wrap(cvsserr.ErrInvalidValue, errs.WithContext("metric", str))
 		}
-	case "MAV": //RemediationLevel
+	case metricMAV: //ModifiedAttackVector
 		em.MAV = GetModifiedAttackVector(m[1])
 		if em.MAV == ModifiedAttackVectorInvalid {
 			return errs.Wrap(cvsserr.ErrInvalidValue, errs.WithContext("metric", str))
 		}
-	case "MAC": //RemediationLevel
+	case metricMAC: //ModifiedAttackComplexity
 		em.MAC = GetModifiedAttackComplexity(m[1])
 		if em.MAC == ModifiedAttackComplexityInvalid {
 			return errs.Wrap(cvsserr.ErrInvalidValue, errs.WithContext("metric", str))
 		}
-	case "MPR": //RemediationLevel
+	case metricMPR: //ModifiedPrivilegesRequired
 		em.MPR = GetModifiedPrivilegesRequired(m[1])
 		if em.MPR == ModifiedPrivilegesRequiredInvalid {
 			return errs.Wrap(cvsserr.ErrInvalidValue, errs.WithContext("metric", str))
 		}
-	case "MUI": //RemediationLevel
+	case metricMUI: //ModifiedUserInteraction
 		em.MUI = GetModifiedUserInteraction(m[1])
 		if em.MUI == ModifiedUserInteractionInvalid {
 			return errs.Wrap(cvsserr.ErrInvalidValue, errs.WithContext("metric", str))
 		}
-	case "MS": //RemediationLevel
+	case metricMS: //ModifiedScope
 		em.MS = GetModifiedScope(m[1])
 		if em.MS == ModifiedScopeInvalid {
 			return errs.Wrap(cvsserr.ErrInvalidValue, errs.WithContext("metric", str))
 		}
-	case "MC": //RemediationLevel
+	case metricMC: //ModifiedConfidentialityImpact
 		em.MC = GetModifiedConfidentialityImpact(m[1])
 		if em.MC == ModifiedConfidentialityImpactInvalid {
 			return errs.Wrap(cvsserr.ErrInvalidValue, errs.WithContext("metric", str))
 		}
-	case "MI": //RemediationLevel
+	case metricMI: //ModifiedIntegrityImpact
 		em.MI = GetModifiedIntegrityImpact(m[1])
 		if em.MI == ModifiedIntegrityImpactInvalid {
 			return errs.Wrap(cvsserr.ErrInvalidValue, errs.WithContext("metric", str))
 		}
-	case "MA": //RemediationLevel
+	case metricMA: //ModifiedAvailabilityImpact
 		em.MA = GetModifiedAvailabilityImpact(m[1])
 		if em.MA == ModifiedAvailabilityInvalid {
 			return errs.Wrap(cvsserr.ErrInvalidValue, errs.WithContext("metric", str))
@@ -182,18 +197,18 @@ func (em *Environmental) Encode() (string, error) {
 		return "", errs.Wrap(err)
 	}
 	r := &strings.Builder{}
-	r.WriteString(bs)                        //Vector of Temporal metrics
-	r.WriteString("/CR:" + em.CR.String())   //Exploitability
-	r.WriteString("/IR:" + em.IR.String())   //Remediation Level
-	r.WriteString("/AR:" + em.AR.String())   //Report Confidence
-	r.WriteString("/MAV:" + em.MAV.String()) //Report Confidence
-	r.WriteString("/MAC:" + em.MAC.String()) //Report Confidence
-	r.WriteString("/MPR:" + em.MPR.String()) //Report Confidence
-	r.WriteString("/MUI:" + em.MUI.String()) //Report Confidence
-	r.WriteString("/MS:" + em.MS.String())   //Report Confidence
-	r.WriteString("/MC:" + em.MC.String())   //Report Confidence
-	r.WriteString("/MI:" + em.MI.String())   //Report Confidence
-	r.WriteString("/MA:" + em.MA.String())   //Report Confidence
+	r.WriteString(bs)                                       //Vector of Temporal metrics
+	r.WriteString(fmt.Sprintf("/%v:%v", metricCR, em.CR))   //Exploitability
+	r.WriteString(fmt.Sprintf("/%v:%v", metricIR, em.IR))   //Remediation Level
+	r.WriteString(fmt.Sprintf("/%v:%v", metricAR, em.AR))   //Report Confidence
+	r.WriteString(fmt.Sprintf("/%v:%v", metricMAV, em.MAV)) //Report Confidence
+	r.WriteString(fmt.Sprintf("/%v:%v", metricMAC, em.MAC)) //Report Confidence
+	r.WriteString(fmt.Sprintf("/%v:%v", metricMPR, em.MPR)) //Report Confidence
+	r.WriteString(fmt.Sprintf("/%v:%v", metricMUI, em.MUI)) //Report Confidence
+	r.WriteString(fmt.Sprintf("/%v:%v", metricMS, em.MS))   //Report Confidence
+	r.WriteString(fmt.Sprintf("/%v:%v", metricMC, em.MC))   //Report Confidence
+	r.WriteString(fmt.Sprintf("/%v:%v", metricMI, em.MI))   //Report Confidence
+	r.WriteString(fmt.Sprintf("/%v:%v", metricMA, em.MA))   //Report Confidence
 	return r.String(), nil
 }
 
