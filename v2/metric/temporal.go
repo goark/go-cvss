@@ -28,9 +28,9 @@ type Temporal struct {
 func NewTemporal() *Temporal {
 	return &Temporal{
 		Base:  NewBase(),
-		E:     ExploitabilityNotDefined,
-		RL:    RemediationLevelNotDefined,
-		RC:    ReportConfidenceNotDefined,
+		E:     ExploitabilityInvalid,
+		RL:    RemediationLevelInvalid,
+		RC:    ReportConfidenceInvalid,
 		names: map[string]bool{},
 	}
 }
@@ -41,9 +41,6 @@ func (m *Temporal) Decode(vector string) (*Temporal, error) {
 		m = NewTemporal()
 	}
 	values := strings.Split(vector, "/")
-	if len(values) < 6 { // Temporal and Environmental metrics are optional
-		return nil, errs.Wrap(cvsserr.ErrInvalidVector, errs.WithContext("vector", vector))
-	}
 	// parse metrics
 	var lastErr error
 	for _, value := range values {
@@ -102,14 +99,14 @@ func (m *Temporal) decodeOne(str string) error {
 // GetError returns error instance if undefined metric
 func (m *Temporal) GetError() error {
 	if m == nil {
-		return errs.Wrap(cvsserr.ErrUndefinedMetric)
+		return errs.Wrap(cvsserr.ErrNoMetrics)
 	}
 	if err := m.Base.GetError(); err != nil {
 		return errs.Wrap(err)
 	}
 	switch true {
 	case !m.E.IsValid(), !m.RL.IsValid(), !m.RC.IsValid():
-		return errs.Wrap(cvsserr.ErrUndefinedMetric)
+		return errs.Wrap(cvsserr.ErrNoMetrics)
 	default:
 		return nil
 	}

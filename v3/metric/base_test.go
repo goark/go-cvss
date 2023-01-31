@@ -18,7 +18,7 @@ func TestDecodeError(t *testing.T) {
 		{vector: "CVSS:3.1/AV:A/AC:L/PR:N/UI:N/S:C/C:H/I:H/A:0/A:H", err: cvsserr.ErrInvalidValue},
 		{vector: "CVSS:3.1/AV:A/AC:L/PR:N/UI:N/S:C/C:H/I:H/A:H/A:H", err: cvsserr.ErrSameMetric},
 		{vector: "CVSS:2.0/AV:P/AC:H/PR:H/UI:R/S:U/C:N/I:N/A:N", err: cvsserr.ErrNotSupportVer},
-		{vector: "CVSS:3.1", err: cvsserr.ErrInvalidVector},
+		{vector: "CVSS:3.1", err: cvsserr.ErrNoMetrics},
 		{vector: "CVSS3.1/AV:X/AC:H/PR:H/UI:R/S:U/C:N/I:N/A:N", err: cvsserr.ErrInvalidVector},
 		{vector: "CVSS:3.1/AV:P/AC:H/PR:H/UI:R/S:U/C:N/I:N/A-N", err: cvsserr.ErrInvalidVector},
 		{vector: "CVSS:3.1/AV:P/AC:H/PR:H/UI:R/S:U/C:N/I:N/A:", err: cvsserr.ErrInvalidVector},

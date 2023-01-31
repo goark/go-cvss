@@ -64,9 +64,6 @@ func (em *Environmental) Decode(vector string) (*Environmental, error) {
 		em = NewEnvironmental()
 	}
 	values := strings.Split(vector, "/")
-	if len(values) < 9 { // E, RL, RC metrics are optional.
-		return em, errs.Wrap(cvsserr.ErrInvalidVector, errs.WithContext("vector", vector))
-	}
 	//CVSS version
 	ver, err := GetVersion(values[0])
 	if err != nil {
@@ -173,7 +170,7 @@ func (em *Environmental) decodeOne(str string) error {
 // GetError returns error instance if undefined metric
 func (em *Environmental) GetError() error {
 	if em == nil {
-		return errs.Wrap(cvsserr.ErrUndefinedMetric)
+		return errs.Wrap(cvsserr.ErrNoMetrics)
 	}
 	if err := em.Temporal.GetError(); err != nil {
 		return errs.Wrap(err)

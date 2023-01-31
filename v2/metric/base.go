@@ -48,9 +48,6 @@ func (m *Base) Decode(vector string) (*Base, error) {
 		m = NewBase()
 	}
 	values := strings.Split(vector, "/")
-	if len(values) < 6 { // Temporal and Environmental metrics are optional
-		return nil, errs.Wrap(cvsserr.ErrInvalidVector, errs.WithContext("vector", vector))
-	}
 	// parse metrics
 	var lastErr error
 	for _, value := range values {
@@ -117,11 +114,11 @@ func (m *Base) decodeOne(str string) error {
 // GetError returns error instance if unknown metric
 func (m *Base) GetError() error {
 	if m == nil {
-		return errs.Wrap(cvsserr.ErrUndefinedMetric)
+		return errs.Wrap(cvsserr.ErrNoMetrics)
 	}
 	switch true {
 	case !m.AV.IsUnknown(), !m.AC.IsUnknown(), !m.Au.IsUnknown(), !m.C.IsUnknown(), !m.I.IsUnknown(), !m.A.IsUnknown():
-		return errs.Wrap(cvsserr.ErrUndefinedMetric)
+		return errs.Wrap(cvsserr.ErrNoMetrics)
 	default:
 		return nil
 	}
@@ -174,7 +171,7 @@ func (m *Base) Severity() Severity {
 	return severity(m.Score())
 }
 
-/* Copyright 2018-2023 Spiegel
+/* Copyright 2023 Spiegel
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.

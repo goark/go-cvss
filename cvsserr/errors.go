@@ -1,38 +1,18 @@
 package cvsserr
 
-import "fmt"
+import "errors"
 
-// Num is error number for CVSS
-type Num int
-
-const (
-	ErrNullPointer Num = iota + 1
-	ErrUndefinedMetric
-	ErrInvalidVector
-	ErrNotSupportVer
-	ErrNotSupportMetric
-	ErrInvalidTemplate
-	ErrSameMetric
-	ErrInvalidValue
+var (
+	ErrNullPointer      = errors.New("Null reference instance")
+	ErrUndefinedMetric  = errors.New("undefined metric")
+	ErrInvalidVector    = errors.New("invalid vector")
+	ErrNotSupportVer    = errors.New("not support version")
+	ErrNotSupportMetric = errors.New("not support metric")
+	ErrInvalidTemplate  = errors.New("invalid templete string")
+	ErrSameMetric       = errors.New("exist same metric")
+	ErrInvalidValue     = errors.New("invalid value of metric")
+	ErrNoMetrics        = errors.New("no metrics")
 )
-
-var errMessage = map[Num]string{
-	ErrNullPointer:      "Null reference instance",
-	ErrUndefinedMetric:  "undefined metric",
-	ErrInvalidVector:    "invalid vector",
-	ErrNotSupportVer:    "not support version",
-	ErrNotSupportMetric: "not support metric",
-	ErrInvalidTemplate:  "invalid templete string",
-	ErrSameMetric:       "exist same metric",
-	ErrInvalidValue:     "invalid value of metric",
-}
-
-func (n Num) Error() string {
-	if s, ok := errMessage[n]; ok {
-		return s
-	}
-	return fmt.Sprintf("unknown error (%d)", int(n))
-}
 
 /* Copyright 2018-2023 Spiegel
  *
