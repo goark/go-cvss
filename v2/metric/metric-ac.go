@@ -1,4 +1,4 @@
-package base
+package metric
 
 // AccessComplexity is metric type for Base Metrics
 type AccessComplexity int
@@ -48,8 +48,8 @@ func (ac AccessComplexity) Value() float64 {
 	return 0.0
 }
 
-// IsDefined returns false if undefined result value of metric
-func (ac AccessComplexity) IsDefined() bool {
+// IsUnknown returns false if undefined result value of metric
+func (ac AccessComplexity) IsUnknown() bool {
 	return ac != AccessComplexityUnknown
 }
 

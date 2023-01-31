@@ -1,4 +1,4 @@
-package base
+package metric
 
 // ConfidentialityRequirement is metric type for Temporal Metrics
 type ConfidentialityRequirement int

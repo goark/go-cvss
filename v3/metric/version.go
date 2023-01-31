@@ -10,6 +10,8 @@ import (
 // Version is error number for CVSS
 type Version int
 
+const nameCVSS = "CVSS"
+
 const (
 	VUnknown Version = iota //unknown version
 	V3_0                    //v3.0
@@ -35,7 +37,7 @@ func GetVersion(vec string) (Version, error) {
 	if len(v) != 2 {
 		return VUnknown, errs.Wrap(cvsserr.ErrInvalidVector, errs.WithContext("vector", vec))
 	}
-	if v[0] != "CVSS" {
+	if v[0] != nameCVSS {
 		return VUnknown, errs.Wrap(cvsserr.ErrInvalidVector, errs.WithContext("vector", vec))
 	}
 	return get(v[1]), nil

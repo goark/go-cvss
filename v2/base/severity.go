@@ -1,14 +1,8 @@
 package base
 
-// Severity is severity for Base Metrics
-type Severity int
+import "github.com/goark/go-cvss/v2/metric"
 
-// Constant of severity
-const (
-	SeverityUnknown Severity = iota
-	SeverityLow
-	SeverityMedium
-	SeverityHigh
-)
+// Severity is severity for Base Metrics
+type Severity = metric.Severity
 
 /* Copyright 2022 luxifer */

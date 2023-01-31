@@ -1,11 +1,23 @@
 package metric
 
 import (
+	"fmt"
 	"math"
 	"strings"
 
 	"github.com/goark/errs"
 	"github.com/goark/go-cvss/cvsserr"
+)
+
+const (
+	metricAV = "AV"
+	metricAC = "AC"
+	metricPR = "PR"
+	metricUI = "UI"
+	metricS  = "S"
+	metricC  = "C"
+	metricI  = "I"
+	metricA  = "A"
 )
 
 // Base is Base Metrics for CVSSv3
@@ -80,42 +92,42 @@ func (bm *Base) decodeOne(str string) error {
 		return errs.Wrap(cvsserr.ErrSameMetric, errs.WithContext("metric", str))
 	}
 	switch name {
-	case "AV": //Attack Vector
+	case metricAV: //Attack Vector
 		bm.AV = GetAttackVector(m[1])
 		if bm.AV == AttackVectorUnknown {
 			return errs.Wrap(cvsserr.ErrInvalidValue, errs.WithContext("metric", str))
 		}
-	case "AC": //Attack Complexity
+	case metricAC: //Attack Complexity
 		bm.AC = GetAttackComplexity(m[1])
 		if bm.AC == AttackComplexityUnknown {
 			return errs.Wrap(cvsserr.ErrInvalidValue, errs.WithContext("metric", str))
 		}
-	case "PR": //Privileges Required
+	case metricPR: //Privileges Required
 		bm.PR = GetPrivilegesRequired(m[1])
 		if bm.PR == PrivilegesRequiredUnknown {
 			return errs.Wrap(cvsserr.ErrInvalidValue, errs.WithContext("metric", str))
 		}
-	case "UI": //User Interaction
+	case metricUI: //User Interaction
 		bm.UI = GetUserInteraction(m[1])
 		if bm.UI == UserInteractionUnknown {
 			return errs.Wrap(cvsserr.ErrInvalidValue, errs.WithContext("metric", str))
 		}
-	case "S": //Scope
+	case metricS: //Scope
 		bm.S = GetScope(m[1])
 		if bm.S == ScopeUnknown {
 			return errs.Wrap(cvsserr.ErrInvalidValue, errs.WithContext("metric", str))
 		}
-	case "C": //Confidentiality Impact
+	case metricC: //Confidentiality Impact
 		bm.C = GetConfidentialityImpact(m[1])
 		if bm.C == ConfidentialityImpactUnknown {
 			return errs.Wrap(cvsserr.ErrInvalidValue, errs.WithContext("metric", str))
 		}
-	case "I": //Integrity Impact
+	case metricI: //Integrity Impact
 		bm.I = GetIntegrityImpact(m[1])
 		if bm.I == IntegrityImpactUnknown {
 			return errs.Wrap(cvsserr.ErrInvalidValue, errs.WithContext("metric", str))
 		}
-	case "A": //Availability Impact
+	case metricA: //Availability Impact
 		bm.A = GetAvailabilityImpact(m[1])
 		if bm.A == AvailabilityImpactUnknown {
 			return errs.Wrap(cvsserr.ErrInvalidValue, errs.WithContext("metric", str))
@@ -146,15 +158,15 @@ func (bm *Base) Encode() (string, error) {
 		return "", err
 	}
 	r := &strings.Builder{}
-	r.WriteString("CVSS:" + bm.Ver.String()) //CVSS Version
-	r.WriteString("/AV:" + bm.AV.String())   //Attack Vector
-	r.WriteString("/AC:" + bm.AC.String())   //Attack Complexity
-	r.WriteString("/PR:" + bm.PR.String())   //Privileges Required
-	r.WriteString("/UI:" + bm.UI.String())   //User Interaction
-	r.WriteString("/S:" + bm.S.String())     //Scope
-	r.WriteString("/C:" + bm.C.String())     //Confidentiality Impact
-	r.WriteString("/I:" + bm.I.String())     //Integrity Impact
-	r.WriteString("/A:" + bm.A.String())     //Availability Impact
+	r.WriteString(fmt.Sprintf("%v:%v", nameCVSS, bm.Ver)) //CVSS Version
+	r.WriteString(fmt.Sprintf("/%v:%v", metricAV, bm.AV)) //Attack Vector
+	r.WriteString(fmt.Sprintf("/%v:%v", metricAC, bm.AC)) //Attack Complexity
+	r.WriteString(fmt.Sprintf("/%v:%v", metricPR, bm.PR)) //Privileges Required
+	r.WriteString(fmt.Sprintf("/%v:%v", metricUI, bm.UI)) //User Interaction
+	r.WriteString(fmt.Sprintf("/%v:%v", metricS, bm.S))   //Scope
+	r.WriteString(fmt.Sprintf("/%v:%v", metricC, bm.C))   //Confidentiality Impact
+	r.WriteString(fmt.Sprintf("/%v:%v", metricI, bm.I))   //Integrity Impact
+	r.WriteString(fmt.Sprintf("/%v:%v", metricA, bm.A))   //Availability Impact
 	return r.String(), nil
 }
 

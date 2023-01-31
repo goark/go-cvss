@@ -1,4 +1,4 @@
-package base
+package metric
 
 // Exploitability is metric type for Temporal Metrics
 type Exploitability int

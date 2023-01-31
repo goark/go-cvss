@@ -1,4 +1,4 @@
-package base
+package metric
 
 // TargetDistribution is metric type for Temporal Metrics
 type TargetDistribution int

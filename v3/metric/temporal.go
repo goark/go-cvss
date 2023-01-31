@@ -1,10 +1,17 @@
 package metric
 
 import (
+	"fmt"
 	"strings"
 
 	"github.com/goark/errs"
 	"github.com/goark/go-cvss/cvsserr"
+)
+
+const (
+	metricE  = "E"
+	metricRL = "RL"
+	metricRC = "RC"
 )
 
 // Base is Temporal Metrics for CVSSv3
@@ -16,7 +23,7 @@ type Temporal struct {
 	names map[string]bool
 }
 
-// NewBase returns Temporal Metrics instance
+// NewTemporal returns Temporal Metrics instance
 func NewTemporal() *Temporal {
 	return &Temporal{
 		Base:  NewBase(),
@@ -76,17 +83,17 @@ func (tm *Temporal) decodeOne(str string) error {
 		return errs.Wrap(cvsserr.ErrSameMetric, errs.WithContext("metric", str))
 	}
 	switch name {
-	case "E": //Exploitability
+	case metricE: //Exploitability
 		tm.E = GetExploitability(m[1])
 		if tm.E == ExploitabilityInvalid {
 			return errs.Wrap(cvsserr.ErrInvalidValue, errs.WithContext("metric", str))
 		}
-	case "RL": //RemediationLevel
+	case metricRL: //RemediationLevel
 		tm.RL = GetRemediationLevel(m[1])
 		if tm.RL == RemediationLevelInvalid {
 			return errs.Wrap(cvsserr.ErrInvalidValue, errs.WithContext("metric", str))
 		}
-	case "RC": //RemediationLevel
+	case metricRC: //RemediationLevel
 		tm.RC = GetReportConfidence(m[1])
 		if tm.RC == ReportConfidenceInvalid {
 			return errs.Wrap(cvsserr.ErrInvalidValue, errs.WithContext("metric", str))
@@ -124,10 +131,10 @@ func (tm *Temporal) Encode() (string, error) {
 		return "", errs.Wrap(err)
 	}
 	r := &strings.Builder{}
-	r.WriteString(bs)                      //Vector of Base metrics
-	r.WriteString("/E:" + tm.E.String())   //Exploitability
-	r.WriteString("/RL:" + tm.RL.String()) //Remediation Level
-	r.WriteString("/RC:" + tm.RC.String()) //Report Confidence
+	r.WriteString(bs)                                     //Vector of Base metrics
+	r.WriteString(fmt.Sprintf("/%v:%v", metricE, tm.E))   //Exploitability
+	r.WriteString(fmt.Sprintf("/%v:%v", metricRL, tm.RL)) //Remediation Level
+	r.WriteString(fmt.Sprintf("/%v:%v", metricRC, tm.RC)) //Report Confidence
 	return r.String(), nil
 }
 

@@ -1,4 +1,4 @@
-package base
+package metric
 
 // AccessVector is metric type for Base Metrics
 type AccessVector int
@@ -48,8 +48,8 @@ func (av AccessVector) Value() float64 {
 	return 0.0
 }
 
-// IsDefined returns false if undefined result value of metric
-func (av AccessVector) IsDefined() bool {
+// IsUnknown returns false if undefined result value of metric
+func (av AccessVector) IsUnknown() bool {
 	return av != AccessVectorUnknown
 }
 
