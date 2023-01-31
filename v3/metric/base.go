@@ -55,9 +55,6 @@ func (bm *Base) Decode(vector string) (*Base, error) {
 		bm = NewBase()
 	}
 	values := strings.Split(vector, "/")
-	if len(values) < 9 {
-		return bm, errs.Wrap(cvsserr.ErrInvalidVector, errs.WithContext("vector", vector))
-	}
 	//CVSS version
 	ver, err := GetVersion(values[0])
 	if err != nil {
@@ -142,11 +139,11 @@ func (bm *Base) decodeOne(str string) error {
 // GetError returns error instance if undefined metric
 func (bm *Base) GetError() error {
 	if bm == nil {
-		return errs.Wrap(cvsserr.ErrUndefinedMetric)
+		return errs.Wrap(cvsserr.ErrNoMetrics)
 	}
 	switch true {
 	case bm.Ver == VUnknown, bm.AV.IsUnknown(), bm.AC.IsUnknown(), bm.PR.IsUnknown(), bm.UI.IsUnknown(), bm.S.IsUnknown(), bm.C.IsUnknown(), bm.I.IsUnknown(), bm.A.IsUnknown():
-		return errs.Wrap(cvsserr.ErrUndefinedMetric)
+		return errs.Wrap(cvsserr.ErrNoMetrics)
 	default:
 		return nil
 	}

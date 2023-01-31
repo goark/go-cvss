@@ -32,11 +32,11 @@ type Environmental struct {
 func NewEnvironmental() *Environmental {
 	return &Environmental{
 		Temporal: NewTemporal(),
-		CDP:      CollateralDamagePotentialNotDefined,
-		TD:       TargetDistributionNotDefined,
-		CR:       ConfidentialityRequirementNotDefined,
-		IR:       IntegrityRequirementNotDefined,
-		AR:       AvailabilityRequirementNotDefined,
+		CDP:      CollateralDamagePotentialInvalid,
+		TD:       TargetDistributionInvalid,
+		CR:       ConfidentialityRequirementInvalid,
+		IR:       IntegrityRequirementInvalid,
+		AR:       AvailabilityRequirementInvalid,
 		names:    map[string]bool{},
 	}
 }
@@ -47,9 +47,6 @@ func (m *Environmental) Decode(vector string) (*Environmental, error) {
 		m = NewEnvironmental()
 	}
 	values := strings.Split(vector, "/")
-	if len(values) < 6 { // Temporal and Environmental metrics are optional
-		return nil, errs.Wrap(cvsserr.ErrInvalidVector, errs.WithContext("vector", vector))
-	}
 	// parse metrics
 	var lastErr error
 	for _, value := range values {
@@ -118,14 +115,14 @@ func (m *Environmental) decodeOne(str string) error {
 // GetError returns error instance if undefined metric
 func (m *Environmental) GetError() error {
 	if m == nil {
-		return errs.Wrap(cvsserr.ErrUndefinedMetric)
+		return errs.Wrap(cvsserr.ErrNoMetrics)
 	}
 	if err := m.Temporal.GetError(); err != nil {
 		return errs.Wrap(err)
 	}
 	switch true {
 	case !m.CDP.IsValid(), !m.TD.IsValid(), !m.CR.IsValid(), !m.IR.IsValid(), !m.AR.IsValid():
-		return errs.Wrap(cvsserr.ErrUndefinedMetric)
+		return errs.Wrap(cvsserr.ErrNoMetrics)
 	default:
 		return nil
 	}

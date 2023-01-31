@@ -39,9 +39,6 @@ func (tm *Temporal) Decode(vector string) (*Temporal, error) {
 		tm = NewTemporal()
 	}
 	values := strings.Split(vector, "/")
-	if len(values) < 9 { // E, RL, RC metrics are optional.
-		return tm, errs.Wrap(cvsserr.ErrInvalidVector, errs.WithContext("vector", vector))
-	}
 	//CVSS version
 	ver, err := GetVersion(values[0])
 	if err != nil {
@@ -108,7 +105,7 @@ func (tm *Temporal) decodeOne(str string) error {
 // GetError returns error instance if undefined metric
 func (tm *Temporal) GetError() error {
 	if tm == nil {
-		return errs.Wrap(cvsserr.ErrUndefinedMetric)
+		return errs.Wrap(cvsserr.ErrNoMetrics)
 	}
 	if err := tm.Base.GetError(); err != nil {
 		return errs.Wrap(err)

@@ -16,7 +16,7 @@ func TestTemporalScore(t *testing.T) {
 	}{
 		{vector: "XXXX:1.0/S:U/AV:N/AC:L/PR:H/UI:N/C:L/I:L/A:N", err: cvsserr.ErrInvalidVector, score: 0, sav: SeverityNone},
 		{vector: "CVSS:1.0/S:U/AV:N/AC:L/PR:H/UI:N/C:L/I:L/A:N", err: cvsserr.ErrNotSupportVer, score: 0, sav: SeverityNone},
-		{vector: "CVSS:3.0/AV:N/AC:L/PR:H/UI:N/C:L/I:L/A:N", err: cvsserr.ErrInvalidVector, score: 0, sav: SeverityNone},
+		{vector: "CVSS:3.0/AV:N/AC:L/PR:H/UI:N/C:L/I:L/A:N", err: cvsserr.ErrNoMetrics, score: 0, sav: SeverityNone},
 		{vector: "CVSS:3.0/S:U/AV:N/AC:L/PR:H/UI:N/C:L/I:L/X:N", err: cvsserr.ErrNotSupportMetric, score: 0, sav: SeverityNone},
 		{vector: "CVSS:3.0/S:U/AV:N/AC:L/PR:H/UI:N/C:L/I:L/RC:", err: cvsserr.ErrInvalidVector, score: 0, sav: SeverityNone},
 		{vector: "CVSS:3.0/S:U/AV:N/AC:L/PR:H/UI:N/C:L/I:L/:X", err: cvsserr.ErrInvalidVector, score: 0, sav: SeverityNone},
