@@ -540,9 +540,21 @@ func TestEncode(t *testing.T) {
 	tests := []struct {
 		name   string
 		vector string
+		outp   string
 	}{
-		{name: "CVE-2018-7846", vector: "AV:N/AC:L/Au:N/C:N/I:N/A:C/E:POC/RL:TF/RC:C"},
-		{name: "CVE-2020-7477", vector: "AV:N/AC:L/Au:S/C:N/I:N/A:P"},
+		{name: "CVE-2020-7477", vector: "AV:N/AC:L/Au:S/C:N/I:N/A:P", outp: "AV:N/AC:L/Au:S/C:N/I:N/A:P"},
+		{name: "CVE-2018-7846-1", vector: "AV:N/AC:L/Au:N/C:N/I:N/A:C/E:POC/RL:TF/RC:C", outp: "AV:N/AC:L/Au:N/C:N/I:N/A:C/E:POC/RL:TF/RC:C"},
+		{name: "CVE-2018-7846-2", vector: "AV:N/AC:L/Au:N/C:N/I:N/A:C/E:ND/RL:ND/RC:ND", outp: "AV:N/AC:L/Au:N/C:N/I:N/A:C/E:ND/RL:ND/RC:ND"},
+		{name: "CVE-2018-7846-3", vector: "AV:N/AC:L/Au:N/C:N/I:N/A:C/E:POC", outp: "AV:N/AC:L/Au:N/C:N/I:N/A:C/E:POC/RL:ND/RC:ND"},
+		{name: "CVE-2018-7846-4", vector: "AV:N/AC:L/Au:N/C:N/I:N/A:C/RL:TF", outp: "AV:N/AC:L/Au:N/C:N/I:N/A:C/E:ND/RL:TF/RC:ND"},
+		{name: "CVE-2018-7846-5", vector: "AV:N/AC:L/Au:N/C:N/I:N/A:C/RC:C", outp: "AV:N/AC:L/Au:N/C:N/I:N/A:C/E:ND/RL:ND/RC:C"},
+		{name: "Issue #23-1", vector: "AV:L/AC:M/Au:S/C:N/I:N/A:P/CDP:N/TD:H/CR:M/IR:M/AR:M", outp: "AV:L/AC:M/Au:S/C:N/I:N/A:P/CDP:N/TD:H/CR:M/IR:M/AR:M"},
+		{name: "Issue #23-2", vector: "AV:L/AC:M/Au:S/C:N/I:N/A:P/CDP:ND/TD:ND/CR:M/IR:ND/AR:ND", outp: "AV:L/AC:M/Au:S/C:N/I:N/A:P/CDP:ND/TD:ND/CR:M/IR:ND/AR:ND"},
+		{name: "Issue #23-3", vector: "AV:L/AC:M/Au:S/C:N/I:N/A:P/CDP:N/TD:H/CR:M/IR:M", outp: "AV:L/AC:M/Au:S/C:N/I:N/A:P/CDP:N/TD:H/CR:M/IR:M/AR:ND"},
+		{name: "Issue #23-4", vector: "AV:L/AC:M/Au:S/C:N/I:N/A:P/CDP:N/TD:H/CR:M/AR:M", outp: "AV:L/AC:M/Au:S/C:N/I:N/A:P/CDP:N/TD:H/CR:M/IR:ND/AR:M"},
+		{name: "Issue #23-5", vector: "AV:L/AC:M/Au:S/C:N/I:N/A:P/CDP:N/TD:H/IR:M/AR:M", outp: "AV:L/AC:M/Au:S/C:N/I:N/A:P/CDP:N/TD:H/CR:ND/IR:M/AR:M"},
+		{name: "Issue #23-6", vector: "AV:L/AC:M/Au:S/C:N/I:N/A:P/CDP:N/CR:M/IR:M/AR:M", outp: "AV:L/AC:M/Au:S/C:N/I:N/A:P/CDP:N/TD:ND/CR:M/IR:M/AR:M"},
+		{name: "Issue #23-7", vector: "AV:L/AC:M/Au:S/C:N/I:N/A:P/TD:H/CR:M/IR:M/AR:M", outp: "AV:L/AC:M/Au:S/C:N/I:N/A:P/CDP:ND/TD:H/CR:M/IR:M/AR:M"},
 	}
 
 	for _, tt := range tests {
@@ -550,8 +562,8 @@ func TestEncode(t *testing.T) {
 			m, err := Decode(tt.vector)
 			if err != nil {
 				t.Error(err)
-			} else if m.String() != tt.vector {
-				t.Errorf("String() = %v, want %v.", m.String(), tt.vector)
+			} else if m.String() != tt.outp {
+				t.Errorf("String() = %v, want %v.", m.String(), tt.outp)
 			}
 		})
 	}

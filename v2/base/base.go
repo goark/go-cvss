@@ -9,6 +9,23 @@ import (
 	"github.com/goark/go-cvss/cvsserr"
 )
 
+const (
+	metricAV  = "AV"
+	metricAC  = "AC"
+	metricAu  = "Au"
+	metricC   = "C"
+	metricI   = "I"
+	metricA   = "A"
+	metricE   = "E"
+	metricRL  = "RL"
+	metricRC  = "RC"
+	metricCDP = "CDP"
+	metricTD  = "TD"
+	metricCR  = "CR"
+	metricIR  = "IR"
+	metricAR  = "AR"
+)
+
 // Metrics is Base Metrics for CVSSv2
 type Metrics struct {
 	AV    AccessVector
@@ -67,72 +84,72 @@ func Decode(vector string) (*Metrics, error) {
 			return nil, errs.Wrap(cvsserr.ErrSameMetric, errs.WithContext("metric", metric))
 		}
 		switch name {
-		case "AV": // Access Vector
+		case metricAV: // Access Vector
 			metrics.AV = GetAccessVector(metric[1])
 			if metrics.AV == AccessVectorUnknown {
 				return nil, errs.Wrap(cvsserr.ErrInvalidValue, errs.WithContext("metric", metric))
 			}
-		case "AC": // Access Complexity
+		case metricAC: // Access Complexity
 			metrics.AC = GetAccessComplexity(metric[1])
 			if metrics.AC == AccessComplexityUnknown {
 				return nil, errs.Wrap(cvsserr.ErrInvalidValue, errs.WithContext("metric", metric))
 			}
-		case "Au": // Authentication
+		case metricAu: // Authentication
 			metrics.Au = GetAuthentication(metric[1])
 			if metrics.Au == AuthenticationUnknown {
 				return nil, errs.Wrap(cvsserr.ErrInvalidValue, errs.WithContext("metric", metric))
 			}
-		case "C": // Confidentiality Impact
+		case metricC: // Confidentiality Impact
 			metrics.C = GetConfidentialityImpact(metric[1])
 			if metrics.C == ConfidentialityImpactUnknown {
 				return nil, errs.Wrap(cvsserr.ErrInvalidValue, errs.WithContext("metric", metric))
 			}
-		case "I": // Integrity Impact
+		case metricI: // Integrity Impact
 			metrics.I = GetIntegrityImpact(metric[1])
 			if metrics.I == IntegrityImpactUnknown {
 				return nil, errs.Wrap(cvsserr.ErrInvalidValue, errs.WithContext("metric", metric))
 			}
-		case "A": // Availability Impact
+		case metricA: // Availability Impact
 			metrics.A = GetAvailabilityImpact(metric[1])
 			if metrics.A == AvailabilityImpactUnknown {
 				return nil, errs.Wrap(cvsserr.ErrInvalidValue, errs.WithContext("metric", metric))
 			}
-		case "E": // Exploitability
+		case metricE: // Exploitability
 			metrics.E = GetExploitability(metric[1])
 			if metrics.E == ExploitabilityInvalid {
 				return nil, errs.Wrap(cvsserr.ErrInvalidValue, errs.WithContext("metric", metric))
 			}
-		case "RL": // RemediationLevel
+		case metricRL: // RemediationLevel
 			metrics.RL = GetRemediationLevel(metric[1])
 			if metrics.RL == RemediationLevelInvalid {
 				return nil, errs.Wrap(cvsserr.ErrInvalidValue, errs.WithContext("metric", metric))
 			}
-		case "RC": // RemediationLevel
+		case metricRC: // RemediationLevel
 			metrics.RC = GetReportConfidence(metric[1])
 			if metrics.RC == ReportConfidenceInvalid {
 				return nil, errs.Wrap(cvsserr.ErrInvalidValue, errs.WithContext("metric", metric))
 			}
-		case "CDP": // CollateralDamagePotential
+		case metricCDP: // CollateralDamagePotential
 			metrics.CDP = GetCollateralDamagePotential(metric[1])
 			if metrics.CDP == CollateralDamagePotentialInvalid {
 				return nil, errs.Wrap(cvsserr.ErrInvalidValue, errs.WithContext("metric", metric))
 			}
-		case "TD": // TargetDistribution
+		case metricTD: // TargetDistribution
 			metrics.TD = GetTargetDistribution(metric[1])
 			if metrics.TD == TargetDistributionInvalid {
 				return nil, errs.Wrap(cvsserr.ErrInvalidValue, errs.WithContext("metric", metric))
 			}
-		case "CR": // ConfidentialityRequirement
+		case metricCR: // ConfidentialityRequirement
 			metrics.CR = GetConfidentialityRequirement(metric[1])
 			if metrics.CR == ConfidentialityRequirementInvalid {
 				return nil, errs.Wrap(cvsserr.ErrInvalidValue, errs.WithContext("metric", metric))
 			}
-		case "IR": // IntegrityRequirement
+		case metricIR: // IntegrityRequirement
 			metrics.IR = GetIntegrityRequirement(metric[1])
 			if metrics.IR == IntegrityRequirementInvalid {
 				return nil, errs.Wrap(cvsserr.ErrInvalidValue, errs.WithContext("metric", metric))
 			}
-		case "AR": // AvailabilityRequirement
+		case metricAR: // AvailabilityRequirement
 			metrics.AR = GetAvailabilityRequirement(metric[1])
 			if metrics.AR == AvailabilityRequirementInvalid {
 				return nil, errs.Wrap(cvsserr.ErrInvalidValue, errs.WithContext("metric", metric))
@@ -151,37 +168,29 @@ func (m *Metrics) Encode() (string, error) {
 		return "", err
 	}
 	r := &strings.Builder{}
-	r.WriteString(fmt.Sprintf("AV:%v", m.AV))  // Access Vector
-	r.WriteString(fmt.Sprintf("/AC:%v", m.AC)) // Access Complexity
-	r.WriteString(fmt.Sprintf("/Au:%v", m.Au)) // Authentication
-	r.WriteString(fmt.Sprintf("/C:%v", m.C))   // Confidentiality Impact
-	r.WriteString(fmt.Sprintf("/I:%v", m.I))   // Integrity Impact
-	r.WriteString(fmt.Sprintf("/A:%v", m.A))   // Availability Impact
 
-	if m.E.IsDefined() {
-		r.WriteString(fmt.Sprintf("/E:%v", m.E)) // Exploitability
-	}
-	if m.RL.IsDefined() {
-		r.WriteString(fmt.Sprintf("/RL:%v", m.RL)) // Remediation Level
-	}
-	if m.RC.IsDefined() {
-		r.WriteString(fmt.Sprintf("/RC:%v", m.RC)) // Report Confidence
+	// Base metrics
+	r.WriteString(fmt.Sprintf("%s:%v", metricAV, m.AV))  // Access Vector
+	r.WriteString(fmt.Sprintf("/%s:%v", metricAC, m.AC)) // Access Complexity
+	r.WriteString(fmt.Sprintf("/%s:%v", metricAu, m.Au)) // Authentication
+	r.WriteString(fmt.Sprintf("/%s:%v", metricC, m.C))   // Confidentiality Impact
+	r.WriteString(fmt.Sprintf("/%s:%v", metricI, m.I))   // Integrity Impact
+	r.WriteString(fmt.Sprintf("/%s:%v", metricA, m.A))   // Availability Impact
+
+	// Temporal metrics
+	if m.names[metricE] || m.names[metricRL] || m.names[metricRC] {
+		r.WriteString(fmt.Sprintf("/%s:%v", metricE, m.E))   // Exploitability
+		r.WriteString(fmt.Sprintf("/%s:%v", metricRL, m.RL)) // Remediation Level
+		r.WriteString(fmt.Sprintf("/%s:%v", metricRC, m.RC)) // Report Confidence
 	}
 
-	if m.CDP.IsDefined() {
-		r.WriteString(fmt.Sprintf("/CDP:%v", m.CDP)) // Collateral Damage Potential
-	}
-	if m.TD.IsDefined() {
-		r.WriteString(fmt.Sprintf("/TD:%v", m.TD)) // Target Distribution
-	}
-	if m.CR.IsDefined() {
-		r.WriteString(fmt.Sprintf("/CR:%v", m.CR)) // Confidentiality Requirement
-	}
-	if m.IR.IsDefined() {
-		r.WriteString(fmt.Sprintf("/IR:%v", m.IR)) // Integrity Requirement
-	}
-	if m.AR.IsDefined() {
-		r.WriteString(fmt.Sprintf("/AR:%v", m.AR)) // Availability Requirement
+	// Environmental metrics
+	if m.names[metricCDP] || m.names[metricTD] || m.names[metricCR] || m.names[metricIR] || m.names[metricAR] {
+		r.WriteString(fmt.Sprintf("/%s:%v", metricCDP, m.CDP)) // Collateral Damage Potential
+		r.WriteString(fmt.Sprintf("/%s:%v", metricTD, m.TD))   // Target Distribution
+		r.WriteString(fmt.Sprintf("/%s:%v", metricCR, m.CR))   // Confidentiality Requirement
+		r.WriteString(fmt.Sprintf("/%s:%v", metricIR, m.IR))   // Integrity Requirement
+		r.WriteString(fmt.Sprintf("/%s:%v", metricAR, m.AR))   // Availability Requirement
 	}
 
 	return r.String(), nil
