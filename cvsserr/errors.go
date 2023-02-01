@@ -3,15 +3,16 @@ package cvsserr
 import "errors"
 
 var (
-	ErrNullPointer      = errors.New("Null reference instance")
-	ErrUndefinedMetric  = errors.New("undefined metric")
-	ErrInvalidVector    = errors.New("invalid vector")
-	ErrNotSupportVer    = errors.New("not support version")
-	ErrNotSupportMetric = errors.New("not support metric")
-	ErrInvalidTemplate  = errors.New("invalid templete string")
-	ErrSameMetric       = errors.New("exist same metric")
-	ErrInvalidValue     = errors.New("invalid value of metric")
-	ErrNoMetrics        = errors.New("no metrics")
+	ErrNullPointer            = errors.New("Null reference instance")
+	ErrInvalidVector          = errors.New("invalid vector")
+	ErrNotSupportVer          = errors.New("not support version")
+	ErrNotSupportMetric       = errors.New("not support metric")
+	ErrInvalidTemplate        = errors.New("invalid templete string")
+	ErrSameMetric             = errors.New("exist same metric")
+	ErrInvalidValue           = errors.New("invalid value of metric")
+	ErrNoBaseMetrics          = errors.New("no Base metrics")
+	ErrNoTemporalMetrics      = errors.New("no Temporal metrics")
+	ErrNoEnvironmentalMetrics = errors.New("no Environmental metrics")
 )
 
 /* Copyright 2018-2023 Spiegel

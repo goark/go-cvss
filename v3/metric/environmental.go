@@ -170,7 +170,7 @@ func (em *Environmental) decodeOne(str string) error {
 // GetError returns error instance if undefined metric
 func (em *Environmental) GetError() error {
 	if em == nil {
-		return errs.Wrap(cvsserr.ErrNoMetrics)
+		return errs.Wrap(cvsserr.ErrNoEnvironmentalMetrics)
 	}
 	if err := em.Temporal.GetError(); err != nil {
 		return errs.Wrap(err)
@@ -178,7 +178,7 @@ func (em *Environmental) GetError() error {
 	switch true {
 	case !em.CR.IsValid(), !em.IR.IsValid(), !em.AR.IsValid(), !em.MAV.IsValid(), !em.MAC.IsValid(), !em.MPR.IsValid(), !em.MUI.IsValid(),
 		!em.MS.IsValid(), !em.MC.IsValid(), !em.MI.IsValid(), !em.MA.IsValid():
-		return errs.Wrap(cvsserr.ErrUndefinedMetric)
+		return errs.Wrap(cvsserr.ErrInvalidValue)
 	default:
 		return nil
 	}
@@ -186,15 +186,15 @@ func (em *Environmental) GetError() error {
 
 // Encode returns CVSSv3 vector string
 func (em *Environmental) Encode() (string, error) {
+	if em == nil {
+		return "", errs.Wrap(cvsserr.ErrNoEnvironmentalMetrics)
+	}
 	if err := em.GetError(); err != nil {
 		return "", errs.Wrap(err)
 	}
-	bs, err := em.Temporal.Encode()
-	if err != nil {
-		return "", errs.Wrap(err)
-	}
+	ts, _ := em.Temporal.Encode()
 	r := &strings.Builder{}
-	r.WriteString(bs)                                       //Vector of Temporal metrics
+	r.WriteString(ts)                                       //Vector of Temporal metrics
 	r.WriteString(fmt.Sprintf("/%v:%v", metricCR, em.CR))   //Confidentiality Requirement
 	r.WriteString(fmt.Sprintf("/%v:%v", metricIR, em.IR))   //Integrity Requirement
 	r.WriteString(fmt.Sprintf("/%v:%v", metricAR, em.AR))   //Availability Requirement
@@ -206,7 +206,7 @@ func (em *Environmental) Encode() (string, error) {
 	r.WriteString(fmt.Sprintf("/%v:%v", metricMC, em.MC))   //Modified Confidentiality Impact
 	r.WriteString(fmt.Sprintf("/%v:%v", metricMI, em.MI))   //Modified Integrity Impact
 	r.WriteString(fmt.Sprintf("/%v:%v", metricMA, em.MA))   //Modified Availability Impact
-	return r.String(), nil
+	return r.String(), em.GetError()
 }
 
 // String is stringer method.

@@ -15,7 +15,7 @@ func TestValidationBase(t *testing.T) {
 		{vec: "AV:N/AC:H/Au:M/C:C/I:N/A:", err: cvsserr.ErrInvalidVector},
 		{vec: "AV:N/AC:H/Au:M/C:C/I:N/:", err: cvsserr.ErrInvalidVector},
 		{vec: "AV:N/AC:H/Au:M/C:C/I:N/X:X", err: cvsserr.ErrNotSupportMetric},
-		{vec: "AV:N/AC:H/Au:M/C:C/I:N", err: cvsserr.ErrNoMetrics},
+		{vec: "AV:N/AC:H/Au:M/C:C/I:N", err: cvsserr.ErrNoBaseMetrics},
 		{vec: "AV:N/AC:H/Au:M/C:C/I:N/A:0", err: cvsserr.ErrInvalidValue},
 		{vec: "AV:N/AC:H/Au:M/C:C/I:0/A:C", err: cvsserr.ErrInvalidValue},
 		{vec: "AV:N/AC:H/Au:M/C:0/I:N/A:C", err: cvsserr.ErrInvalidValue},
@@ -40,11 +40,12 @@ func TestValidationTemporal(t *testing.T) {
 	}{
 		{vec: "AV:N/AC:H/Au:M/C:C/I:N/A:C/E:U/RL:ND/RC:", err: cvsserr.ErrInvalidVector},
 		{vec: "AV:N/AC:H/Au:M/C:C/I:N/A:C/E:U/RL:ND/:", err: cvsserr.ErrInvalidVector},
-		{vec: "AV:N/AC:H/Au:M/C:C/I:N/A:C/E:U/RL:ND", err: cvsserr.ErrNoMetrics},
 		{vec: "AV:N/AC:H/Au:M/C:C/I:N/A:C/E:U/RL:ND/X:X", err: cvsserr.ErrNotSupportMetric},
 		{vec: "AV:N/AC:H/Au:M/C:C/I:N/A:C/E:U/RL:ND/RC:0", err: cvsserr.ErrInvalidValue},
 		{vec: "AV:N/AC:H/Au:M/C:C/I:N/A:C/E:U/RL:0/RC:ND", err: cvsserr.ErrInvalidValue},
 		{vec: "AV:N/AC:H/Au:M/C:C/I:N/A:C/E:0/RL:ND/RC:ND", err: cvsserr.ErrInvalidValue},
+		{vec: "AV:N/AC:H/Au:M/C:C/I:N/A:C/E:U/RL:ND", err: cvsserr.ErrNoTemporalMetrics},
+		{vec: "AV:N/AC:L/Au:N/C:N/I:N/E:U/RL:ND/RC:ND", err: cvsserr.ErrNoBaseMetrics},
 		{vec: "AV:N/AC:L/Au:N/C:N/I:N/A:C/E:U/RL:ND/RC:ND", err: nil},
 	}
 
@@ -71,8 +72,9 @@ func TestValidationEnvironmental(t *testing.T) {
 		{vec: "AV:N/AC:H/Au:M/C:C/I:N/A:C/E:U/RL:ND/RC:ND/CDP:0/TD:H/CR:M/IR:M/AR:H", err: cvsserr.ErrInvalidValue},
 		{vec: "av:n/ac:l/au:n/c:n/i:n/a:c/e:u/rl:nd/rc:nd/cdp:h/td:h/cr:m/ir:m/ar:h", err: cvsserr.ErrNotSupportMetric},
 		{vec: "AV:N/AC:L/AU:N/C:N/I:N/A:C/E:U/RL:ND/RC:ND/CDP:H/TD:H/CR:M/IR:M/AR:H", err: cvsserr.ErrNotSupportMetric},
-		{vec: "AV:N/AC:L/Au:N/C:N/I:N/A:C/E:U/RL:ND/RC:ND/CDP:H/TD:H/CR:M/IR:M", err: cvsserr.ErrNoMetrics},
-		{vec: "AV:N/AC:L/Au:N/C:N/I:N/A:C/E:U/RL:ND/CDP:H/TD:H/CR:M/IR:M/AR:H", err: cvsserr.ErrNoMetrics},
+		{vec: "AV:N/AC:L/Au:N/C:N/I:N/A:C/E:U/RL:ND/RC:ND/CDP:H/TD:H/CR:M/IR:M", err: cvsserr.ErrNoEnvironmentalMetrics},
+		{vec: "AV:N/AC:L/Au:N/C:N/I:N/A:C/E:U/RL:ND/CDP:H/TD:H/CR:M/IR:M/AR:H", err: cvsserr.ErrNoTemporalMetrics},
+		{vec: "AV:N/AC:L/Au:N/C:N/I:N/E:U/RL:ND/RC:ND/CDP:H/TD:H/CR:M/IR:M/AR:H", err: cvsserr.ErrNoBaseMetrics},
 		{vec: "AV:N/AC:L/Au:N/C:N/I:N/A:C/E:U/RL:ND/RC:ND/CDP:H/TD:H/CR:M/IR:M/AR:H", err: nil},
 	}
 
@@ -169,6 +171,9 @@ func TestBaseTemporalScore(t *testing.T) {
 				if got := m.Score(); got != tt.temp {
 					t.Errorf("Metrics.Score() = %v, want %v", got, tt.temp)
 				}
+				if got := m.String(); tt.vector != got {
+					t.Errorf("Metrics.String() = %v, want %v", got, tt.temp)
+				}
 			}
 		})
 	}
@@ -218,6 +223,9 @@ func TestEnvEnvironmentalScore(t *testing.T) {
 				}
 				if got := m.Score(); got != tt.env {
 					t.Errorf("Metrics.EnvironmentalScore() = %v, want %v", got, tt.temp)
+				}
+				if got := m.String(); tt.vector != got {
+					t.Errorf("Metrics.String() = %v, want %v", got, tt.temp)
 				}
 			}
 

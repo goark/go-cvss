@@ -18,7 +18,7 @@ func TestDecodeError(t *testing.T) {
 		{vector: "CVSS:3.1/AV:A/AC:L/PR:N/UI:N/S:C/C:H/I:H/A:0/A:H", err: cvsserr.ErrInvalidValue},
 		{vector: "CVSS:3.1/AV:A/AC:L/PR:N/UI:N/S:C/C:H/I:H/A:H/A:H", err: cvsserr.ErrSameMetric},
 		{vector: "CVSS:2.0/AV:P/AC:H/PR:H/UI:R/S:U/C:N/I:N/A:N", err: cvsserr.ErrNotSupportVer},
-		{vector: "CVSS:3.1", err: cvsserr.ErrNoMetrics},
+		{vector: "CVSS:3.1", err: cvsserr.ErrNoBaseMetrics},
 		{vector: "CVSS3.1/AV:X/AC:H/PR:H/UI:R/S:U/C:N/I:N/A:N", err: cvsserr.ErrInvalidVector},
 		{vector: "CVSS:3.1/AV:P/AC:H/PR:H/UI:R/S:U/C:N/I:N/A-N", err: cvsserr.ErrInvalidVector},
 		{vector: "CVSS:3.1/AV:P/AC:H/PR:H/UI:R/S:U/C:N/I:N/A:", err: cvsserr.ErrInvalidVector},
@@ -90,7 +90,7 @@ func TestScore(t *testing.T) {
 		score    float64
 		severity Severity
 	}{
-		{vector: "CVSS:3.0/AV:P/AC:H/PR:H/UI:R/S:U/C:N/I:N/A:X", score: 0.0, severity: SeverityNone}, //error
+		{vector: "CVSS:3.0/AV:P/AC:H/PR:H/UI:R/S:U/C:N/I:N", score: 0.0, severity: SeverityNone}, //error
 		//CVSSv3.0
 		{vector: "CVSS:3.0/AV:P/AC:H/PR:H/UI:R/S:U/C:N/I:N/A:N", score: 0.0, severity: SeverityNone},     //Zero metrics
 		{vector: "CVSS:3.0/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:N/A:N", score: 7.5, severity: SeverityHigh},     //CVE-2015-8252
@@ -142,6 +142,9 @@ func TestScore(t *testing.T) {
 	for _, tc := range testCases {
 		m, _ := NewBase().Decode(tc.vector)
 		score := m.Score()
+		if got := m.String(); got != tc.vector {
+			t.Errorf("String() = %v, want %v.", got, tc.vector)
+		}
 		if score != tc.score {
 			t.Errorf("Score(%s) = %v, want %v.", tc.vector, score, tc.score)
 		}

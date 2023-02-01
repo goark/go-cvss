@@ -139,11 +139,13 @@ func (bm *Base) decodeOne(str string) error {
 // GetError returns error instance if undefined metric
 func (bm *Base) GetError() error {
 	if bm == nil {
-		return errs.Wrap(cvsserr.ErrNoMetrics)
+		return errs.Wrap(cvsserr.ErrNoBaseMetrics)
 	}
 	switch true {
-	case bm.Ver == VUnknown, bm.AV.IsUnknown(), bm.AC.IsUnknown(), bm.PR.IsUnknown(), bm.UI.IsUnknown(), bm.S.IsUnknown(), bm.C.IsUnknown(), bm.I.IsUnknown(), bm.A.IsUnknown():
-		return errs.Wrap(cvsserr.ErrNoMetrics)
+	case bm.Ver == VUnknown:
+		return errs.Wrap(cvsserr.ErrNotSupportVer)
+	case bm.AV.IsUnknown(), bm.AC.IsUnknown(), bm.PR.IsUnknown(), bm.UI.IsUnknown(), bm.S.IsUnknown(), bm.C.IsUnknown(), bm.I.IsUnknown(), bm.A.IsUnknown():
+		return errs.Wrap(cvsserr.ErrNoBaseMetrics)
 	default:
 		return nil
 	}
@@ -151,20 +153,38 @@ func (bm *Base) GetError() error {
 
 // Encode returns CVSSv3 vector string
 func (bm *Base) Encode() (string, error) {
-	if err := bm.GetError(); err != nil {
-		return "", err
+	if bm == nil {
+		return "", errs.Wrap(cvsserr.ErrNoBaseMetrics)
 	}
-	r := &strings.Builder{}
-	r.WriteString(fmt.Sprintf("%v:%v", nameCVSS, bm.Ver)) //CVSS Version
-	r.WriteString(fmt.Sprintf("/%v:%v", metricAV, bm.AV)) //Attack Vector
-	r.WriteString(fmt.Sprintf("/%v:%v", metricAC, bm.AC)) //Attack Complexity
-	r.WriteString(fmt.Sprintf("/%v:%v", metricPR, bm.PR)) //Privileges Required
-	r.WriteString(fmt.Sprintf("/%v:%v", metricUI, bm.UI)) //User Interaction
-	r.WriteString(fmt.Sprintf("/%v:%v", metricS, bm.S))   //Scope
-	r.WriteString(fmt.Sprintf("/%v:%v", metricC, bm.C))   //Confidentiality Impact
-	r.WriteString(fmt.Sprintf("/%v:%v", metricI, bm.I))   //Integrity Impact
-	r.WriteString(fmt.Sprintf("/%v:%v", metricA, bm.A))   //Availability Impact
-	return r.String(), nil
+	r := []string{}
+	if bm.Ver != VUnknown {
+		r = append(r, fmt.Sprintf("%v:%v", nameCVSS, bm.Ver)) //CVSS Version
+	}
+	if bm.names[metricAV] {
+		r = append(r, fmt.Sprintf("%v:%v", metricAV, bm.AV)) //Attack Vector
+	}
+	if bm.names[metricAC] {
+		r = append(r, fmt.Sprintf("%v:%v", metricAC, bm.AC)) //Attack Complexity
+	}
+	if bm.names[metricPR] {
+		r = append(r, fmt.Sprintf("%v:%v", metricPR, bm.PR)) //Privileges Required
+	}
+	if bm.names[metricUI] {
+		r = append(r, fmt.Sprintf("%v:%v", metricUI, bm.UI)) //User Interaction
+	}
+	if bm.names[metricS] {
+		r = append(r, fmt.Sprintf("%v:%v", metricS, bm.S)) //Scope
+	}
+	if bm.names[metricC] {
+		r = append(r, fmt.Sprintf("%v:%v", metricC, bm.C)) //Confidentiality Impact
+	}
+	if bm.names[metricI] {
+		r = append(r, fmt.Sprintf("%v:%v", metricI, bm.I)) //Integrity Impact
+	}
+	if bm.names[metricA] {
+		r = append(r, fmt.Sprintf("%v:%v", metricA, bm.A)) //Availability Impact
+	}
+	return strings.Join(r, "/"), bm.GetError()
 }
 
 // String is stringer method.
