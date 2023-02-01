@@ -115,14 +115,14 @@ func (m *Environmental) decodeOne(str string) error {
 // GetError returns error instance if undefined metric
 func (m *Environmental) GetError() error {
 	if m == nil {
-		return errs.Wrap(cvsserr.ErrNoMetrics)
+		return errs.Wrap(cvsserr.ErrNoEnvironmentalMetrics)
 	}
 	if err := m.Temporal.GetError(); err != nil {
 		return errs.Wrap(err)
 	}
 	switch true {
 	case !m.CDP.IsValid(), !m.TD.IsValid(), !m.CR.IsValid(), !m.IR.IsValid(), !m.AR.IsValid():
-		return errs.Wrap(cvsserr.ErrNoMetrics)
+		return errs.Wrap(cvsserr.ErrNoEnvironmentalMetrics)
 	default:
 		return nil
 	}
@@ -130,23 +130,28 @@ func (m *Environmental) GetError() error {
 
 // Encode returns CVSSv2 vector string
 func (m *Environmental) Encode() (string, error) {
-	if err := m.GetError(); err != nil {
-		return "", err
+	if m == nil {
+		return "", errs.Wrap(cvsserr.ErrNoBaseMetrics)
 	}
-	ts, err := m.Temporal.Encode()
-	if err != nil {
-		return "", errs.Wrap(err)
-	}
+	ts, _ := m.Temporal.Encode()
 	r := &strings.Builder{}
 	r.WriteString(ts) //Vector of Temporal metrics
-	if m.names[metricCDP] || m.names[metricTD] || m.names[metricCR] || m.names[metricIR] || m.names[metricAR] {
+	if m.names[metricCDP] {
 		r.WriteString(fmt.Sprintf("/%s:%v", metricCDP, m.CDP)) // Collateral Damage Potential
-		r.WriteString(fmt.Sprintf("/%s:%v", metricTD, m.TD))   // Target Distribution
-		r.WriteString(fmt.Sprintf("/%s:%v", metricCR, m.CR))   // Confidentiality Requirement
-		r.WriteString(fmt.Sprintf("/%s:%v", metricIR, m.IR))   // Integrity Requirement
-		r.WriteString(fmt.Sprintf("/%s:%v", metricAR, m.AR))   // Availability Requirement
 	}
-	return r.String(), nil
+	if m.names[metricTD] {
+		r.WriteString(fmt.Sprintf("/%s:%v", metricTD, m.TD)) // Target Distribution
+	}
+	if m.names[metricCR] {
+		r.WriteString(fmt.Sprintf("/%s:%v", metricCR, m.CR)) // Confidentiality Requirement
+	}
+	if m.names[metricIR] {
+		r.WriteString(fmt.Sprintf("/%s:%v", metricIR, m.IR)) // Integrity Requirement
+	}
+	if m.names[metricAR] {
+		r.WriteString(fmt.Sprintf("/%s:%v", metricAR, m.AR)) // Availability Requirement
+	}
+	return r.String(), m.GetError()
 }
 
 // String is stringer method.

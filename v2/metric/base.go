@@ -114,11 +114,11 @@ func (m *Base) decodeOne(str string) error {
 // GetError returns error instance if unknown metric
 func (m *Base) GetError() error {
 	if m == nil {
-		return errs.Wrap(cvsserr.ErrNoMetrics)
+		return errs.Wrap(cvsserr.ErrNoBaseMetrics)
 	}
 	switch true {
 	case !m.AV.IsUnknown(), !m.AC.IsUnknown(), !m.Au.IsUnknown(), !m.C.IsUnknown(), !m.I.IsUnknown(), !m.A.IsUnknown():
-		return errs.Wrap(cvsserr.ErrNoMetrics)
+		return errs.Wrap(cvsserr.ErrNoBaseMetrics)
 	default:
 		return nil
 	}
@@ -126,17 +126,29 @@ func (m *Base) GetError() error {
 
 // Encode returns CVSSv2 vector string
 func (m *Base) Encode() (string, error) {
-	if err := m.GetError(); err != nil {
-		return "", err
+	if m == nil {
+		return "", errs.Wrap(cvsserr.ErrNoBaseMetrics)
 	}
-	r := &strings.Builder{}
-	r.WriteString(fmt.Sprintf("%s:%v", metricAV, m.AV))  // Access Vector
-	r.WriteString(fmt.Sprintf("/%s:%v", metricAC, m.AC)) // Access Complexity
-	r.WriteString(fmt.Sprintf("/%s:%v", metricAu, m.Au)) // Authentication
-	r.WriteString(fmt.Sprintf("/%s:%v", metricC, m.C))   // Confidentiality Impact
-	r.WriteString(fmt.Sprintf("/%s:%v", metricI, m.I))   // Integrity Impact
-	r.WriteString(fmt.Sprintf("/%s:%v", metricA, m.A))   // Availability Impact
-	return r.String(), nil
+	r := []string{}
+	if m.names[metricAV] {
+		r = append(r, fmt.Sprintf("%s:%v", metricAV, m.AV)) // Access Vector
+	}
+	if m.names[metricAC] {
+		r = append(r, fmt.Sprintf("%s:%v", metricAC, m.AC)) // Access Complexity
+	}
+	if m.names[metricAu] {
+		r = append(r, fmt.Sprintf("%s:%v", metricAu, m.Au)) // Authentication
+	}
+	if m.names[metricC] {
+		r = append(r, fmt.Sprintf("%s:%v", metricC, m.C)) // Confidentiality Impact
+	}
+	if m.names[metricI] {
+		r = append(r, fmt.Sprintf("%s:%v", metricI, m.I)) // Integrity Impact
+	}
+	if m.names[metricA] {
+		r = append(r, fmt.Sprintf("%s:%v", metricA, m.A)) // Availability Impact
+	}
+	return strings.Join(r, "/"), m.GetError()
 }
 
 // String is stringer method.

@@ -105,14 +105,14 @@ func (tm *Temporal) decodeOne(str string) error {
 // GetError returns error instance if undefined metric
 func (tm *Temporal) GetError() error {
 	if tm == nil {
-		return errs.Wrap(cvsserr.ErrNoMetrics)
+		return errs.Wrap(cvsserr.ErrNoTemporalMetrics)
 	}
 	if err := tm.Base.GetError(); err != nil {
 		return errs.Wrap(err)
 	}
 	switch true {
 	case !tm.E.IsValid(), !tm.RL.IsValid(), !tm.RC.IsValid():
-		return errs.Wrap(cvsserr.ErrUndefinedMetric)
+		return errs.Wrap(cvsserr.ErrInvalidValue)
 	default:
 		return nil
 	}
@@ -120,19 +120,16 @@ func (tm *Temporal) GetError() error {
 
 // Encode returns CVSSv3 vector string
 func (tm *Temporal) Encode() (string, error) {
-	if err := tm.GetError(); err != nil {
-		return "", errs.Wrap(err)
+	if tm == nil {
+		return "", errs.Wrap(cvsserr.ErrNoTemporalMetrics)
 	}
-	bs, err := tm.Base.Encode()
-	if err != nil {
-		return "", errs.Wrap(err)
-	}
+	bs, _ := tm.Base.Encode()
 	r := &strings.Builder{}
 	r.WriteString(bs)                                     //Vector of Base metrics
 	r.WriteString(fmt.Sprintf("/%v:%v", metricE, tm.E))   //Exploitability
 	r.WriteString(fmt.Sprintf("/%v:%v", metricRL, tm.RL)) //Remediation Level
 	r.WriteString(fmt.Sprintf("/%v:%v", metricRC, tm.RC)) //Report Confidence
-	return r.String(), nil
+	return r.String(), tm.GetError()
 }
 
 // String is stringer method.

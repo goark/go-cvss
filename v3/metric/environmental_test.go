@@ -16,7 +16,7 @@ func TestEnvironmentalScore(t *testing.T) {
 	}{
 		{vector: "XXXX:3.1/AV:A/AC:H/PR:L/UI:N/S:C/C:L/I:H/A:L/E:P/RL:O/RC:U/CR:L/IR:M/AR:L/MAV:P/MAC:L/MPR:L/MUI:R/MS:C/MC:H/MI:H/MA:H", err: cvsserr.ErrInvalidVector, score: 0, sav: SeverityNone},
 		{vector: "CVSS:1.0/S:U/AV:N/AC:L/PR:H/UI:N/C:L/I:L/A:N", err: cvsserr.ErrNotSupportVer, score: 0, sav: SeverityNone},
-		{vector: "CVSS:3.0/AV:N/AC:L/PR:H/UI:N/C:L/I:L/A:N", err: cvsserr.ErrNoMetrics, score: 0, sav: SeverityNone},
+		{vector: "CVSS:3.0/AV:N/AC:L/PR:H/UI:N/C:L/I:L/A:N", err: cvsserr.ErrNoBaseMetrics, score: 0, sav: SeverityNone},
 		{vector: "CVSS:3.0/S:U/AV:N/AC:L/PR:H/UI:N/C:L/I:L/X:N", err: cvsserr.ErrNotSupportMetric, score: 0, sav: SeverityNone},
 		{vector: "CVSS:3.1/AV:A/AC:H/PR:L/UI:N/S:C/C:H/I:L/A:L/RC:", err: cvsserr.ErrInvalidVector, score: 0, sav: SeverityNone},
 		{vector: "CVSS:3.1/AV:A/AC:H/PR:L/UI:N/S:C/C:H/I:L/A:L/MC:", err: cvsserr.ErrInvalidVector, score: 0, sav: SeverityNone},

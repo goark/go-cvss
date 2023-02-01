@@ -99,14 +99,14 @@ func (m *Temporal) decodeOne(str string) error {
 // GetError returns error instance if undefined metric
 func (m *Temporal) GetError() error {
 	if m == nil {
-		return errs.Wrap(cvsserr.ErrNoMetrics)
+		return errs.Wrap(cvsserr.ErrNoTemporalMetrics)
 	}
 	if err := m.Base.GetError(); err != nil {
 		return errs.Wrap(err)
 	}
 	switch true {
 	case !m.E.IsValid(), !m.RL.IsValid(), !m.RC.IsValid():
-		return errs.Wrap(cvsserr.ErrNoMetrics)
+		return errs.Wrap(cvsserr.ErrNoTemporalMetrics)
 	default:
 		return nil
 	}
@@ -114,21 +114,22 @@ func (m *Temporal) GetError() error {
 
 // Encode returns CVSSv2 vector string
 func (m *Temporal) Encode() (string, error) {
-	if err := m.GetError(); err != nil {
-		return "", err
+	if m == nil {
+		return "", errs.Wrap(cvsserr.ErrNoBaseMetrics)
 	}
-	bs, err := m.Base.Encode()
-	if err != nil {
-		return "", errs.Wrap(err)
-	}
+	bs, _ := m.Base.Encode()
 	r := &strings.Builder{}
 	r.WriteString(bs) //Vector of Base metrics
-	if m.names[metricE] || m.names[metricRL] || m.names[metricRC] {
-		r.WriteString(fmt.Sprintf("/%s:%v", metricE, m.E))   // Exploitability
+	if m.names[metricE] {
+		r.WriteString(fmt.Sprintf("/%s:%v", metricE, m.E)) // Exploitability
+	}
+	if m.names[metricRL] {
 		r.WriteString(fmt.Sprintf("/%s:%v", metricRL, m.RL)) // Remediation Level
+	}
+	if m.names[metricRC] {
 		r.WriteString(fmt.Sprintf("/%s:%v", metricRC, m.RC)) // Report Conf
 	}
-	return r.String(), nil
+	return r.String(), m.GetError()
 }
 
 // String is stringer method.
