@@ -120,12 +120,20 @@ func (m *Environmental) GetError() error {
 	if err := m.Temporal.GetError(); err != nil {
 		return errs.Wrap(err)
 	}
+	if m.IsEmpty() {
+		return nil
+	}
 	switch true {
 	case !m.CDP.IsValid(), !m.TD.IsValid(), !m.CR.IsValid(), !m.IR.IsValid(), !m.AR.IsValid():
 		return errs.Wrap(cvsserr.ErrNoEnvironmentalMetrics)
 	default:
 		return nil
 	}
+}
+
+// IsEmpty returns true if all elements of Temporal Metrics are empty.
+func (m *Environmental) IsEmpty() bool {
+	return !m.names[metricCDP] && !m.names[metricTD] && !m.names[metricCR] && !m.names[metricIR] && !m.names[metricAR]
 }
 
 // Encode returns CVSSv2 vector string
@@ -165,9 +173,22 @@ func (m *Environmental) Score() float64 {
 	if err := m.GetError(); err != nil {
 		return 0
 	}
-	adjustedImpact := math.Min(10.0, 10.41*(1-(1-m.C.Value()*m.CR.Value())*(1-m.I.Value()*m.IR.Value())*(1-m.A.Value()*m.AR.Value())))
-	baseScore := m.Base.score(adjustedImpact)
-	adjustedTemporal := m.Temporal.score(baseScore)
+	var baseScore float64
+	if m.IsEmpty() {
+		baseScore = m.Base.Score()
+	} else {
+		adjustedImpact := math.Min(10.0, 10.41*(1-(1-m.C.Value()*m.CR.Value())*(1-m.I.Value()*m.IR.Value())*(1-m.A.Value()*m.AR.Value())))
+		baseScore = m.Base.score(adjustedImpact)
+	}
+	var adjustedTemporal float64
+	if m.Temporal.IsEmpty() {
+		adjustedTemporal = baseScore
+	} else {
+		adjustedTemporal = m.Temporal.score(baseScore)
+	}
+	if m.IsEmpty() {
+		return adjustedTemporal
+	}
 	return math.Round((adjustedTemporal+(10-adjustedTemporal)*m.CDP.Value()*m.TD.Value())*10) / 10
 }
 

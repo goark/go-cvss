@@ -157,6 +157,12 @@ func TestBaseTemporalScore(t *testing.T) {
 			base:   6.2,
 			temp:   4.9,
 		},
+		{
+			name:   "CVE-2003-0062-baseonly",
+			vector: "AV:L/AC:H/Au:N/C:C/I:C/A:C",
+			base:   6.2,
+			temp:   6.2,
+		},
 	}
 
 	for _, tt := range tests {
@@ -207,6 +213,27 @@ func TestEnvEnvironmentalScore(t *testing.T) {
 			base:   6.2,
 			temp:   4.9,
 			env:    7.5,
+		},
+		{
+			name:   "CVE-2003-0062-baseonly",
+			vector: "AV:L/AC:H/Au:N/C:C/I:C/A:C",
+			base:   6.2,
+			temp:   6.2,
+			env:    6.2,
+		},
+		{
+			name:   "CVE-2003-0062-temporal",
+			vector: "AV:L/AC:H/Au:N/C:C/I:C/A:C/E:POC/RL:OF/RC:C",
+			base:   6.2,
+			temp:   4.9,
+			env:    4.9,
+		},
+		{
+			name:   "CVE-2003-0062-skip-temporal",
+			vector: "AV:L/AC:H/Au:N/C:C/I:C/A:C/CDP:H/TD:H/CR:M/IR:M/AR:M",
+			base:   6.2,
+			temp:   6.2,
+			env:    8.1,
 		},
 	}
 	for _, tt := range tests {
