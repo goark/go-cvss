@@ -104,12 +104,20 @@ func (m *Temporal) GetError() error {
 	if err := m.Base.GetError(); err != nil {
 		return errs.Wrap(err)
 	}
+	if m.IsEmpty() {
+		return nil
+	}
 	switch true {
 	case !m.E.IsValid(), !m.RL.IsValid(), !m.RC.IsValid():
 		return errs.Wrap(cvsserr.ErrNoTemporalMetrics)
 	default:
 		return nil
 	}
+}
+
+// IsEmpty returns true if all elements of Temporal Metrics are empty.
+func (m *Temporal) IsEmpty() bool {
+	return !m.names[metricE] && !m.names[metricRL] && !m.names[metricRC]
 }
 
 // Encode returns CVSSv2 vector string
@@ -143,7 +151,11 @@ func (m *Temporal) Score() float64 {
 	if err := m.GetError(); err != nil {
 		return 0
 	}
-	return m.score(m.Base.Score())
+	bs := m.Base.Score()
+	if m.IsEmpty() {
+		return bs
+	}
+	return m.score(bs)
 }
 
 func (m *Temporal) score(baseScore float64) float64 {
