@@ -61,7 +61,14 @@ func (m *Base) Decode(vector string) (*Base, error) {
 	if lastErr != nil {
 		return m, lastErr
 	}
-	return m, m.GetError()
+	enc, err := m.Encode()
+	if err != nil {
+		return m, errs.Wrap(err, errs.WithContext("vector", vector))
+	}
+	if vector != enc {
+		return m, errs.Wrap(cvsserr.ErrMisordered, errs.WithContext("vector", vector))
+	}
+	return m, nil
 }
 
 func (m *Base) decodeOne(str string) error {
