@@ -60,7 +60,14 @@ func (m *Environmental) Decode(vector string) (*Environmental, error) {
 	if lastErr != nil {
 		return m, lastErr
 	}
-	return m, m.GetError()
+	enc, err := m.Encode()
+	if err != nil {
+		return m, errs.Wrap(err, errs.WithContext("vector", vector))
+	}
+	if vector != enc {
+		return m, errs.Wrap(cvsserr.ErrMisordered, errs.WithContext("vector", vector))
+	}
+	return m, nil
 }
 
 func (m *Environmental) decodeOne(str string) error {
@@ -141,9 +148,8 @@ func (m *Environmental) Encode() (string, error) {
 	if m == nil {
 		return "", errs.Wrap(cvsserr.ErrNoBaseMetrics)
 	}
-	ts, _ := m.Temporal.Encode()
 	r := &strings.Builder{}
-	r.WriteString(ts) //Vector of Temporal metrics
+	r.WriteString(m.Temporal.String()) //Vector of Temporal metrics
 	if m.names[metricCDP] {
 		r.WriteString(fmt.Sprintf("/%s:%v", metricCDP, m.CDP)) // Collateral Damage Potential
 	}

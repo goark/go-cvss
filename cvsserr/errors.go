@@ -13,6 +13,7 @@ var (
 	ErrNoBaseMetrics          = errors.New("no Base metrics")
 	ErrNoTemporalMetrics      = errors.New("no Temporal metrics")
 	ErrNoEnvironmentalMetrics = errors.New("no Environmental metrics")
+	ErrMisordered             = errors.New("misordered vector string")
 )
 
 /* Copyright 2018-2023 Spiegel

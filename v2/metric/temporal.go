@@ -54,7 +54,14 @@ func (m *Temporal) Decode(vector string) (*Temporal, error) {
 	if lastErr != nil {
 		return m, lastErr
 	}
-	return m, m.GetError()
+	enc, err := m.Encode()
+	if err != nil {
+		return m, errs.Wrap(err, errs.WithContext("vector", vector))
+	}
+	if vector != enc {
+		return m, errs.Wrap(cvsserr.ErrMisordered, errs.WithContext("vector", vector))
+	}
+	return m, nil
 }
 
 func (m *Temporal) decodeOne(str string) error {
@@ -125,9 +132,8 @@ func (m *Temporal) Encode() (string, error) {
 	if m == nil {
 		return "", errs.Wrap(cvsserr.ErrNoBaseMetrics)
 	}
-	bs, _ := m.Base.Encode()
 	r := &strings.Builder{}
-	r.WriteString(bs) //Vector of Base metrics
+	r.WriteString(m.Base.String()) //Vector of Base metrics
 	if m.names[metricE] {
 		r.WriteString(fmt.Sprintf("/%s:%v", metricE, m.E)) // Exploitability
 	}
