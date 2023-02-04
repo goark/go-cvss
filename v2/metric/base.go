@@ -2,7 +2,6 @@ package metric
 
 import (
 	"fmt"
-	"math"
 	"strings"
 
 	"github.com/goark/errs"
@@ -182,7 +181,7 @@ func (m *Base) score(impact float64) float64 {
 	if impact == 0 {
 		fimpact = 0
 	}
-	return math.Round(((0.6*impact)+(0.4*exploitability)-1.5)*fimpact*10) / 10
+	return roundTo1Decimal(((0.6 * impact) + (0.4 * exploitability) - 1.5) * fimpact)
 }
 
 // GetSeverity returns severity by score of Base metrics

@@ -241,6 +241,20 @@ func TestEnvEnvironmentalScore(t *testing.T) {
 			temp:   6.2,
 			env:    8.1,
 		},
+		{
+			name:   "issue-33",
+			vector: "AV:A/AC:L/Au:N/C:C/I:C/A:C/CDP:H/TD:H/CR:L/IR:ND/AR:ND",
+			base:   8.3,
+			temp:   8.3,
+			env:    9.0,
+		},
+		{
+			name:   "issue-33b",
+			vector: "AV:A/AC:L/Au:N/C:C/I:C/A:C/E:ND/RL:ND/RC:ND/CDP:H/TD:ND/CR:L/IR:ND/AR:ND",
+			base:   8.3,
+			temp:   8.3,
+			env:    9.0,
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
@@ -255,10 +269,10 @@ func TestEnvEnvironmentalScore(t *testing.T) {
 					t.Errorf("Metrics.TemporalScore() = %v, want %v", got, tt.env)
 				}
 				if got := m.Score(); got != tt.env {
-					t.Errorf("Metrics.EnvironmentalScore() = %v, want %v", got, tt.temp)
+					t.Errorf("Metrics.EnvironmentalScore() = %v, want %v", got, tt.env)
 				}
 				if got := m.String(); tt.vector != got {
-					t.Errorf("Metrics.String() = %v, want %v", got, tt.temp)
+					t.Errorf("Metrics.String() = %v, want %v", got, tt.vector)
 				}
 			}
 

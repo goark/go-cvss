@@ -2,7 +2,6 @@ package metric
 
 import (
 	"fmt"
-	"math"
 	"strings"
 
 	"github.com/goark/errs"
@@ -165,7 +164,7 @@ func (m *Temporal) Score() float64 {
 }
 
 func (m *Temporal) score(baseScore float64) float64 {
-	return math.Round(baseScore*m.E.Value()*m.RL.Value()*m.RC.Value()*10) / 10
+	return roundTo1Decimal(baseScore * m.E.Value() * m.RL.Value() * m.RC.Value())
 }
 
 // GetSeverity returns severity by score of Base metrics
