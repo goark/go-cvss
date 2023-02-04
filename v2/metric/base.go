@@ -168,7 +168,7 @@ func (m *Base) Score() float64 {
 	if err := m.GetError(); err != nil {
 		return 0
 	}
-	impact := 10.41 * (1 - (1-m.C.Value())*(1-m.I.Value())*(1-m.A.Value()))
+	impact := roundTo4Decimal(10.41 * (1 - (1-m.C.Value())*(1-m.I.Value())*(1-m.A.Value())))
 	return m.score(impact)
 }
 
@@ -176,7 +176,7 @@ func (m *Base) score(impact float64) float64 {
 	if err := m.GetError(); err != nil {
 		return 0
 	}
-	exploitability := 20 * m.AV.Value() * m.AC.Value() * m.Au.Value()
+	exploitability := roundTo4Decimal(20 * m.AV.Value() * m.AC.Value() * m.Au.Value())
 	fimpact := 1.176
 	if impact == 0 {
 		fimpact = 0

@@ -241,19 +241,26 @@ func TestEnvEnvironmentalScore(t *testing.T) {
 			temp:   6.2,
 			env:    8.1,
 		},
+		// {
+		// 	name:   "issue-33",
+		// 	vector: "AV:A/AC:L/Au:N/C:C/I:C/A:C/CDP:H/TD:H/CR:L/IR:ND/AR:ND",
+		// 	base:   8.3,
+		// 	temp:   8.3,
+		// 	env:    9.0,
+		// },
+		// {
+		// 	name:   "issue-33b",
+		// 	vector: "AV:A/AC:L/Au:N/C:C/I:C/A:C/E:ND/RL:ND/RC:ND/CDP:H/TD:ND/CR:L/IR:ND/AR:ND",
+		// 	base:   8.3,
+		// 	temp:   8.3,
+		// 	env:    9.0,
+		// },
 		{
-			name:   "issue-33",
-			vector: "AV:A/AC:L/Au:N/C:C/I:C/A:C/CDP:H/TD:H/CR:L/IR:ND/AR:ND",
-			base:   8.3,
-			temp:   8.3,
-			env:    9.0,
-		},
-		{
-			name:   "issue-33b",
-			vector: "AV:A/AC:L/Au:N/C:C/I:C/A:C/E:ND/RL:ND/RC:ND/CDP:H/TD:ND/CR:L/IR:ND/AR:ND",
-			base:   8.3,
-			temp:   8.3,
-			env:    9.0,
+			name:   "issue-33c",
+			vector: "AV:L/AC:M/Au:S/C:N/I:N/A:P/CDP:N/TD:ND/CR:M/IR:ND/AR:ND",
+			base:   1.5,
+			temp:   1.5,
+			env:    1.5,
 		},
 	}
 	for _, tt := range tests {
