@@ -1,6 +1,6 @@
 module github.com/goark/go-cvss
 
-go 1.19
+go 1.20
 
 require (
 	github.com/goark/errs v1.1.0

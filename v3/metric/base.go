@@ -58,10 +58,10 @@ func (bm *Base) Decode(vector string) (*Base, error) {
 	//CVSS version
 	ver, err := GetVersion(values[0])
 	if err != nil {
-		return bm, errs.Wrap(err, errs.WithContext("vector", vector))
+		return nil, errs.Wrap(err, errs.WithContext("vector", vector))
 	}
 	if ver == VUnknown {
-		return bm, errs.Wrap(cvsserr.ErrNotSupportVer, errs.WithContext("vector", vector))
+		return nil, errs.Wrap(cvsserr.ErrNotSupportVer, errs.WithContext("vector", vector))
 	}
 	bm.Ver = ver
 	//parse vector
@@ -75,9 +75,12 @@ func (bm *Base) Decode(vector string) (*Base, error) {
 		}
 	}
 	if lastErr != nil {
-		return bm, lastErr
+		return nil, lastErr
 	}
-	return bm, bm.GetError()
+	if err := bm.GetError(); err != nil {
+		return nil, err
+	}
+	return bm, nil
 }
 func (bm *Base) decodeOne(str string) error {
 	m := strings.Split(str, ":")

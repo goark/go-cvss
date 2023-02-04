@@ -73,12 +73,13 @@ func TestDecodeEncode(t *testing.T) {
 			v, err := m.Encode()
 			if err != nil {
 				t.Errorf("Encode() = \"%+v\", want <nil>.", err)
-			}
-			if v != tc.vector {
-				t.Errorf("Encode() = \"%v\", want \"%v\".", v, tc.vector)
-			}
-			if m.String() != tc.vector {
-				t.Errorf("String() = \"%v\", want \"%v\".", m.String(), tc.vector)
+			} else {
+				if v != tc.vector {
+					t.Errorf("Encode() = \"%v\", want \"%v\".", v, tc.vector)
+				}
+				if m.String() != tc.vector {
+					t.Errorf("String() = \"%v\", want \"%v\".", m.String(), tc.vector)
+				}
 			}
 		}
 	}
@@ -90,7 +91,6 @@ func TestScore(t *testing.T) {
 		score    float64
 		severity Severity
 	}{
-		{vector: "CVSS:3.0/AV:P/AC:H/PR:H/UI:R/S:U/C:N/I:N", score: 0.0, severity: SeverityNone}, //error
 		//CVSSv3.0
 		{vector: "CVSS:3.0/AV:P/AC:H/PR:H/UI:R/S:U/C:N/I:N/A:N", score: 0.0, severity: SeverityNone},     //Zero metrics
 		{vector: "CVSS:3.0/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:N/A:N", score: 7.5, severity: SeverityHigh},     //CVE-2015-8252
@@ -140,17 +140,21 @@ func TestScore(t *testing.T) {
 	}
 
 	for _, tc := range testCases {
-		m, _ := NewBase().Decode(tc.vector)
-		score := m.Score()
-		if got := m.String(); got != tc.vector {
-			t.Errorf("String() = %v, want %v.", got, tc.vector)
-		}
-		if score != tc.score {
-			t.Errorf("Score(%s) = %v, want %v.", tc.vector, score, tc.score)
-		}
-		severity := m.Severity()
-		if severity.String() != tc.severity.String() {
-			t.Errorf("Score(%s) = %v, want %v.", tc.vector, severity, tc.severity)
+		m, err := NewBase().Decode(tc.vector)
+		if err != nil {
+			t.Errorf("Decode(%v) is %v, want <nil>.", tc.vector, err)
+		} else {
+			score := m.Score()
+			if got := m.String(); got != tc.vector {
+				t.Errorf("String() = %v, want %v.", got, tc.vector)
+			}
+			if score != tc.score {
+				t.Errorf("Score(%s) = %v, want %v.", tc.vector, score, tc.score)
+			}
+			severity := m.Severity()
+			if severity.String() != tc.severity.String() {
+				t.Errorf("Score(%s) = %v, want %v.", tc.vector, severity, tc.severity)
+			}
 		}
 	}
 }

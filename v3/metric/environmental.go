@@ -67,10 +67,10 @@ func (em *Environmental) Decode(vector string) (*Environmental, error) {
 	//CVSS version
 	ver, err := GetVersion(values[0])
 	if err != nil {
-		return em, errs.Wrap(err, errs.WithContext("vector", vector))
+		return nil, errs.Wrap(err, errs.WithContext("vector", vector))
 	}
 	if ver == VUnknown {
-		return em, errs.Wrap(cvsserr.ErrNotSupportVer, errs.WithContext("vector", vector))
+		return nil, errs.Wrap(cvsserr.ErrNotSupportVer, errs.WithContext("vector", vector))
 	}
 	em.Ver = ver
 	//parse vector
@@ -84,9 +84,12 @@ func (em *Environmental) Decode(vector string) (*Environmental, error) {
 		}
 	}
 	if lastErr != nil {
-		return em, lastErr
+		return nil, lastErr
 	}
-	return em, em.GetError()
+	if err := em.GetError(); err != nil {
+		return nil, err
+	}
+	return em, nil
 }
 func (em *Environmental) decodeOne(str string) error {
 	if err := em.Temporal.decodeOne(str); err != nil {

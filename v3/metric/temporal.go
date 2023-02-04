@@ -42,10 +42,10 @@ func (tm *Temporal) Decode(vector string) (*Temporal, error) {
 	//CVSS version
 	ver, err := GetVersion(values[0])
 	if err != nil {
-		return tm, errs.Wrap(err, errs.WithContext("vector", vector))
+		return nil, errs.Wrap(err, errs.WithContext("vector", vector))
 	}
 	if ver == VUnknown {
-		return tm, errs.Wrap(cvsserr.ErrNotSupportVer, errs.WithContext("vector", vector))
+		return nil, errs.Wrap(cvsserr.ErrNotSupportVer, errs.WithContext("vector", vector))
 	}
 	tm.Ver = ver
 	//parse vector
@@ -59,9 +59,12 @@ func (tm *Temporal) Decode(vector string) (*Temporal, error) {
 		}
 	}
 	if lastErr != nil {
-		return tm, lastErr
+		return nil, lastErr
 	}
-	return tm, tm.GetError()
+	if err := tm.GetError(); err != nil {
+		return nil, err
+	}
+	return tm, nil
 }
 func (tm *Temporal) decodeOne(str string) error {
 	if err := tm.Base.decodeOne(str); err != nil {
