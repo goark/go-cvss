@@ -195,7 +195,7 @@ func (m *Environmental) Score() float64 {
 	if m.IsEmpty() {
 		return adjustedTemporal
 	}
-	return roundTo1Decimal(adjustedTemporal + (10-adjustedTemporal)*m.CDP.Value()*m.TD.Value())
+	return roundTo1Decimal((adjustedTemporal + (10-adjustedTemporal)*m.CDP.Value()) * m.TD.Value())
 }
 
 // Severity returns severity by score of Environmental metrics

@@ -262,6 +262,13 @@ func TestEnvEnvironmentalScore(t *testing.T) {
 			temp:   1.5,
 			env:    1.5,
 		},
+		{
+			name:   "issue-33d",
+			vector: "AV:A/AC:M/Au:S/C:C/I:C/A:C/CDP:N/TD:N/CR:M/IR:ND/AR:L",
+			base:   7.4,
+			temp:   7.4,
+			env:    0.0,
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
