@@ -6,8 +6,8 @@ func roundTo1Decimal(input float64) float64 {
 	return math.Round(input*10) / 10
 }
 
-func roundTo4Decimal(input float64) float64 {
-	return math.Round(input*10000) / 10000
+func roundTo2Decimal(input float64) float64 {
+	return math.Round(input*100) / 100
 }
 
 /* Copyright 2023 Spiegel

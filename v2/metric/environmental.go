@@ -183,7 +183,7 @@ func (m *Environmental) Score() float64 {
 	if m.IsEmpty() {
 		baseScore = m.Base.Score()
 	} else {
-		adjustedImpact := math.Min(10.0, roundTo4Decimal(10.41*(1-(1-m.C.Value()*m.CR.Value())*(1-m.I.Value()*m.IR.Value())*(1-m.A.Value()*m.AR.Value()))))
+		adjustedImpact := math.Min(10.0, roundTo2Decimal(10.41*(1-(1-m.C.Value()*m.CR.Value())*(1-m.I.Value()*m.IR.Value())*(1-m.A.Value()*m.AR.Value()))))
 		baseScore = m.Base.score(adjustedImpact)
 	}
 	var adjustedTemporal float64
