@@ -58,14 +58,14 @@ func (m *Environmental) Decode(vector string) (*Environmental, error) {
 		}
 	}
 	if lastErr != nil {
-		return m, lastErr
+		return nil, lastErr
 	}
 	enc, err := m.Encode()
 	if err != nil {
-		return m, errs.Wrap(err, errs.WithContext("vector", vector))
+		return nil, errs.Wrap(err, errs.WithContext("vector", vector))
 	}
 	if vector != enc {
-		return m, errs.Wrap(cvsserr.ErrMisordered, errs.WithContext("vector", vector))
+		return nil, errs.Wrap(cvsserr.ErrMisordered, errs.WithContext("vector", vector))
 	}
 	return m, nil
 }
@@ -183,7 +183,7 @@ func (m *Environmental) Score() float64 {
 	if m.IsEmpty() {
 		baseScore = m.Base.Score()
 	} else {
-		adjustedImpact := math.Min(10.0, 10.41*(1-(1-m.C.Value()*m.CR.Value())*(1-m.I.Value()*m.IR.Value())*(1-m.A.Value()*m.AR.Value())))
+		adjustedImpact := math.Min(10.0, roundTo1Decimal(10.41*(1-(1-m.C.Value()*m.CR.Value())*(1-m.I.Value()*m.IR.Value())*(1-m.A.Value()*m.AR.Value()))))
 		baseScore = m.Base.score(adjustedImpact)
 	}
 	var adjustedTemporal float64
@@ -195,7 +195,7 @@ func (m *Environmental) Score() float64 {
 	if m.IsEmpty() {
 		return adjustedTemporal
 	}
-	return math.Round((adjustedTemporal+(10-adjustedTemporal)*m.CDP.Value()*m.TD.Value())*10) / 10
+	return roundTo1Decimal(adjustedTemporal + (10-adjustedTemporal)*m.CDP.Value()*m.TD.Value())
 }
 
 // Severity returns severity by score of Environmental metrics

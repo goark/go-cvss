@@ -2,7 +2,6 @@ package metric
 
 import (
 	"fmt"
-	"math"
 	"strings"
 
 	"github.com/goark/errs"
@@ -59,14 +58,14 @@ func (m *Base) Decode(vector string) (*Base, error) {
 		}
 	}
 	if lastErr != nil {
-		return m, lastErr
+		return nil, lastErr
 	}
 	enc, err := m.Encode()
 	if err != nil {
-		return m, errs.Wrap(err, errs.WithContext("vector", vector))
+		return nil, errs.Wrap(err, errs.WithContext("vector", vector))
 	}
 	if vector != enc {
-		return m, errs.Wrap(cvsserr.ErrMisordered, errs.WithContext("vector", vector))
+		return nil, errs.Wrap(cvsserr.ErrMisordered, errs.WithContext("vector", vector))
 	}
 	return m, nil
 }
@@ -182,7 +181,7 @@ func (m *Base) score(impact float64) float64 {
 	if impact == 0 {
 		fimpact = 0
 	}
-	return math.Round(((0.6*impact)+(0.4*exploitability)-1.5)*fimpact*10) / 10
+	return roundTo1Decimal(((0.6 * impact) + (0.4 * exploitability) - 1.5) * fimpact)
 }
 
 // GetSeverity returns severity by score of Base metrics
