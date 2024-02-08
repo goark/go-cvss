@@ -7,7 +7,7 @@
 
 Importing CVSS vector and scoring.
 
-- Supoort CVSS v2, v3.0 and v3.1
+- Supports CVSS v2, v3.0 and v3.1
 - Exporting CVSS information with template string
 
 **Migrated repository to [github.com/goark/go-cvss][go-cvss]**
