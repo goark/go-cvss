@@ -1,8 +1,10 @@
 module github.com/goark/go-cvss
 
-go 1.20
+go 1.22
+
+toolchain go1.22.1
 
 require (
-	github.com/goark/errs v1.1.0
-	golang.org/x/text v0.6.0
+	github.com/goark/errs v1.3.2
+	golang.org/x/text v0.14.0
 )
